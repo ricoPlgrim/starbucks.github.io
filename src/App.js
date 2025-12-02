@@ -1,8 +1,8 @@
-import PublishingGuidePage from "./pages/PublishingGuidePage/PublishingGuidePage";
+import PublishingUrlPage from "./pages/PublishingUrlPage/PublishingUrlPage";
 import "./App.scss";
 
 function App() {
-  return <PublishingGuidePage />;
+  return <PublishingUrlPage />;
 }
 
 export default App;

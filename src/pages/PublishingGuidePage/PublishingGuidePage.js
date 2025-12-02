@@ -12,19 +12,55 @@ const LayoutPreview = () => (
   </div>
 );
 
-const IconPreview = () => (
-  <div className="guide-preview guide-preview--icons">
-    <button type="button" className="icon-chip" aria-label="알림">
-      🔔
-    </button>
-    <button type="button" className="icon-chip" aria-label="즐겨찾기">
-      ⭐
-    </button>
-    <button type="button" className="icon-chip" aria-label="설정">
-      ⚙️
-    </button>
-  </div>
-);
+const IconPreview = () => {
+  const [copiedIcon, setCopiedIcon] = useState(null);
+
+  const icons = [
+    { label: "알림", symbol: "🔔", className: "icon-notification" },
+    { label: "즐겨찾기", symbol: "⭐", className: "icon-star" },
+    { label: "설정", symbol: "⚙️", className: "icon-settings" },
+  ];
+
+  const copyToClipboard = async (className, iconLabel) => {
+    try {
+      await navigator.clipboard.writeText(className);
+      setCopiedIcon(className);
+      setTimeout(() => setCopiedIcon(null), 2000);
+    } catch (err) {
+      // Fallback for older browsers
+      const textArea = document.createElement("textarea");
+      textArea.value = className;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+      setCopiedIcon(className);
+      setTimeout(() => setCopiedIcon(null), 2000);
+    }
+  };
+
+  return (
+    <div className="guide-preview guide-preview--icons">
+      {icons.map((icon) => (
+        <button
+          key={icon.className}
+          type="button"
+          className={`icon-chip ${copiedIcon === icon.className ? "is-copied" : ""}`}
+          aria-label={`${icon.label} 아이콘 복사`}
+          onClick={() => copyToClipboard(icon.className, icon.label)}
+        >
+          <span className="icon-chip__symbol">{icon.symbol}</span>
+          <span className="icon-chip__label">{icon.label}</span>
+          {copiedIcon === icon.className && (
+            <span className="icon-chip__copied" aria-live="polite">
+              복사됨
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 const FormPreview = () => (
   <form className="guide-preview guide-preview--form">

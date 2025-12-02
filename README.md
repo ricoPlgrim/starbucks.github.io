@@ -74,12 +74,19 @@ stabucks/
 │   │       ├── PageTemplate.js
 │   │       └── PageTemplate.scss
 │   ├── pages/
+│   │   ├── PublishingGuidePage/     # 퍼블리싱 가이드 페이지
+│   │   │   ├── PublishingGuidePage.js
+│   │   │   └── PublishingGuidePage.scss
+│   │   ├── PublishingUrlPage/       # 퍼블리싱 URL 관리 페이지
+│   │   │   ├── PublishingUrlPage.js
+│   │   │   └── PublishingUrlPage.scss
 │   │   └── ExamplePage/             # 예시 페이지
 │   │       ├── ExamplePage.js
 │   │       └── ExamplePage.scss
 │   ├── styles/
 │   │   ├── _variables.scss          # CSS 변수 정의
 │   │   ├── _mixins.scss             # SCSS 믹스인 (px-to-rem)
+│   │   ├── _utilities.scss          # 유틸리티 클래스 (mt-10, pt-20 등)
 │   │   ├── _base.scss               # 기본 스타일
 │   │   └── index.scss               # 스타일 통합 파일
 │   ├── App.js                       # 메인 앱 컴포넌트
@@ -255,6 +262,24 @@ function MyPage() {
 | `$max` | `number` | `null` | 최대값 설정 (선택) |
 | `$base` | `number` | `16` | 기준 픽셀 값 (선택) |
 
+### 유틸리티 클래스
+
+간편하게 사용할 수 있는 마진/패딩 유틸리티 클래스를 제공합니다.
+
+```scss
+// 마진 유틸리티
+.mt-10 { margin-top: 10px; }      // 상단 마진 10px
+.mb-20 { margin-bottom: 20px; }   // 하단 마진 20px
+.mx-30 { margin-left: 30px; margin-right: 30px; }  // 좌우 마진 30px
+
+// 패딩 유틸리티
+.pt-15 { padding-top: 15px; }     // 상단 패딩 15px
+.pb-25 { padding-bottom: 25px; }  // 하단 패딩 25px
+.px-40 { padding-left: 40px; padding-right: 40px; } // 좌우 패딩 40px
+```
+
+**사용 가능한 범위**: 10px ~ 100px (10px 단위)
+
 ### CSS 변수
 
 #### 색상 변수
@@ -419,11 +444,26 @@ export default MyPage;
 
 ---
 
-## 예시 페이지
+## 포함된 페이지들
 
-`src/pages/ExamplePage/` 폴더에 예시 페이지가 포함되어 있습니다.
+### PublishingGuidePage (퍼블리싱 가이드)
+퍼블리싱을 위한 UI 컴포넌트 가이드 페이지입니다.
 
-### 포함된 예시
+- 🎨 **레이아웃, 아이콘, 폼, 버튼, 컴포넌트, 탭** 섹션별 예시
+- 💻 코드 예시와 실제 UI 미리보기 동시 표시
+- 🎯 아이콘 클릭 시 클래스명 클립보드 복사 기능
+- 📱 탭 인터랙션 및 상태 관리
+
+### PublishingUrlPage (퍼블리싱 URL 관리)
+퍼블리싱된 페이지들의 URL을 체계적으로 관리하는 페이지입니다.
+
+- 📋 **뎁스1 ~ 뎁스4** 계층 구조로 URL 분류
+- 🔗 URL 클릭 시 새 탭에서 열기
+- 📊 깔끔한 테이블 레이아웃
+- 📱 모바일 반응형 디자인
+
+### ExamplePage (예시 페이지)
+기본적인 사용법을 보여주는 예시 페이지입니다.
 
 - ✅ 템플릿 사용법
 - ✅ SCSS 믹스인 사용법
