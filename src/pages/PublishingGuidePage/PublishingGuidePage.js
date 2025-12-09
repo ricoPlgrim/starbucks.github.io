@@ -9,6 +9,8 @@ import TableDemo from "../../components/TableDemo/TableDemo";
 import DatePicker from "../../components/DatePicker/DatePicker";
 import Tooltip from "../../components/Tooltip/Tooltip";
 import DragDropList from "../../components/DragDropList/DragDropList";
+import Carousel from "../../components/Carousel/Carousel";
+import Dropdown from "../../components/Dropdown/Dropdown";
 import "../../components/Popup/Popup.scss";
 import "./PublishingGuidePage.scss";
 
@@ -896,37 +898,65 @@ if (dragDistance > threshold) closeSheet();`,
     id: "dnd",
     label: "드래그앤드랍",
     title: "드래그앤드랍 리스트",
-    description: "react-beautiful-dnd를 사용한 기본 리스트 드래그앤드랍 예시입니다.",
-    code: `import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+    description: "react-draggable을 사용한 세로 리스트 드래그 & 순서 변경 예시입니다.",
+    code: `import Draggable from "react-draggable";
 
-const onDragEnd = (result) => {
-  if (!result.destination) return;
-  // reorder(prev, result.source.index, result.destination.index)
+const handleStop = (startIndex, data) => {
+  const deltaIndex = Math.round(data.y / itemHeight);
+  const target = clamp(startIndex + deltaIndex, 0, items.length - 1);
+  reorder(startIndex, target);
 };
 
-<DragDropContext onDragEnd={onDragEnd}>
-  <Droppable droppableId="list">
-    {(provided) => (
-      <div ref={provided.innerRef} {...provided.droppableProps}>
-        {items.map((item, index) => (
-          <Draggable key={item.id} draggableId={item.id} index={index}>
-            {(dragProvided) => (
-              <div
-                ref={dragProvided.innerRef}
-                {...dragProvided.draggableProps}
-                {...dragProvided.dragHandleProps}
-              >
-                {item.title}
-              </div>
-            )}
-          </Draggable>
-        ))}
-        {provided.placeholder}
-      </div>
-    )}
-  </Droppable>
-</DragDropContext>`,
+<Draggable axis="y" onStop={(e, data) => handleStop(index, data)}>
+  <div className="card">...</div>
+</Draggable>`,
     PreviewComponent: DragDropList,
+  },
+  {
+    id: "carousel",
+    label: "캐러셀",
+    title: "Swiper 캐러셀",
+    description: "react + swiper로 구현한 기본 캐러셀(내비게이션/페이지네이션 포함) 예시입니다.",
+    code: `import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
+<Swiper modules={[Navigation, Pagination]} navigation pagination={{ clickable: true }}>
+  <SwiperSlide>슬라이드 1</SwiperSlide>
+  <SwiperSlide>슬라이드 2</SwiperSlide>
+</Swiper>`,
+    PreviewComponent: Carousel,
+  },
+  {
+    id: "dropdown",
+    label: "드롭다운",
+    title: "드롭다운 UI",
+    description: "클릭으로 열고 닫는 기본/filled/ghost 드롭다운. 선택 값 표시와 선택 이벤트 예시를 포함합니다.",
+    code: `import Dropdown from "./Dropdown";
+
+// 기본 아웃라인
+<Dropdown />
+
+// 배경 강조형
+<Dropdown variant="filled" />
+
+// 고스트형 (테두리 최소화)
+<Dropdown variant="ghost" />
+
+// API
+// - variant: "outline" | "filled" | "ghost"
+// - disabled: boolean
+// - fullWidth: boolean
+// - onChange: (option) => void`,
+    PreviewComponent: () => (
+      <div className="guide-preview guide-preview--dropdown">
+        <Dropdown />
+        <Dropdown variant="filled" />
+        <Dropdown variant="ghost" />
+      </div>
+    ),
   },
   {
     id: "tab",
@@ -1062,7 +1092,7 @@ const guideGroups = [
   {
     id: "ui-group",
     label: "UI 컴포넌트",
-    items: ["icon", "button", "component", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd"],
+    items: ["icon", "button", "component", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd", "carousel", "dropdown"],
   },
 ];
 

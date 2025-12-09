@@ -55,7 +55,7 @@ npm start
 npm run build
 ```
 
-프로덕션 빌드가 `build` 폴더에 생성됩니다.
+프로덕션 빌드가 `docs` 폴더에 생성됩니다. (GitHub Pages 배포용)
 
 ---
 
@@ -231,17 +231,17 @@ function MyPage() {
 
 ## 스타일 시스템
 
-### SCSS 믹스인: px-to-rem
+### SCSS 믹스인: px (px-to-rem 단축)
 
-피그마에서 가져온 픽셀 값을 그대로 사용하면 자동으로 rem 단위로 변환됩니다.
+피그마에서 가져온 픽셀 값을 그대로 사용하면 자동으로 rem 단위로 변환됩니다. (`@include px(...)`)
 
 #### 기본 사용법
 
 ```scss
 .my-element {
-  @include px-to-rem(font-size, 16);        // 16px → 1rem
-  @include px-to-rem(padding, 20);          // 20px → 1.25rem
-  @include px-to-rem(margin, 12, 16);       // 12px → 0.75rem (기준값 16px)
+  @include px(font-size, 16);        // 16px → 1rem
+  @include px(padding, 20);          // 20px → 1.25rem
+  @include px(margin, 12, 16);       // 12px → 0.75rem (기준값 16px)
 }
 ```
 
@@ -249,7 +249,7 @@ function MyPage() {
 
 ```scss
 .container {
-  @include px-to-rem(max-width, 1200, 16);  // max-width: 75rem
+  @include px(max-width, 1200, 16);  // max-width: 75rem
 }
 ```
 
@@ -449,7 +449,7 @@ export default MyPage;
 ### PublishingGuidePage (퍼블리싱 가이드)
 퍼블리싱을 위한 UI 컴포넌트 가이드 페이지입니다.
 
-- 🎨 **더보기, 아이콘, 폼, 버튼, 컴포넌트, 탭, 이미지, 스크립트, 페이지네이션** 섹션별 예시
+- 🎨 **더보기, 아이콘, 폼, 버튼, 컴포넌트, 탭, 이미지, 스크립트, 페이지네이션, 드래그앤드랍, 툴팁** 섹션별 예시
 - 💻 코드 예시와 실제 UI 미리보기 동시 표시
 - 🎯 아이콘 클릭 시 클래스명 클립보드 복사 기능
 - 📱 탭 인터랙션 및 상태 관리

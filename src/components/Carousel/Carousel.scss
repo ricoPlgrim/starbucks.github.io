@@ -1,0 +1,41 @@
+@use "../../styles/index.scss" as *;
+
+.guide-preview--carousel {
+  width: 100%;
+  .swiper {
+    padding-bottom: px(28);
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    color: var(--color-accent);
+  }
+
+  .swiper-pagination-bullet {
+    background: var(--color-border);
+    opacity: 1;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: var(--color-accent);
+  }
+}
+
+.carousel-card {
+  border: px(1) solid var(--color-border);
+  border-radius: px(12);
+  padding: px(20);
+  background: var(--color-card);
+  box-shadow: 0 px(8) px(20) rgba(0, 0, 0, 0.04);
+
+  h4 {
+    margin: 0 0 px(8) 0;
+    color: var(--color-text);
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-muted);
+  }
+}
+

@@ -636,6 +636,13 @@
     }
   }
 
+  &--dropdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: px(12);
+    align-items: start;
+  }
+
   &--grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));

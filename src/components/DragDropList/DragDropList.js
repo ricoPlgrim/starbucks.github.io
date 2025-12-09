@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useEffect, useRef, useState, createRef } from "react";
+import Draggable from "react-draggable";
 import "./DragDropList.scss";
 
 const initialItems = [
@@ -9,21 +9,35 @@ const initialItems = [
   { id: "item-4", title: "드래그 아이템 4", desc: "네 번째 카드" },
 ];
 
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
+const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
 
 const DragDropList = () => {
   const [items, setItems] = useState(initialItems);
+  const [dragMeta, setDragMeta] = useState({ id: null, index: -1, z: 1 });
+  const listRef = useRef(null);
+  const [itemHeight, setItemHeight] = useState(80); // fallback height
+  const nodeRefs = useRef({});
 
-  const onDragEnd = (result) => {
-    const { destination, source } = result;
-    if (!destination) return;
-    if (destination.index === source.index) return;
-    setItems((prev) => reorder(prev, source.index, destination.index));
+  // 첫 아이템 높이를 측정해 인덱스 계산 정확도 향상
+  useEffect(() => {
+    const first = listRef.current?.querySelector(".dnd-card");
+    if (first) {
+      const rect = first.getBoundingClientRect();
+      // gap 10px를 포함한 예상 높이
+      setItemHeight(rect.height + 10);
+    }
+  }, [items.length]);
+
+  const handleStop = (itemId, startIndex) => (e, data) => {
+    const deltaIndex = Math.round(data.y / itemHeight);
+    const targetIndex = clamp(startIndex + deltaIndex, 0, items.length - 1);
+    if (targetIndex !== startIndex) {
+      const next = [...items];
+      const [moved] = next.splice(startIndex, 1);
+      next.splice(targetIndex, 0, moved);
+      setItems(next);
+    }
+    setDragMeta((prev) => ({ ...prev, id: null, index: -1 }));
   };
 
   return (
@@ -31,33 +45,36 @@ const DragDropList = () => {
       <div className="dnd-header">
         <p className="dnd-help">마우스로 잡아 끌어 순서를 변경하세요.</p>
       </div>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="droppable-list" isDropDisabled={false} isCombineEnabled={false}>
-          {(provided) => (
-            <div className="dnd-list" ref={provided.innerRef} {...provided.droppableProps}>
-              {items.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.id} index={index} isDragDisabled={false}>
-                  {(dragProvided, snapshot) => (
-                    <div
-                      className={`dnd-card ${snapshot.isDragging ? "is-dragging" : ""}`}
-                      ref={dragProvided.innerRef}
-                      {...dragProvided.draggableProps}
-                      {...dragProvided.dragHandleProps}
-                    >
-                      <div className="dnd-card__handle" aria-hidden="true">⋮⋮</div>
-                      <div className="dnd-card__body">
-                        <strong>{item.title}</strong>
-                        <p>{item.desc}</p>
-                      </div>
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <div className="dnd-list" ref={listRef}>
+        {items.map((item, index) => {
+          if (!nodeRefs.current[item.id]) {
+            nodeRefs.current[item.id] = createRef();
+          }
+          const nodeRef = nodeRefs.current[item.id];
+          return (
+            <Draggable
+              key={item.id}
+              axis="y"
+              position={{ x: 0, y: 0 }} // 드래그 끝나면 원위치로 리셋
+              onStart={() => setDragMeta((prev) => ({ id: item.id, index, z: prev.z + 1 }))}
+              onStop={handleStop(item.id, index)}
+              nodeRef={nodeRef}
+            >
+              <div
+                ref={nodeRef}
+                className={`dnd-card ${dragMeta.id === item.id ? "is-dragging" : ""}`}
+                style={{ zIndex: dragMeta.id === item.id ? dragMeta.z : 1 }}
+              >
+                <div className="dnd-card__handle" aria-hidden="true">⋮⋮</div>
+                <div className="dnd-card__body">
+                  <strong>{item.title}</strong>
+                  <p>{item.desc}</p>
+                </div>
+              </div>
+            </Draggable>
+          );
+        })}
+      </div>
     </div>
   );
 };

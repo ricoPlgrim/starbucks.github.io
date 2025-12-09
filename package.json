@@ -10,10 +10,11 @@
     "@testing-library/user-event": "^13.5.0",
     "date-fns": "^4.1.0",
     "react": "^19.2.0",
-    "react-beautiful-dnd": "^13.1.1",
+    "react-draggable": "^4.4.6",
     "react-day-picker": "^8.10.1",
     "react-dom": "^19.2.0",
     "react-scripts": "5.0.1",
+    "swiper": "^11.1.9",
     "sass": "npm:sass-embedded@^1.79.4",
     "web-vitals": "^2.1.4"
   },
