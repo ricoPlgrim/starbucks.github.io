@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import Image from "../../components/Image/Image";
 import Header from "../../components/Header/Header";
+import FileUpload from "../../components/FileUpload/FileUpload";
+import FormSample from "../../components/FormSample/FormSample";
+import Tabs from "../../components/Tabs/Tabs";
+import { BasicPopup, BottomSheetPopup, FullscreenPopup } from "../../components/Popup/Popup";
 import "./PublishingGuidePage.scss";
 
 const PaginationPreview = () => {
@@ -214,34 +218,274 @@ const IconPreview = () => {
   );
 };
 
-const FormPreview = () => (
-  <form className="guide-preview guide-preview--form">
-    <label className="field">
-      <span className="field__label">이메일</span>
-      <input type="email" placeholder="name@example.com" />
-      <small className="field__help">가입 시 사용한 이메일을 입력하세요.</small>
-    </label>
-    <label className="field">
-      <span className="field__label">비밀번호</span>
-      <input type="password" placeholder="••••••" />
-      <small className="field__help is-error">8자 이상 입력해주세요.</small>
-    </label>
-  </form>
-);
+const FormPreview = () => {
+  const [form, setForm] = useState({ name: "", phone: "", address: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    setMessage("");
+  };
+
+  const validate = () => {
+    const nextErrors = {};
+    if (!form.name.trim()) {
+      nextErrors.name = "이름을 입력해주세요.";
+    }
+    if (!/^01[0-9]-?\d{3,4}-?\d{4}$/.test(form.phone)) {
+      nextErrors.phone = "휴대폰 번호를 010-1234-5678 형식으로 입력해주세요.";
+    }
+    if (!form.address.trim()) {
+      nextErrors.address = "주소를 입력해주세요.";
+    }
+    if (!/\S+@\S+\.\S+/.test(form.email)) {
+      nextErrors.email = "유효한 이메일을 입력해주세요.";
+    }
+    if (form.password.length < 8) {
+      nextErrors.password = "비밀번호는 8자 이상이어야 합니다.";
+    }
+    return nextErrors;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const nextErrors = validate();
+    setErrors(nextErrors);
+    if (Object.keys(nextErrors).length === 0) {
+      setMessage("유효성 검사가 완료되었습니다!");
+    }
+  };
+
+  return (
+    <form className="guide-preview guide-preview--form" onSubmit={handleSubmit}>
+      <label className="field">
+        <span className="field__label">이름</span>
+        <input
+          type="text"
+          name="name"
+          placeholder="홍길동"
+          value={form.name}
+          onChange={handleChange}
+          aria-invalid={!!errors.name}
+        />
+        <small className={`field__help ${errors.name ? "is-error" : ""}`}>
+          {errors.name || "본인 확인이 가능한 이름을 입력하세요."}
+        </small>
+      </label>
+      <label className="field">
+        <span className="field__label">휴대폰 번호</span>
+        <input
+          type="tel"
+          name="phone"
+          placeholder="010-1234-5678"
+          value={form.phone}
+          onChange={handleChange}
+          aria-invalid={!!errors.phone}
+        />
+        <small className={`field__help ${errors.phone ? "is-error" : ""}`}>
+          {errors.phone || "숫자만 입력해도 자동으로 처리됩니다."}
+        </small>
+      </label>
+      <label className="field">
+        <span className="field__label">주소</span>
+        <input
+          type="text"
+          name="address"
+          placeholder="도로명 주소를 입력하세요"
+          value={form.address}
+          onChange={handleChange}
+          aria-invalid={!!errors.address}
+        />
+        <small className={`field__help ${errors.address ? "is-error" : ""}`}>
+          {errors.address || "배송 또는 연락 가능한 주소를 입력하세요."}
+        </small>
+      </label>
+      <label className="field">
+        <span className="field__label">이메일</span>
+        <input
+          type="email"
+          name="email"
+          placeholder="name@example.com"
+          value={form.email}
+          onChange={handleChange}
+          aria-invalid={!!errors.email}
+        />
+        <small className={`field__help ${errors.email ? "is-error" : ""}`}>
+          {errors.email || "가입 시 사용한 이메일을 입력하세요."}
+        </small>
+      </label>
+      <label className="field">
+        <span className="field__label">비밀번호</span>
+        <input
+          type="password"
+          name="password"
+          placeholder="8자 이상 입력"
+          value={form.password}
+          onChange={handleChange}
+          aria-invalid={!!errors.password}
+        />
+        <small className={`field__help ${errors.password ? "is-error" : ""}`}>
+          {errors.password || "문자, 숫자 조합으로 8자 이상 입력하세요."}
+        </small>
+      </label>
+      <button type="submit" className="btn btn--primary btn--md">
+        유효성 검사
+      </button>
+      {message && <p className="form-success">{message}</p>}
+    </form>
+  );
+};
 
 const ButtonPreview = () => (
   <div className="guide-preview guide-preview--buttons">
-    <button type="button" className="btn btn--primary">
-      Primary
-    </button>
-    <button type="button" className="btn btn--secondary">
-      Secondary
-    </button>
-    <button type="button" className="btn btn--ghost">
-      Ghost
-    </button>
+    <h4 className="button-list__title">버튼 사이즈 가이드</h4>
+    <ul className="button-list">
+      <li className="button-list__item">
+        <div className="button-list__label">Small</div>
+        <div className="button-list__actions">
+          <button type="button" className="btn btn--primary btn--sm">Primary</button>
+          <button type="button" className="btn btn--secondary btn--sm">Secondary</button>
+          <button type="button" className="btn btn--ghost btn--sm">Ghost</button>
+        </div>
+      </li>
+      <li className="button-list__item">
+        <div className="button-list__label">Medium</div>
+        <div className="button-list__actions">
+          <button type="button" className="btn btn--primary btn--md">Primary</button>
+          <button type="button" className="btn btn--secondary btn--md">Secondary</button>
+          <button type="button" className="btn btn--ghost btn--md">Ghost</button>
+        </div>
+      </li>
+      <li className="button-list__item">
+        <div className="button-list__label">Large</div>
+        <div className="button-list__actions">
+          <button type="button" className="btn btn--primary btn--lg">Primary</button>
+          <button type="button" className="btn btn--secondary btn--lg">Secondary</button>
+          <button type="button" className="btn btn--ghost btn--lg">Ghost</button>
+        </div>
+      </li>
+    </ul>
   </div>
 );
+
+const PopupPreview = () => {
+  const [isBasicOpen, setIsBasicOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isFullOpen, setIsFullOpen] = useState(false);
+  const [sheetOffset, setSheetOffset] = useState(0);
+  const [dragStartY, setDragStartY] = useState(null);
+
+  const SHEET_THRESHOLD = 120;
+
+  const handleSheetStart = (e) => {
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    setDragStartY(clientY);
+  };
+
+  const handleSheetMove = (e) => {
+    if (dragStartY === null) return;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const delta = clientY - dragStartY;
+    setSheetOffset(Math.max(0, Math.min(delta, 240))); // drag down only
+  };
+
+  const handleSheetEnd = () => {
+    if (sheetOffset > SHEET_THRESHOLD) {
+      setIsSheetOpen(false);
+    }
+    setSheetOffset(0);
+    setDragStartY(null);
+  };
+
+  return (
+    <div className="guide-preview guide-preview--popup">
+      <div className="popup-actions">
+        <button className="btn btn--primary btn--sm" onClick={() => setIsBasicOpen(true)}>
+          Basic 팝업
+        </button>
+        <button className="btn btn--secondary btn--sm" onClick={() => setIsSheetOpen(true)}>
+          바텀시트
+        </button>
+        <button className="btn btn--ghost btn--sm" onClick={() => setIsFullOpen(true)}>
+          풀스크린
+        </button>
+      </div>
+
+      {/* Basic Center Popup */}
+      {isBasicOpen && (
+        <div className="popup-overlay" onClick={() => setIsBasicOpen(false)}>
+          <div className="popup popup--basic" onClick={(e) => e.stopPropagation()}>
+            <div className="popup__image">
+              <span className="popup__image-icon">🔒</span>
+            </div>
+            <div className="popup__body popup__body--center">
+              <h4>Setting my friends data</h4>
+              <p>You can chat freely after a privacy my chatroom by chatting data</p>
+            </div>
+            <div className="popup__dots" aria-hidden="true">
+              <span className="is-active"></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <div className="popup__actions popup__actions--stack">
+              <button className="popup__btn popup__btn--ghost" onClick={() => setIsBasicOpen(false)}>
+                Cancel
+              </button>
+              <button className="popup__btn popup__btn--primary" onClick={() => setIsBasicOpen(false)}>
+                OK
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Bottom Sheet */}
+      {isSheetOpen && (
+        <div className="popup-overlay popup-overlay--sheet" onClick={() => setIsSheetOpen(false)}>
+          <div
+            className="popup popup--sheet"
+            style={{ transform: `translateY(${sheetOffset}px)` }}
+            onClick={(e) => e.stopPropagation()}
+            onMouseDown={handleSheetStart}
+            onMouseMove={handleSheetMove}
+            onMouseUp={handleSheetEnd}
+            onMouseLeave={handleSheetEnd}
+            onTouchStart={handleSheetStart}
+            onTouchMove={handleSheetMove}
+            onTouchEnd={handleSheetEnd}
+          >
+            <div className="popup__handle" />
+            <h4>바텀시트 팝업</h4>
+            <p>상단 드래그로 절반 이상 내리면 자동으로 닫힙니다.</p>
+            <button className="btn btn--secondary btn--sm" onClick={() => setIsSheetOpen(false)}>
+              닫기
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Fullscreen Popup */}
+      {isFullOpen && (
+        <div className="popup-overlay popup-overlay--full">
+          <div className="popup popup--full">
+            <div className="popup__header">
+              <h4>풀스크린 팝업</h4>
+              <button className="popup__close" onClick={() => setIsFullOpen(false)}>✕</button>
+            </div>
+            <div className="popup__body">
+              <p>전체 화면을 덮는 풀스크린 팝업입니다.</p>
+              <p>배경 스크롤을 잠그고, 상단 닫기 버튼을 제공합니다.</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const CardPreview = () => (
   <article className="guide-preview guide-preview--card">
@@ -604,6 +848,36 @@ const HeaderPreview = () => {
   );
 };
 
+const FooterPreview = () => {
+  return (
+    <div className="guide-preview guide-preview--footer">
+      <footer className="footer-demo">
+        <div className="footer-demo__top">
+          <div className="footer-demo__logo">스타벅스</div>
+          <nav className="footer-demo__nav">
+            <a href="#company">회사소개</a>
+            <a href="#policy">개인정보처리방침</a>
+            <a href="#faq">FAQ</a>
+            <a href="#contact">문의하기</a>
+          </nav>
+        </div>
+        <div className="footer-demo__bottom">
+          <div className="footer-demo__info">
+            <p>서울시 어딘가 123, 스타벅스코리아</p>
+            <p>고객센터 1234-5678 | support@starbucks.co.kr</p>
+          </div>
+          <div className="footer-demo__sns">
+            <span>Instagram</span>
+            <span>Facebook</span>
+            <span>Youtube</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+// 가이드 섹션 정의
 const guideSections = [
   {
     id: "header",
@@ -653,6 +927,29 @@ function Header({ currentPage, onPageChange }) {
     PreviewComponent: HeaderPreview,
   },
   {
+    id: "footer",
+    label: "푸터",
+    title: "푸터 레이아웃",
+    description:
+      "사이트의 공통 하단 영역으로, 회사 정보·고객센터·SNS 링크 등을 담습니다. 명확한 링크와 대비를 유지하고, 모바일에서도 읽기 쉬운 여백을 확보합니다.",
+    code: `<footer class="site-footer">
+  <div class="site-footer__top">
+    <div class="logo">Brand</div>
+    <nav class="footer-nav">
+      <a href="#company">회사소개</a>
+      <a href="#policy">개인정보처리방침</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">문의하기</a>
+    </nav>
+  </div>
+  <div class="site-footer__bottom">
+    <p>서울시 어딘가 123, 브랜드코리아</p>
+    <p>고객센터 1234-5678 | support@example.com</p>
+  </div>
+</footer>`,
+    PreviewComponent: FooterPreview,
+  },
+  {
     id: "file-upload",
     label: "파일첨부",
     title: "파일 첨부 UI",
@@ -674,10 +971,10 @@ const handleFileChange = (e) => {
     e.target.value = "";
   }
 };`,
-    PreviewComponent: FileUploadPreview,
+    PreviewComponent: FileUpload,
   },
   {
-    id: "layout",
+    id: "more",
     label: "더보기",
     title: "더보기 레이아웃",
     description:
@@ -729,23 +1026,49 @@ return (
     label: "폼",
     title: "폼 요소",
     description:
-      "레이블, 플레이스홀더, 보조텍스트를 구분해 시각·보조기기 사용성을 높입니다.",
-    code: `<label class="field">
-  <span class="field__label">이메일</span>
-  <input type="email" placeholder="name@example.com" />
-  <small class="field__help">가입 시 사용한 이메일을 입력하세요.</small>
-</label>`,
-    PreviewComponent: FormPreview,
+      "레이블·플레이스홀더·보조텍스트와 함께 간단한 유효성 검사를 포함한 폼입니다. 이름, 휴대폰, 주소, 이메일, 비밀번호를 검증합니다.",
+    code: `<form onSubmit={handleSubmit}>
+  <label class="field">
+    <span class="field__label">이름</span>
+    <input name="name" type="text" placeholder="홍길동" />
+  </label>
+  <label class="field">
+    <span class="field__label">휴대폰 번호</span>
+    <input name="phone" type="tel" placeholder="010-1234-5678" />
+  </label>
+  <label class="field">
+    <span class="field__label">주소</span>
+    <input name="address" type="text" placeholder="도로명 주소" />
+  </label>
+  <label class="field">
+    <span class="field__label">이메일</span>
+    <input name="email" type="email" placeholder="name@example.com" />
+  </label>
+  <label class="field">
+    <span class="field__label">비밀번호</span>
+    <input name="password" type="password" placeholder="8자 이상 입력" />
+  </label>
+  <button type="submit" class="btn btn--primary btn--md">유효성 검사</button>
+</form>`,
+    PreviewComponent: FormSample,
   },
   {
     id: "button",
     label: "버튼",
     title: "버튼 타입",
     description:
-      "Primary/Secondary/Quiet 버튼을 픽셀값 대신 `rem`으로 정의해 접근성을 확보합니다.",
-    code: `<button class="btn btn--primary">Primary</button>
-<button class="btn btn--secondary">Secondary</button>
-<button class="btn btn--ghost">Ghost</button>`,
+      "Primary/Secondary/Ghost 버튼을 rem 단위와 사이즈 토큰(S, M, L)으로 제공합니다.",
+    code: `<button class="btn btn--primary btn--sm">Primary Small</button>
+<button class="btn btn--secondary btn--sm">Secondary Small</button>
+<button class="btn btn--ghost btn--sm">Ghost Small</button>
+
+<button class="btn btn--primary btn--md">Primary Medium</button>
+<button class="btn btn--secondary btn--md">Secondary Medium</button>
+<button class="btn btn--ghost btn--md">Ghost Medium</button>
+
+<button class="btn btn--primary btn--lg">Primary Large</button>
+<button class="btn btn--secondary btn--lg">Secondary Large</button>
+<button class="btn btn--ghost btn--lg">Ghost Large</button>`,
     PreviewComponent: ButtonPreview,
   },
   {
@@ -762,6 +1085,21 @@ return (
     PreviewComponent: CardPreview,
   },
   {
+    id: "popup",
+    label: "팝업",
+    title: "팝업 UI",
+    description:
+      "Basic 중앙 팝업, 바텀시트(드래그로 닫기), 풀스크린 팝업을 제공합니다.",
+    code: `// 상태
+const [isBasicOpen, setIsBasicOpen] = useState(false);
+const [isSheetOpen, setIsSheetOpen] = useState(false);
+const [isFullOpen, setIsFullOpen] = useState(false);
+
+// 바텀시트 드래그 종료 시
+if (dragDistance > threshold) closeSheet();`,
+    PreviewComponent: PopupPreview,
+  },
+  {
     id: "tab",
     label: "탭",
     title: "탭 인터페이스",
@@ -772,7 +1110,7 @@ return (
   <button role="tab" aria-selected="false">리뷰</button>
   <button role="tab" aria-selected="false">Q&A</button>
 </div>`,
-    PreviewComponent: TabPreview,
+    PreviewComponent: Tabs,
   },
   {
     id: "image",
@@ -880,29 +1218,55 @@ const renderPagination = () => {
   },
 ];
 
+// 1뎁스 그룹 구성 (LNB용)
+const guideGroups = [
+  {
+    id: "layout-group",
+    label: "레이아웃",
+    items: ["header", "footer"], // 레이아웃 전용
+  },
+  {
+    id: "input-group",
+    label: "입력 / 첨부",
+    items: ["file-upload", "form"],
+  },
+  {
+    id: "ui-group",
+    label: "UI 컴포넌트",
+    items: ["icon", "button", "component", "tab", "image", "more", "pagination", "popup"],
+  },
+];
+
+// id로 빠르게 조회하기 위한 맵
+const sectionMap = guideSections.reduce((acc, cur) => {
+  acc[cur.id] = cur;
+  return acc;
+}, {});
+
 function PublishingGuidePage() {
-  const [activeSection, setActiveSection] = useState(guideSections[0].id);
+  const [activeSection, setActiveSection] = useState(guideGroups[0].items[0]);
+  const [isMobileLnbOpen, setIsMobileLnbOpen] = useState(false);
 
   // 네비게이션 클릭 핸들러 - 네비게이션 바 높이 고려한 부드러운 스크롤
   const handleNavClick = (sectionId) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      // 네비게이션 바 높이 계산
+    // 먼저 활성 섹션을 업데이트해서 우측 패널이 즉시 변경되도록
+    setActiveSection(sectionId);
+    setIsMobileLnbOpen(false);
+
+    // 렌더 후 스크롤 이동 시도 (DOM 생성 시점을 고려)
+    setTimeout(() => {
+      const element = document.getElementById(sectionId);
+      if (!element) return;
+
       const navElement = document.querySelector('.app-nav');
       const navHeight = navElement ? navElement.offsetHeight : 0;
+      const targetPosition = element.offsetTop - navHeight - 20;
 
-      // 네비게이션 바 높이를 고려한 스크롤 위치 계산
-      const targetPosition = element.offsetTop - navHeight - 20; // 추가 패딩
-
-      // 부드러운 스크롤
       window.scrollTo({
         top: targetPosition,
         behavior: 'smooth'
       });
-
-      // 활성화 섹션 업데이트
-      setActiveSection(sectionId);
-    }
+    }, 50);
   };
 
   // 스크롤 이벤트로 활성화 섹션 감지
@@ -949,52 +1313,112 @@ function PublishingGuidePage() {
     <PageTemplate title="퍼블리싱 가이드">
       <section className="publishing-guide">
         <div className="publishing-guide__layout">
+          {/* 모바일 LNB 토글 버튼 */}
+          <div className="publishing-guide__mobile-toggle">
+            <button onClick={() => setIsMobileLnbOpen(true)}>메뉴</button>
+          </div>
+
+          {/* 모바일 LNB 모달 */}
+          {isMobileLnbOpen && (
+            <div className="publishing-guide__mobile-lnb-overlay" onClick={() => setIsMobileLnbOpen(false)}>
+              <div
+                className="publishing-guide__mobile-lnb-modal"
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-label="퍼블리싱 가이드 메뉴"
+              >
+                <div className="publishing-guide__mobile-lnb-header">
+                  <h4>Guide</h4>
+                  <button onClick={() => setIsMobileLnbOpen(false)} aria-label="닫기">✕</button>
+                </div>
+                <div className="publishing-guide__mobile-lnb-body">
+                  {guideGroups.map((group) => (
+                    <div key={group.id} className="publishing-guide__mobile-lnb-group">
+                      <p className="publishing-guide__lnb-group-label">{group.label}</p>
+                      <ul className="publishing-guide__lnb-sublist">
+                        {group.items.map((sectionId) => {
+                          const section = sectionMap[sectionId];
+                          if (!section) return null;
+                          const isActive = activeSection === sectionId;
+                          return (
+                            <li key={sectionId}>
+                              <button
+                                className={`publishing-guide__lnb-link${isActive ? " is-active" : ""}`}
+                                aria-current={isActive ? "true" : undefined}
+                                onClick={() => handleNavClick(sectionId)}
+                              >
+                                {section.label}
+                              </button>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
           <nav className="publishing-guide__lnb" aria-label="퍼블리싱 가이드 메뉴">
-            <p className="publishing-guide__lnb-title">Guide</p>
             <ul className="publishing-guide__lnb-list">
-              {guideSections.map((section) => {
-                const isActive = activeSection === section.id;
-                return (
-                  <li key={section.id}>
-                    <button
-                      className={`publishing-guide__lnb-link${isActive ? " is-active" : ""}`}
-                      aria-current={isActive ? "true" : undefined}
-                      onClick={() => handleNavClick(section.id)}
-                    >
-                      {section.label}
-                    </button>
-                  </li>
-                );
-              })}
+              {guideGroups.map((group) => (
+                <li key={group.id} className="publishing-guide__lnb-group">
+                  <p className="publishing-guide__lnb-group-label">{group.label}</p>
+                  <ul className="publishing-guide__lnb-sublist">
+                    {group.items.map((sectionId) => {
+                      const section = sectionMap[sectionId];
+                      if (!section) return null;
+                      const isActive = activeSection === sectionId;
+                      return (
+                        <li key={sectionId}>
+                          <button
+                            className={`publishing-guide__lnb-link${isActive ? " is-active" : ""}`}
+                            aria-current={isActive ? "true" : undefined}
+                            onClick={() => handleNavClick(sectionId)}
+                          >
+                            {section.label}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </li>
+              ))}
             </ul>
           </nav>
 
           <div className="publishing-guide__content">
-            {guideSections.map((section) => (
-              <article key={section.id} id={section.id} className="guide-section">
-                <header className="guide-section__header">
-                  <p className="guide-section__eyebrow">{section.label}</p>
-                  <div>
-                    <h3 className="guide-section__title">{section.title}</h3>
-                    <p className="guide-section__description">{section.description}</p>
-                  </div>
-                </header>
+            {(() => {
+              const currentSection = sectionMap[activeSection] || guideSections[0];
 
-                <div className="guide-section__body">
-                  <div className="guide-section__code">
-                    <p className="guide-section__code-label">예시 코드</p>
-                    <pre>
-                      <code>{section.code}</code>
-                    </pre>
-                  </div>
+              return (
+                <article key={currentSection.id} id={currentSection.id} className="guide-section">
+                  <header className="guide-section__header">
+                    <p className="guide-section__eyebrow">{currentSection.label}</p>
+                    <div>
+                      <h3 className="guide-section__title">{currentSection.title}</h3>
+                      <p className="guide-section__description">{currentSection.description}</p>
+                    </div>
+                  </header>
 
-                  <div className="guide-section__preview">
-                    <p className="guide-section__code-label">UI 미리보기</p>
-                    <section.PreviewComponent />
+                  <div className="guide-section__body">
+                    <div className="guide-section__code">
+                      <p className="guide-section__code-label">예시 코드</p>
+                      <pre>
+                        <code>{currentSection.code}</code>
+                      </pre>
+                    </div>
+
+                    <div className="guide-section__preview">
+                      <p className="guide-section__code-label">UI 미리보기</p>
+                      <currentSection.PreviewComponent />
+                    </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })()}
           </div>
         </div>
       </section>

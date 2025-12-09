@@ -21,7 +21,9 @@
     padding: 0 !important;
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
@@ -97,7 +99,7 @@
 
 @media (max-width: 768px) {
   .publishing-url-page {
-    padding: px-to-rem(20);
+    padding: 0; // 모바일에서도 패딩 제거
 
     &__header {
       margin-bottom: 0;

@@ -23,4 +23,13 @@
   }
 }
 
+// 짧은 별칭
+@function px($value, $base: 16) {
+  @return px-to-rem($value, $base);
+}
+
+@mixin px($property, $value, $max: null, $base: 16, $max-property: null) {
+  @include px-to-rem($property, $value, $max, $base, $max-property);
+}
+
 

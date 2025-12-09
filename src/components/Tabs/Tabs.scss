@@ -1,0 +1,41 @@
+@import "../../styles/index.scss";
+
+.tabs-demo {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: px-to-rem(16);
+
+  &__tablist {
+    display: flex;
+    gap: px-to-rem(8);
+    width: 100%;
+  }
+
+  button {
+    flex: 1;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-card);
+    padding: px-to-rem(10) px-to-rem(16);
+    border-radius: px-to-rem(999);
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+
+    &[aria-selected="true"] {
+      background-color: var(--color-accent);
+      color: #fff;
+      border-color: var(--color-accent);
+    }
+  }
+
+  &__tabpanel {
+    border: 1px solid var(--color-border);
+    border-radius: px-to-rem(12);
+    padding: px-to-rem(16);
+    background-color: var(--color-card);
+    color: var(--color-text);
+    line-height: 1.5;
+  }
+}
+
