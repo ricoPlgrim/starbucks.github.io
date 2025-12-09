@@ -8,24 +8,25 @@ const FONT_SCALE_OPTIONS = [
   { id: "xlarge", label: "아주 크게" },
 ];
 
-const ACCESSIBILITY_CHECKLIST = [
-  { id: "contrast", label: "색상 대비 비율 4.5:1 이상", checked: false },
-  { id: "font-size", label: "최소 폰트 크기 14px 이상", checked: false },
-  { id: "focus", label: "키보드 포커스 표시 명확", checked: false },
-  { id: "alt", label: "이미지 alt 텍스트 제공", checked: false },
-  { id: "aria", label: "ARIA 레이블 적절히 사용", checked: false },
-  { id: "semantic", label: "시맨틱 HTML 태그 사용", checked: false },
-];
+// TODO: 접근성 체크리스트 기능 구현 예정
+// const ACCESSIBILITY_CHECKLIST = [
+//   { id: "contrast", label: "색상 대비 비율 4.5:1 이상", checked: false },
+//   { id: "font-size", label: "최소 폰트 크기 14px 이상", checked: false },
+//   { id: "focus", label: "키보드 포커스 표시 명확", checked: false },
+//   { id: "alt", label: "이미지 alt 텍스트 제공", checked: false },
+//   { id: "aria", label: "ARIA 레이블 적절히 사용", checked: false },
+//   { id: "semantic", label: "시맨틱 HTML 태그 사용", checked: false },
+// ];
 
 function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScale }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [checklist, setChecklist] = useState(ACCESSIBILITY_CHECKLIST);
-
-  const toggleChecklist = (id) => {
-    setChecklist((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
-    );
-  };
+  // TODO: 접근성 체크리스트 기능 구현 예정
+  // const [checklist, setChecklist] = useState(ACCESSIBILITY_CHECKLIST);
+  // const toggleChecklist = (id) => {
+  //   setChecklist((prev) =>
+  //     prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
+  //   );
+  // };
 
   const currentFontScaleLabel =
     FONT_SCALE_OPTIONS.find((option) => option.id === fontScale)?.label ?? "보통";

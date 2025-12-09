@@ -112,7 +112,6 @@ const Image = ({
           className={`${classes} image--fallback`}
           width={width}
           height={height}
-          role="img"
           {...props}
         />
       )}

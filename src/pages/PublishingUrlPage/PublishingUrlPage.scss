@@ -17,7 +17,8 @@
   }
 
   &__table-container {
-    width: 100%;
+    width: 100% !important;
+    padding: 0 !important;
     background-color: var(--color-card);
     border: 1px solid var(--color-border);
     overflow: hidden;
@@ -79,6 +80,21 @@
 
 
 // 반응형 디자인
+
+// 테블릿 (768px ~ 1024px)
+@media (max-width: 1024px) and (min-width: 769px) {
+  .publishing-url-page {
+    &__table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch; // iOS 부드러운 스크롤
+    }
+  }
+
+  .publishing-url-table {
+    min-width: 1000px; // 테블릿에서도 모든 컬럼이 보이도록 최소 너비 증가
+  }
+}
+
 @media (max-width: 768px) {
   .publishing-url-page {
     padding: px-to-rem(20);
