@@ -11,6 +11,8 @@ import Tooltip from "../../components/Tooltip/Tooltip";
 import DragDropList from "../../components/DragDropList/DragDropList";
 import Carousel from "../../components/Carousel/Carousel";
 import Dropdown from "../../components/Dropdown/Dropdown";
+import ImageZoomPopup from "../../components/Popup/ImageZoomPopup";
+import Footer from "../../components/Footer/Footer";
 import "../../components/Popup/Popup.scss";
 import "./PublishingGuidePage.scss";
 
@@ -588,28 +590,7 @@ const HeaderPreview = () => {
 const FooterPreview = () => {
   return (
     <div className="guide-preview guide-preview--footer">
-      <footer className="footer-demo">
-        <div className="footer-demo__top">
-          <div className="footer-demo__logo">스타벅스</div>
-          <nav className="footer-demo__nav">
-            <a href="#company">회사소개</a>
-            <a href="#policy">개인정보처리방침</a>
-            <a href="#faq">FAQ</a>
-            <a href="#contact">문의하기</a>
-          </nav>
-        </div>
-        <div className="footer-demo__bottom">
-          <div className="footer-demo__info">
-            <p>서울시 어딘가 123, 스타벅스코리아</p>
-            <p>고객센터 1234-5678 | support@starbucks.co.kr</p>
-          </div>
-          <div className="footer-demo__sns">
-            <span>Instagram</span>
-            <span>Facebook</span>
-            <span>Youtube</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };
@@ -865,6 +846,33 @@ if (dragDistance > threshold) closeSheet();`,
     PreviewComponent: PopupPreview,
   },
   {
+    id: "image-zoom",
+    label: "이미지 줌 팝업",
+    title: "풀스크린 이미지 확대",
+    description: "풀팝업 위에 이미지를 올려두고 핀치/휠로 확대·축소하는 예시입니다.",
+    code: `<ImageZoomPopup
+  src="https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&w=1200"
+  open={open}
+  onClose={() => setOpen(false)}
+/>`,
+    PreviewComponent: () => {
+      const [open, setOpen] = useState(false);
+      return (
+        <div className="guide-preview guide-preview--popup">
+          <button className="btn btn--primary btn--sm" onClick={() => setOpen(true)}>
+            이미지 풀팝업 열기
+          </button>
+          <ImageZoomPopup
+            src="https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&w=1200"
+            alt="샘플 이미지"
+            open={open}
+            onClose={() => setOpen(false)}
+          />
+        </div>
+      );
+    },
+  },
+  {
     id: "datepicker",
     label: "데이터피커",
     title: "데이터 피커",
@@ -1092,7 +1100,7 @@ const guideGroups = [
   {
     id: "ui-group",
     label: "UI 컴포넌트",
-    items: ["icon", "button", "component", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd", "carousel", "dropdown"],
+    items: ["icon", "button", "component", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd", "carousel", "dropdown", "image-zoom"],
   },
 ];
 

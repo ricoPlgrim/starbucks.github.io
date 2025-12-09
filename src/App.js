@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import PublishingGuidePage from "./pages/PublishingGuidePage/PublishingGuidePage";
 import PublishingUrlPage from "./pages/PublishingUrlPage/PublishingUrlPage";
+import SamplePage from "./pages/SamplePage/SamplePage";
+import Footer from "./components/Footer/Footer";
 import "./App.scss";
 
 function App() {
@@ -61,9 +63,19 @@ function App() {
         >
           퍼블리싱 가이드
         </button>
+        <button
+          className={`app-nav-btn ${currentPage === "sample" ? "active" : ""}`}
+          onClick={() => handlePageChange("sample")}
+        >
+          샘플 페이지
+        </button>
       </nav>
 
-      {currentPage === "guide" ? <PublishingGuidePage /> : <PublishingUrlPage />}
+      {currentPage === "guide" && <PublishingGuidePage />}
+      {currentPage === "url" && <PublishingUrlPage />}
+      {currentPage === "sample" && <SamplePage />}
+
+      <Footer />
     </div>
   );
 }

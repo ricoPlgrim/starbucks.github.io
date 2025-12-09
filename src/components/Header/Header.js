@@ -129,27 +129,6 @@ function Header({ currentPage, onPageChange }) {
           {/* 메뉴 리스트 */}
           <nav className="header__nav">
             <ul className="header__nav-list">
-              {/* 페이지 네비게이션 */}
-              <li className="header__nav-item">
-                <button
-                  className={`header__nav-link ${currentPage === "url" ? "is-active" : ""}`}
-                  onClick={() => handlePageChange("url")}
-                >
-                  URL 관리
-                </button>
-              </li>
-              <li className="header__nav-item">
-                <button
-                  className={`header__nav-link ${currentPage === "guide" ? "is-active" : ""}`}
-                  onClick={() => handlePageChange("guide")}
-                >
-                  퍼블리싱 가이드
-                </button>
-              </li>
-
-              {/* 구분선 */}
-              <li className="header__nav-divider"></li>
-
               {/* GNB 메뉴 (3뎁스) */}
               {gnbMenu.map((menu) => (
                 <li key={menu.id} className="header__nav-item header__nav-item--has-children">

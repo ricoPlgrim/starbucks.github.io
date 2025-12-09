@@ -1,0 +1,63 @@
+@use "../../styles/index.scss" as *;
+
+.footer {
+  border: px(1) solid var(--color-border);
+  border-radius: px(12);
+  padding: px(20);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
+  gap: px(16);
+
+  &__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: px(12);
+    align-items: center;
+  }
+
+  &__logo {
+    font-weight: 800;
+    font-size: px(18);
+    color: var(--color-accent);
+  }
+
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px(12);
+
+    a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: px(14);
+      padding: px(6) px(8);
+      border-radius: px(8);
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      &:hover {
+        color: var(--color-accent);
+        background-color: rgba(12, 124, 89, 0.08);
+      }
+    }
+  }
+
+  &__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: px(12);
+    font-size: px(13);
+    color: var(--color-muted);
+  }
+
+  &__sns {
+    display: flex;
+    gap: px(10);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+}
+
