@@ -613,6 +613,40 @@
     width: 100%;
   }
 
+  &--toggle {
+    display: flex;
+    flex-direction: column;
+    gap: px(12);
+    width: 100%;
+
+    .toggle-status {
+      display: inline-flex;
+      gap: px(8);
+      align-items: center;
+      padding: px(10) px(12);
+      border-radius: px(10);
+      border: 1px solid var(--color-border);
+      background: var(--color-card);
+
+      code {
+        color: var(--color-accent);
+        font-weight: 700;
+      }
+    }
+  }
+
+  &--toast {
+    display: flex;
+    flex-direction: column;
+    gap: px(12);
+
+    .toast-actions {
+      display: flex;
+      gap: px(8);
+      flex-wrap: wrap;
+    }
+  }
+
   &--icons {
     .icon-chip {
       border: 1px solid var(--color-border);
@@ -1083,6 +1117,47 @@
             background: rgba(0, 0, 0, 0.05);
           }
         }
+      }
+    }
+  }
+
+  &--dock {
+    display: flex;
+    flex-direction: column;
+    gap: px(12);
+
+    .dock-status {
+      display: inline-flex;
+      gap: px(6);
+      align-items: center;
+      padding: px(10) px(12);
+      border: 1px solid var(--color-border);
+      border-radius: px(10);
+      background: var(--color-card);
+
+      strong {
+        color: var(--color-accent);
+      }
+    }
+  }
+
+  &--listsync {
+    display: flex;
+    flex-direction: column;
+    gap: px(12);
+
+    .listsync-status {
+      display: inline-flex;
+      gap: px(8);
+      align-items: center;
+      padding: px(10) px(12);
+      border: 1px solid var(--color-border);
+      border-radius: px(10);
+      background: var(--color-card);
+
+      code {
+        color: var(--color-accent);
+        font-weight: 700;
       }
     }
   }
@@ -1598,4 +1673,45 @@
   0% { opacity: 0; transform: scale(0.8); }
   10%, 90% { opacity: 1; transform: scale(1); }
   100% { opacity: 0; transform: scale(0.8); }
+}
+
+/* 컴포넌트 조합 프리뷰 */
+.guide-preview--slot {
+  width: 100%;
+}
+
+.slot-card {
+  display: flex;
+  flex-direction: column;
+  gap: px(12);
+  padding: px(16);
+  border: 1px solid var(--color-border);
+  border-radius: px(12);
+  background: var(--color-card);
+  box-shadow: var(--shadow-soft);
+
+  &__title {
+    margin: 0;
+    @include px(font-size, 18);
+    color: var(--color-text);
+    font-weight: 800;
+  }
+
+  &__body {
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.6;
+
+    ul {
+      margin: px(8) 0 0 0;
+      padding-left: px(18);
+      color: var(--color-muted);
+    }
+  }
+
+  &__footer {
+    display: flex;
+    gap: px(8);
+    flex-wrap: wrap;
+  }
 }

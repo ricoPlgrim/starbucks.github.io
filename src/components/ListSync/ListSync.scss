@@ -1,0 +1,102 @@
+@use "../../styles/index.scss" as *;
+
+.list-sync {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: px(16);
+  align-items: start;
+
+  &__source {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px(8);
+  }
+
+  &__option {
+    padding: px(10) px(12);
+    border-radius: px(10);
+    border: 1px solid var(--color-border);
+    background: var(--color-card);
+    color: var(--color-text);
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+      background: rgba(12, 124, 89, 0.06);
+    }
+  }
+
+  &__target {
+    border: 1px solid var(--color-border);
+    border-radius: px(12);
+    background: var(--color-card);
+    padding: px(12);
+    display: flex;
+    flex-direction: column;
+    gap: px(10);
+  }
+
+  &__target-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__count {
+    color: var(--color-accent);
+  }
+
+  &__empty {
+    margin: 0;
+    color: var(--color-muted);
+    @include px(font-size, 13);
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: px(8);
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: px(10) px(12);
+      border: 1px solid var(--color-border);
+      border-radius: px(10);
+      background: var(--color-bg);
+      color: var(--color-text);
+      gap: px(10);
+    }
+  }
+
+  &__remove {
+    padding: px(6) px(10);
+    border-radius: px(8);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    font-weight: 700;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: rgba(12, 124, 89, 0.08);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+
+  @media (max-width: 720px) {
+    grid-template-columns: 1fr;
+  }
+}
+

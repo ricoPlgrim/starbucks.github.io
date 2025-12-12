@@ -1,22 +1,36 @@
+@use "./mixins" as *;
+
 // Spacing Utilities
 // Margin utilities
 @for $i from 10 through 100 {
-  .mt-#{$i} { margin-top: #{$i}px; }
-  .mb-#{$i} { margin-bottom: #{$i}px; }
-  .ml-#{$i} { margin-left: #{$i}px; }
-  .mr-#{$i} { margin-right: #{$i}px; }
-  .mx-#{$i} { margin-left: #{$i}px; margin-right: #{$i}px; }
-  .my-#{$i} { margin-top: #{$i}px; margin-bottom: #{$i}px; }
-  .m-#{$i} { margin: #{$i}px; }
+  .mt-#{$i} { @include px(margin-top, $i); }
+  .mb-#{$i} { @include px(margin-bottom, $i); }
+  .ml-#{$i} { @include px(margin-left, $i); }
+  .mr-#{$i} { @include px(margin-right, $i); }
+  .mx-#{$i} {
+    @include px(margin-left, $i);
+    @include px(margin-right, $i);
+  }
+  .my-#{$i} {
+    @include px(margin-top, $i);
+    @include px(margin-bottom, $i);
+  }
+  .m-#{$i} { @include px(margin, $i); }
 }
 
 // Padding utilities
 @for $i from 10 through 100 {
-  .pt-#{$i} { padding-top: #{$i}px; }
-  .pb-#{$i} { padding-bottom: #{$i}px; }
-  .pl-#{$i} { padding-left: #{$i}px; }
-  .pr-#{$i} { padding-right: #{$i}px; }
-  .px-#{$i} { padding-left: #{$i}px; padding-right: #{$i}px; }
-  .py-#{$i} { padding-top: #{$i}px; padding-bottom: #{$i}px; }
-  .p-#{$i} { padding: #{$i}px; }
+  .pt-#{$i} { @include px(padding-top, $i); }
+  .pb-#{$i} { @include px(padding-bottom, $i); }
+  .pl-#{$i} { @include px(padding-left, $i); }
+  .pr-#{$i} { @include px(padding-right, $i); }
+  .px-#{$i} {
+    @include px(padding-left, $i);
+    @include px(padding-right, $i);
+  }
+  .py-#{$i} {
+    @include px(padding-top, $i);
+    @include px(padding-bottom, $i);
+  }
+  .p-#{$i} { @include px(padding, $i); }
 }

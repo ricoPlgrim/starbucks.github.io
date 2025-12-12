@@ -12,6 +12,10 @@ import DragDropList from "../../components/DragDropList/DragDropList";
 import Carousel from "../../components/Carousel/Carousel";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import ImageZoomPopup from "../../components/Popup/ImageZoomPopup";
+import Toggle from "../../components/Toggle/Toggle";
+import Toast from "../../components/Toast/Toast";
+import BottomDock from "../../components/BottomDock/BottomDock";
+import ListSync from "../../components/ListSync/ListSync";
 import Footer from "../../components/Footer/Footer";
 import "../../components/Popup/Popup.scss";
 import "./PublishingGuidePage.scss";
@@ -257,6 +261,150 @@ const ButtonPreview = () => (
     </ul>
   </div>
 );
+
+const TogglePreview = () => {
+  const [states, setStates] = useState({
+    wifi: true,
+    push: false,
+    marketing: false,
+  });
+
+  const handleChange = (key, next) => {
+    setStates((prev) => ({ ...prev, [key]: next }));
+  };
+
+  return (
+    <div className="guide-preview guide-preview--toggle">
+      <Toggle
+        label="Wi-Fi 자동 연결"
+        description="보안이 약한 네트워크는 자동 연결하지 않습니다."
+        defaultOn={states.wifi}
+        onChange={(next) => handleChange("wifi", next)}
+      />
+      <Toggle
+        label="푸시 알림"
+        description="중요 공지와 업데이트 소식을 받아봅니다."
+        defaultOn={states.push}
+        onChange={(next) => handleChange("push", next)}
+      />
+      <Toggle
+        label="마케팅 수신 동의"
+        description="이벤트와 혜택 정보를 이메일로 받아봅니다."
+        defaultOn={states.marketing}
+        onChange={(next) => handleChange("marketing", next)}
+      />
+      <div className="toggle-status">
+        <span>현재 상태: </span>
+        <code>Wi-Fi {states.wifi ? "ON" : "OFF"} · Push {states.push ? "ON" : "OFF"} · Marketing {states.marketing ? "ON" : "OFF"}</code>
+      </div>
+    </div>
+  );
+};
+
+const ToastPreview = () => {
+  const [toast, setToast] = useState({ message: "", type: "info", key: 0 });
+
+  const showToast = (type, message) => {
+    setToast({ message, type, key: Date.now() });
+  };
+
+  const clearToast = () => setToast({ message: "", type: "info", key: toast.key });
+
+  return (
+    <div className="guide-preview guide-preview--toast">
+      <div className="toast-actions">
+        <button className="btn btn--primary btn--sm" onClick={() => showToast("success", "저장되었습니다.")}>
+          성공 토스트
+        </button>
+        <button className="btn btn--secondary btn--sm" onClick={() => showToast("warning", "네트워크가 불안정합니다.")}>
+          경고 토스트
+        </button>
+        <button className="btn btn--ghost btn--sm" onClick={() => showToast("danger", "저장에 실패했습니다.")}>
+          에러 토스트
+        </button>
+      </div>
+
+      <div className="toast-stack">
+        <Toast key={toast.key} message={toast.message} type={toast.type} onClose={clearToast} />
+      </div>
+    </div>
+  );
+};
+
+const BottomDockPreview = () => {
+  const [last, setLast] = useState("home");
+
+  const items = [
+    { key: "home", label: "홈", icon: "🏠" },
+    { key: "search", label: "검색", icon: "🔍" },
+    { key: "bookmark", label: "즐겨찾기", icon: "⭐" },
+    { key: "chat", label: "채팅", icon: "💬" },
+    { key: "profile", label: "내 정보", icon: "👤" },
+  ];
+
+  return (
+    <div className="guide-preview guide-preview--dock">
+      <BottomDock items={items} defaultActive={last} onChange={(key) => setLast(key)} />
+      <div className="dock-status">
+        마지막 클릭: <strong>{last}</strong>
+      </div>
+    </div>
+  );
+};
+
+const ListSyncPreview = () => {
+  const options = [
+    { value: "react", label: "React" },
+    { value: "vue", label: "Vue" },
+    { value: "svelte", label: "Svelte" },
+    { value: "next", label: "Next.js" },
+    { value: "astro", label: "Astro" },
+  ];
+  const [selected, setSelected] = useState([]);
+
+  return (
+    <div className="guide-preview guide-preview--listsync">
+      <ListSync options={options} onChange={setSelected} />
+      <div className="listsync-status">
+        <span>현재 선택:</span>
+        <code>{selected.map((s) => s.label).join(", ") || "없음"}</code>
+      </div>
+    </div>
+  );
+};
+
+const ComponentPropPreview = () => {
+  const Title = () => <h4 className="slot-card__title">슬롯 타이틀</h4>;
+  const Body = () => (
+    <div className="slot-card__body">
+      <p>컴포넌트 props로 다른 컴포넌트를 주입해 레이아웃을 재사용할 수 있습니다.</p>
+      <ul>
+        <li>HeaderComponent, ContentComponent, FooterComponent를 교체</li>
+        <li>필요 시 children 조합도 가능</li>
+      </ul>
+    </div>
+  );
+  const FooterSlot = () => (
+    <div className="slot-card__footer">
+      <button className="btn btn--primary btn--sm">확인</button>
+      <button className="btn btn--ghost btn--sm">취소</button>
+    </div>
+  );
+
+  const SlotCard = ({ HeaderComponent, ContentComponent, FooterComponent }) => (
+    <div className="slot-card">
+      <HeaderComponent />
+      <ContentComponent />
+      <FooterComponent />
+    </div>
+  );
+
+  return (
+    <div className="guide-preview guide-preview--slot">
+      <SlotCard HeaderComponent={Title} ContentComponent={Body} FooterComponent={FooterSlot} />
+    </div>
+  );
+};
 
 const PopupPreview = () => {
   const [isBasicOpen, setIsBasicOpen] = useState(false);
@@ -740,6 +888,20 @@ return (
     PreviewComponent: IconPreview,
   },
   {
+    id: "toggle",
+    label: "토글",
+    title: "토글 스위치",
+    description:
+      "접근성을 고려한 role=\"switch\" 기반 토글입니다. 라벨과 설명을 함께 제공하고, 상태 변화는 onChange 이벤트로 전달합니다.",
+    code: `<Toggle
+  label="푸시 알림"
+  description="중요 공지와 업데이트 소식을 받아봅니다."
+  defaultOn={false}
+  onChange={(next) => console.log(next)}
+/>`,
+    PreviewComponent: TogglePreview,
+  },
+  {
     id: "form",
     label: "폼",
     title: "폼 요소",
@@ -790,6 +952,53 @@ return (
     PreviewComponent: ButtonPreview,
   },
   {
+    id: "toast",
+    label: "토스트",
+    title: "토스트 알림",
+    description:
+      "성공/경고/에러 등 상태에 따라 색상이 바뀌는 토스트 알림입니다. 지정된 시간 후 자동으로 사라지며 닫기 버튼을 제공합니다.",
+    code: `const [toast, setToast] = useState({ message: "", type: "info" });
+
+const showToast = (type, message) => {
+  setToast({ message, type });
+};
+
+<Toast message={toast.message} type={toast.type} onClose={() => setToast({ message: "", type: "info" })} />`,
+    PreviewComponent: ToastPreview,
+  },
+  {
+    id: "dock",
+    label: "돗바",
+    title: "하단 돗바 내비게이션",
+    description:
+      "모바일 하단 고정형 돗바 UI. 아이콘/라벨 목록을 props로 받아 활성 상태를 표시하며 onChange로 선택 값을 전달합니다.",
+    code: `const items = [
+  { key: "home", label: "홈", icon: "🏠" },
+  { key: "search", label: "검색", icon: "🔍" },
+  { key: "bookmark", label: "즐겨찾기", icon: "⭐" },
+  { key: "profile", label: "내 정보", icon: "👤" },
+];
+
+<BottomDock
+  items={items}
+  defaultActive="home"
+  onChange={(key) => console.log("selected", key)}
+/>`,
+    PreviewComponent: BottomDockPreview,
+  },
+  {
+    id: "listsync",
+    label: "리스트 동기화",
+    title: "선택 리스트 연동",
+    description:
+      "좌측 버튼 리스트를 클릭하면 우측 리스트에 li로 추가되고, 삭제 버튼을 누르면 선택 목록에서 제거됩니다. onChange로 최신 선택 배열을 전달합니다.",
+    code: `const options = [{ value: "react", label: "React" }, ...];
+const [selected, setSelected] = useState([]);
+
+<ListSync options={options} onChange={setSelected} />`,
+    PreviewComponent: ListSyncPreview,
+  },
+  {
     id: "component",
     label: "컴포넌트",
     title: "카드 컴포넌트",
@@ -801,6 +1010,31 @@ return (
   <p class="card__desc">2줄에서 말줄임 처리를 적용합니다.</p>
 </article>`,
     PreviewComponent: CardPreview,
+  },
+  {
+    id: "component-props",
+    label: "컴포넌트 조합",
+    title: "컴포넌트를 props로 주입",
+    description:
+      "레이아웃 컴포넌트에 Header/Content/Footer를 props로 전달해 원하는 UI를 끼워 넣을 수 있습니다. children 패턴과 병행해 재사용성을 높입니다.",
+    code: `const CardShell = ({ HeaderComponent, ContentComponent, FooterComponent }) => (
+  <div className="card-shell">
+    <HeaderComponent />
+    <ContentComponent />
+    <FooterComponent />
+  </div>
+);
+
+const Title = () => <h4>슬롯 타이틀</h4>;
+const Body = () => <p>필요한 본문을 컴포넌트로 전달</p>;
+const Footer = () => <button>확인</button>;
+
+<CardShell
+  HeaderComponent={Title}
+  ContentComponent={Body}
+  FooterComponent={Footer}
+/>`,
+    PreviewComponent: ComponentPropPreview,
   },
   {
     id: "table",
@@ -1100,7 +1334,7 @@ const guideGroups = [
   {
     id: "ui-group",
     label: "UI 컴포넌트",
-    items: ["icon", "button", "component", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd", "carousel", "dropdown", "image-zoom"],
+    items: ["icon", "toggle", "button", "toast", "dock", "listsync", "component", "component-props", "table", "tab", "image", "more", "pagination", "popup", "datepicker", "tooltip", "dnd", "carousel", "dropdown", "image-zoom"],
   },
 ];
 

@@ -8,22 +8,6 @@ const PlaceholderCard = ({ title, desc }) => (
     <p>{desc}</p>
   </div>
 );
-
-const SampleFooter = () => (
-  <footer className="sample-footer">
-    <div className="sample-footer__inner">
-      <div>
-        <h5>Footer 영역</h5>
-        <p>공통 푸터 컴포넌트를 대신할 샘플 섹션입니다.</p>
-      </div>
-      <div>
-        <h5>링크</h5>
-        <p>회사 정보 / 고객센터 등</p>
-      </div>
-    </div>
-  </footer>
-);
-
 function SamplePage() {
   return (
     <div className="sample-page">
@@ -69,8 +53,7 @@ function SamplePage() {
           </div>
         </section>
       </main>
-
-      <Footer />
+      
     </div>
   );
 }
