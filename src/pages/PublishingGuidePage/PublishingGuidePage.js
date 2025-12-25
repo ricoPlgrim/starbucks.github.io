@@ -62,6 +62,7 @@ import Spacing, { SpacingScale, SpacingExample } from "../../components/Spacing/
 import Container, { ContainerScale, GridSystem } from "../../components/Layout/Layout";
 import Icon from "../../components/Icon/Icon";
 import Button from "../../components/Button/Button";
+import BorderAnimation from "../../components/BorderAnimation/BorderAnimation";
 
 // 코드 블록 컴포넌트 (구문 강조 적용)
 const CodeBlock = ({ code }) => {
@@ -2449,6 +2450,48 @@ const LayoutSpacingPreview = () => {
   );
 };
 
+const BorderAnimationPreview = () => {
+  return (
+    <div className="guide-preview guide-preview--border-animation">
+      <div className="border-animation-grid">
+        <div className="border-animation-item">
+          <h5>회전하는 그라데이션</h5>
+          <BorderAnimation variant="rotate">
+            <div>
+              <Typography variant="h6" size="medium">회전 보더</Typography>
+              <Typography variant="body" size="small" color="muted">
+                그라데이션이 회전하는 보더 애니메이션
+              </Typography>
+            </div>
+          </BorderAnimation>
+        </div>
+        <div className="border-animation-item">
+          <h5>펄스 보더</h5>
+          <BorderAnimation variant="pulse">
+            <div>
+              <Typography variant="h6" size="medium">펄스 보더</Typography>
+              <Typography variant="body" size="small" color="muted">
+                맥박처럼 뛰는 펄스 애니메이션
+              </Typography>
+            </div>
+          </BorderAnimation>
+        </div>
+        <div className="border-animation-item">
+          <h5>그라데이션 보더</h5>
+          <BorderAnimation variant="gradient">
+            <div>
+              <Typography variant="h6" size="medium">그라데이션 보더</Typography>
+              <Typography variant="body" size="small" color="muted">
+                위에서 아래로 흐르는 그라데이션
+              </Typography>
+            </div>
+          </BorderAnimation>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // 가이드 섹션 정의
 const guideSections = [
   {
@@ -3328,6 +3371,69 @@ import Icon from "./Icon";
 // 4. focus-visible 상태에서 접근성을 위한 outline 표시
 // 5. 아이콘과 텍스트를 함께 사용할 때는 gap이 자동으로 적용됨`,
     PreviewComponent: ButtonPreview,
+  },
+  {
+    id: "border-animation",
+    label: "보더 애니메이션",
+    title: "BorderAnimation 컴포넌트",
+    description:
+      "다양한 보더 애니메이션 효과를 제공하는 컴포넌트입니다. 회전하는 그라데이션, 펄스, 그라데이션 등 3가지 애니메이션 타입을 지원합니다. _mixins.scss에 정의된 mixin을 사용하여 구현되었습니다.",
+    code: `import BorderAnimation from "./BorderAnimation";
+
+// ===== Props 설명 =====
+// children: 내부 콘텐츠
+// variant: 'rotate' | 'pulse' | 'gradient' (기본값: 'rotate')
+// className: 추가 클래스명
+// style: 인라인 스타일
+
+// ===== 회전하는 그라데이션 보더 =====
+<BorderAnimation variant="rotate">
+  <div>
+    <h3>회전 보더</h3>
+    <p>그라데이션이 회전하는 보더 애니메이션</p>
+  </div>
+</BorderAnimation>
+
+// ===== 펄스 보더 =====
+<BorderAnimation variant="pulse">
+  <div>
+    <h3>펄스 보더</h3>
+    <p>맥박처럼 뛰는 펄스 애니메이션</p>
+  </div>
+</BorderAnimation>
+
+// ===== 그라데이션 보더 =====
+<BorderAnimation variant="gradient">
+  <div>
+    <h3>그라데이션 보더</h3>
+    <p>위에서 아래로 흐르는 그라데이션</p>
+  </div>
+</BorderAnimation>
+
+// ===== Mixin 사용법 =====
+// _mixins.scss에 정의된 mixin을 직접 사용할 수도 있습니다:
+
+// 회전하는 그라데이션
+@include border-animation-rotate(2px, (#0c7c59, #4ade80, #0c7c59), 3s);
+
+// 펄스 보더
+@include border-animation-pulse(2px, #0c7c59, 2s);
+
+// 그라데이션 보더
+@include border-animation-gradient(2px, (#0c7c59, #4ade80), 3s);
+
+// ===== Mixin 파라미터 =====
+// border-width: 보더 두께 (기본값: 2px)
+// colors: 그라데이션 색상 배열 (rotate, gradient용)
+// color: 단일 색상 (pulse용)
+// duration: 애니메이션 지속 시간 (기본값: 2s 또는 3s)
+
+// ===== 주의사항 =====
+// 1. 모든 애니메이션은 무한 반복됩니다 (infinite)
+// 2. 보더 애니메이션은 ::before pseudo-element를 사용합니다
+// 3. 내부 콘텐츠는 position: relative로 배치됩니다
+// 4. 배경색은 var(--color-card)를 사용합니다`,
+    PreviewComponent: BorderAnimationPreview,
   },
   {
     id: "toast",
@@ -4385,7 +4491,7 @@ const guideGroups = [
   {
     id: "button-toggle-group",
     label: "버튼 & 토글",
-    items: ["button", "toggle"],
+    items: ["border-animation", "button", "toggle"],
   },
   {
     id: "input-group",

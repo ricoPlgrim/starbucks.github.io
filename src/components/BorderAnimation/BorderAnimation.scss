@@ -1,0 +1,31 @@
+@use "../../styles/index.scss" as *;
+
+.border-animation {
+  padding: px(20);
+  min-height: px(100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text);
+
+  // 회전하는 그라데이션 보더
+  &--rotate {
+    @include border-animation-rotate(3px, (#0c7c59, #4ade80, #10b981, #4ade80, #0c7c59), 2s);
+  }
+
+  // 반짝이는 보더
+  &--shimmer {
+    @include border-animation-shimmer(3px, #4ade80, 7.5s);
+  }
+
+  // 펄스 보더
+  &--pulse {
+    @include border-animation-pulse(3px, #0c7c59, 4.5s);
+  }
+
+  // 그라데이션 보더
+  &--gradient {
+    @include border-animation-gradient(3px, (#0c7c59, #4ade80, #10b981), 2s);
+  }
+}
+

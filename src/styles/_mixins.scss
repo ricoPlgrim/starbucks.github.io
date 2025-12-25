@@ -1,5 +1,6 @@
 @use "sass:math";
 @use "sass:string";
+@use "sass:color";
 
 @function px-to-rem($value, $base: 16) {
   @if math.is-unitless($value) {
@@ -33,6 +34,149 @@
 
 @mixin px($property, $value, $max: null, $base: 16, $max-property: null) {
   @include px-to-rem($property, $value, $max, $base, $max-property);
+}
+
+// ===== 보더 애니메이션 Mixin =====
+// 회전하는 그라데이션 보더 애니메이션
+@mixin border-animation-rotate($border-width: 2px, $colors: (#0c7c59, #4ade80, #0c7c59), $duration: 3s) {
+  position: relative;
+  background: var(--color-card, #fff);
+  border-radius: px(8);
+  z-index: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: $border-width;
+    background: linear-gradient(45deg, $colors);
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: border-rotate $duration linear infinite;
+    z-index: -1;
+  }
+}
+
+// 반짝이는 보더 애니메이션 (회전하면서 반짝임)
+@mixin border-animation-shimmer($border-width: 2px, $color: #0c7c59, $duration: 2s) {
+  position: relative;
+  background: var(--color-card, #fff);
+  border-radius: px(8);
+  z-index: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: $border-width;
+    background: conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 60deg,
+      $color 90deg,
+      color.adjust($color, $lightness: 15%) 120deg,
+      $color 150deg,
+      transparent 210deg,
+      transparent 270deg,
+      $color 300deg,
+      color.adjust($color, $lightness: 15%) 330deg,
+      $color 360deg
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: border-shimmer-rotate $duration linear infinite;
+    z-index: -1;
+  }
+}
+
+// 펄스 보더 애니메이션
+@mixin border-animation-pulse($border-width: 2px, $color: #0c7c59, $duration: 2s) {
+  position: relative;
+  background: var(--color-card, #fff);
+  border-radius: px(8);
+  border: $border-width solid $color;
+  animation: border-pulse $duration ease-in-out infinite;
+  
+  @keyframes border-pulse {
+    0%, 100% {
+      border-color: $color;
+      box-shadow: 0 0 0 0 rgba($color, 0.6);
+    }
+    50% {
+      $lightened: color.adjust($color, $lightness: 20%);
+      border-color: $lightened;
+      box-shadow: 0 0 0 px(12) rgba($color, 0.2), 0 0 0 px(20) rgba($color, 0);
+    }
+  }
+} 
+
+// 그라데이션 보더 애니메이션 (위에서 아래로)
+@mixin border-animation-gradient($border-width: 2px, $colors: (#0c7c59, #4ade80), $duration: 3s) {
+  position: relative;
+  background: var(--color-card, #fff);
+  border-radius: px(8);
+  z-index: 0;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: $border-width;
+    background: linear-gradient(180deg, $colors);
+    background-size: 100% 200%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    animation: border-gradient $duration linear infinite;
+    z-index: -1;
+  }
+}
+
+// 애니메이션 키프레임
+@keyframes border-rotate {
+  0% {
+    background-position: 0% 0%;
+  }
+  25% {
+    background-position: 100% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  75% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+@keyframes border-shimmer-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+@keyframes border-gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 0% 100%;
+  }
 }
 
 

@@ -1084,7 +1084,42 @@
   }
 }
 
+.border-animation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(px(280), 1fr));
+  gap: px(24);
+  width: 100%;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: px(20);
+  }
+}
+
+.border-animation-item {
+  display: flex;
+  flex-direction: column;
+  gap: px(12);
+
+  h5 {
+    margin: 0;
+    @include px(font-size, 14);
+    font-weight: 700;
+    color: var(--color-text);
+    padding-bottom: px(8);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .border-animation {
+    min-height: px(120);
+  }
+}
+
 .guide-preview {
+  &--border-animation {
+    width: 100%;
+    padding: px(20);
+  }
   &--card {
     display: flex;
     flex-direction: column;

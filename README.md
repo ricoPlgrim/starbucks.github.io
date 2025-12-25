@@ -78,37 +78,70 @@ npm run build:analyze
 ## 프로젝트 구조
 
 ```
-stabucks/
+Newstarbucks/
 ├── public/
-│   └── index.html              # HTML 템플릿 (초기 테마 설정 포함)
+│   └── index.html                    # HTML 템플릿 (초기 테마 설정 포함)
 ├── src/
-│   ├── components/
-│   │   ├── AccessibilityHelper/    # 접근성 도우미 컴포넌트
-│   │   │   ├── AccessibilityHelper.js
-│   │   │   └── AccessibilityHelper.scss
-│   │   └── PageTemplate/            # 페이지 템플릿 컴포넌트
-│   │       ├── PageTemplate.js
-│   │       └── PageTemplate.scss
-│   ├── pages/
-│   │   ├── PublishingGuidePage/     # 퍼블리싱 가이드 페이지
-│   │   │   ├── PublishingGuidePage.js
-│   │   │   └── PublishingGuidePage.scss
-│   │   ├── PublishingUrlPage/       # 퍼블리싱 URL 관리 페이지
-│   │   │   ├── PublishingUrlPage.js
-│   │   │   └── PublishingUrlPage.scss
-│   │   └── ExamplePage/             # 예시 페이지
-│   │       ├── ExamplePage.js
-│   │       └── ExamplePage.scss
-│   ├── styles/
-│   │   ├── _variables.scss          # CSS 변수 정의
-│   │   ├── _mixins.scss             # SCSS 믹스인 (px-to-rem)
-│   │   ├── _utilities.scss          # 유틸리티 클래스 (mt-10, pt-20 등)
-│   │   ├── _base.scss               # 기본 스타일
-│   │   └── index.scss               # 스타일 통합 파일
-│   ├── App.js                       # 메인 앱 컴포넌트
-│   └── index.js                     # 진입점
-├── PAGE_GUIDE.md                    # 페이지 개발 가이드
-└── README.md                        # 프로젝트 문서 (현재 파일)
+│   ├── components/                    # 재사용 가능한 컴포넌트
+│   │   ├── AccessibilityHelper/      # 접근성 도우미 컴포넌트
+│   │   ├── Accordion/                # 아코디언 컴포넌트
+│   │   ├── Badge/                    # 뱃지 컴포넌트
+│   │   ├── BorderAnimation/          # 보더 애니메이션 컴포넌트
+│   │   ├── BottomDock/               # 하단 돗바 컴포넌트
+│   │   ├── Button/                   # 버튼 컴포넌트
+│   │   ├── Card/                     # 카드 컴포넌트
+│   │   ├── Carousel/                 # 캐러셀 컴포넌트
+│   │   ├── Checkbox/                 # 체크박스 컴포넌트
+│   │   ├── Color/                    # 컬러 컴포넌트 (디자인 시스템)
+│   │   ├── DatePicker/               # 날짜 선택 컴포넌트
+│   │   ├── DragDropList/             # 드래그앤드랍 리스트
+│   │   ├── Dropdown/                 # 드롭다운 컴포넌트
+│   │   ├── EmptyState/               # 빈 상태 UI
+│   │   ├── ErrorState/               # 에러 상태 UI
+│   │   ├── FileUpload/               # 파일 업로드 컴포넌트
+│   │   ├── Footer/                   # 푸터 컴포넌트
+│   │   ├── FormSample/               # 폼 예제 컴포넌트
+│   │   ├── Header/                   # 헤더 컴포넌트
+│   │   ├── Icon/                     # 아이콘 컴포넌트
+│   │   ├── Image/                    # 이미지 컴포넌트
+│   │   ├── Input/                    # 입력 컴포넌트
+│   │   ├── Layout/                   # 레이아웃 컴포넌트 (디자인 시스템)
+│   │   ├── List/                     # 리스트 컴포넌트
+│   │   ├── ListSync/                 # 리스트 동기화 컴포넌트
+│   │   ├── Loading/                  # 로딩 인디케이터
+│   │   ├── LoadingGrid/              # 로딩 그리드
+│   │   ├── Lottie/                   # Lottie 애니메이션
+│   │   ├── Notice/                   # 공지사항 컴포넌트
+│   │   ├── PageTemplate/             # 페이지 템플릿 컴포넌트
+│   │   ├── Popup/                    # 팝업 컴포넌트
+│   │   ├── Radio/                    # 라디오 버튼 컴포넌트
+│   │   ├── SearchField/              # 검색 필드 컴포넌트
+│   │   ├── Select/                   # 셀렉트 박스 컴포넌트
+│   │   ├── Skeleton/                 # 스켈레톤 로딩 컴포넌트
+│   │   ├── Spacing/                  # 스페이싱 컴포넌트 (디자인 시스템)
+│   │   ├── TableDemo/                # 테이블 데모 컴포넌트
+│   │   ├── Tabs/                     # 탭 컴포넌트
+│   │   ├── Textarea/                 # 텍스트 영역 컴포넌트
+│   │   ├── Toast/                    # 토스트 알림 컴포넌트
+│   │   ├── Toggle/                   # 토글 스위치 컴포넌트
+│   │   ├── Tooltip/                  # 툴팁 컴포넌트
+│   │   └── Typography/               # 타이포그래피 컴포넌트 (디자인 시스템)
+│   ├── pages/                        # 페이지 컴포넌트
+│   │   ├── AmericanoPage/            # 아메리카노 페이지
+│   │   ├── PublishingGuidePage/      # 퍼블리싱 가이드 페이지
+│   │   ├── PublishingUrlPage/        # 퍼블리싱 URL 관리 페이지
+│   │   └── SamplePage/               # 샘플 페이지
+│   ├── styles/                       # 전역 스타일
+│   │   ├── _variables.scss           # CSS 변수 정의 (다크모드, 색상 등)
+│   │   ├── _mixins.scss              # SCSS 믹스인 (px-to-rem, 보더 애니메이션)
+│   │   ├── _utilities.scss           # 유틸리티 클래스 (mt-10, pt-20 등)
+│   │   ├── _base.scss                # 기본 스타일 (리셋, 기본 설정)
+│   │   └── index.scss                 # 스타일 통합 파일
+│   ├── App.js                        # 메인 앱 컴포넌트
+│   └── index.js                      # 진입점
+├── PAGE_GUIDE.md                     # 페이지 개발 가이드
+├── PAGE_CREATION_GUIDE.md            # 페이지 생성 가이드
+└── README.md                         # 프로젝트 문서 (현재 파일)
 ```
 
 ---
@@ -247,13 +280,20 @@ function MyPage() {
 
 프로젝트에 구현된 주요 컴포넌트들입니다. 자세한 사용법은 `PublishingGuidePage`에서 확인할 수 있습니다.
 
+#### 디자인 시스템
+- **Typography** - 타이포그래피 컴포넌트 (h1-h6, body, caption, overline, 다양한 size/weight/color 옵션)
+- **Color** - 컬러 컴포넌트 (브랜드 컬러, 상태 컬러, 다크모드 지원)
+- **Spacing** - 스페이싱 컴포넌트 (간격 토큰 시각화 및 예제)
+- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템)
+- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, size/color 옵션)
+
 #### 레이아웃
-- **Header** - 모바일 헤더 (햄버거 메뉴)
+- **Header** - 모바일 헤더 (햄버거 메뉴, 3뎁스 메뉴 구조)
 - **Footer** - 푸터
 - **PageTemplate** - 페이지 템플릿 (다크모드, 폰트 스케일 지원)
 
 #### 입력 컴포넌트
-- **Input** - 텍스트 입력 (text, password, number, validation states)
+- **Input** - 텍스트 입력 (text, password, number, validation states, help text, clear button)
 - **Select** - 셀렉트 박스 (native select with custom styling)
 - **Textarea** - 여러 줄 텍스트 입력
 - **FileUpload** - 파일 업로드 (이미지 미리보기, 최대 3개, 삭제 기능)
@@ -276,12 +316,12 @@ function MyPage() {
 
 #### 피드백
 - **Toast** - 토스트 알림
-- **Tooltip** - 툴팁
+- **Tooltip** - 툴팁 (top, bottom, left, right placement)
 - **Popup** - 팝업 (기본, 시트, 풀스크린)
 
 #### 미디어
 - **Image** - 이미지 컴포넌트 (에러 처리, 비율 자동 판단, landscape/portrait/square)
-- **Carousel** - 캐러셀 (Swiper 기반)
+- **Carousel** - 캐러셀 (Swiper 기반, 다양한 효과: fade, cube, coverflow, flip, multiple slides)
 - **Lottie** - Lottie 애니메이션
 
 #### 상태 & 로딩
@@ -292,13 +332,18 @@ function MyPage() {
 - **EmptyState** - 빈 상태 UI (데이터 없을 때)
 - **ErrorState** - 에러 상태 UI (error, nodata, network, notfound)
 
-#### 기타 UI
-- **Button** - 버튼 (Primary, Secondary, Ghost)
+#### 버튼 & 토글
+- **Button** - 버튼 (Primary, Secondary, Ghost variant, Small/Medium/Large size, disabled 상태, 아이콘 지원)
 - **Toggle** - 토글 스위치
+- **BorderAnimation** - 보더 애니메이션 (회전하는 그라데이션, 펄스, 그라데이션 효과)
+
+#### 드롭다운 & 피커
 - **Dropdown** - 드롭다운
 - **DatePicker** - 날짜 선택
+
+#### 기타 UI
 - **TableDemo** - 테이블
-- **FormSample** - 폼 요소
+- **FormSample** - 폼 요소 (유효성 검사 포함)
 - **DragDropList** - 드래그앤드랍 리스트
 - **ListSync** - 리스트 동기화
 
@@ -306,29 +351,41 @@ function MyPage() {
 
 ## 스타일 시스템
 
-### SCSS 믹스인: px (px-to-rem 단축)
+### SCSS 믹스인
 
-피그마에서 가져온 픽셀 값을 그대로 사용하면 자동으로 rem 단위로 변환됩니다. (`@include px(...)`)
+#### px (px-to-rem 단축)
 
-#### 기본 사용법
+피그마에서 가져온 픽셀 값을 그대로 사용하면 자동으로 rem 단위로 변환됩니다.
+
+##### 기본 사용법
 
 ```scss
 .my-element {
   @include px(font-size, 16);        // 16px → 1rem
   @include px(padding, 20);          // 20px → 1.25rem
-  @include px(margin, 12, 16);       // 12px → 0.75rem (기준값 16px)
+  @include px(margin, 12);           // 12px → 0.75rem
 }
 ```
 
-#### max-width 설정
+##### px() 함수 사용법
+
+```scss
+.my-element {
+  padding: px(20);              // 20px → 1.25rem
+  margin: px(16);               // 16px → 1rem
+  font-size: px(14);            // 14px → 0.875rem
+}
+```
+
+##### max-width 설정
 
 ```scss
 .container {
-  @include px(max-width, 1200, 16);  // max-width: 75rem
+  @include px(max-width, 1200);  // max-width: 75rem
 }
 ```
 
-#### 매개변수
+##### 매개변수
 
 | 매개변수 | Type | 기본값 | 설명 |
 |----------|------|--------|------|
@@ -336,6 +393,43 @@ function MyPage() {
 | `$value` | `number` | - | 피그마 픽셀 값 (필수) |
 | `$max` | `number` | `null` | 최대값 설정 (선택) |
 | `$base` | `number` | `16` | 기준 픽셀 값 (선택) |
+
+#### 보더 애니메이션 Mixin
+
+보더 애니메이션 효과를 위한 mixin을 제공합니다.
+
+##### 회전하는 그라데이션 보더
+
+```scss
+.my-element {
+  @include border-animation-rotate(3px, (#0c7c59, #4ade80, #10b981), 2s);
+}
+```
+
+##### 펄스 보더
+
+```scss
+.my-element {
+  @include border-animation-pulse(3px, #0c7c59, 1.5s);
+}
+```
+
+##### 그라데이션 보더
+
+```scss
+.my-element {
+  @include border-animation-gradient(3px, (#0c7c59, #4ade80), 2s);
+}
+```
+
+##### 매개변수
+
+| 매개변수 | Type | 기본값 | 설명 |
+|----------|------|--------|------|
+| `$border-width` | `number` | `2px` | 보더 두께 |
+| `$colors` | `list` | - | 그라데이션 색상 배열 (rotate, gradient용) |
+| `$color` | `color` | `#0c7c59` | 단일 색상 (pulse용) |
+| `$duration` | `time` | `2s` 또는 `3s` | 애니메이션 지속 시간 |
 
 ### 유틸리티 클래스
 
