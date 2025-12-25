@@ -7,6 +7,21 @@
   --color-border: rgba(12, 124, 89, 0.16);
   --shadow-soft: 0 12px 32px rgba(27, 27, 31, 0.08);
   --font-scale: 1;
+
+  // 상태 컬러
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.12);
+  --color-warning: #fbbf24;
+  --color-warning-bg: rgba(251, 191, 36, 0.12);
+  --color-error: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.12);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.12);
+
+  // 브랜드 컬러 팔레트
+  --color-brand-primary: #0c7c59;
+  --color-brand-primary-light: rgba(12, 124, 89, 0.12);
+  --color-brand-primary-dark: #0a6347;
 }
 
 :root[data-theme="dark"] {
@@ -14,8 +29,24 @@
   --color-card: #1a1c1f;
   --color-text: #f8f8fa;
   --color-muted: #a5a7ac;
-  --color-border: rgba(248, 248, 250, 0.08);
+  --color-accent: #4ade80;
+  --color-border: rgba(248, 248, 250, 0.08);    
   --shadow-soft: 0 12px 40px rgba(0, 0, 0, 0.35);
+
+  // 상태 컬러 (다크모드)
+  --color-success: #4ade80;
+  --color-success-bg: rgba(74, 222, 128, 0.15);
+  --color-warning: #fcd34d;
+  --color-warning-bg: rgba(252, 211, 77, 0.15);
+  --color-error: #f87171;
+  --color-error-bg: rgba(248, 113, 113, 0.15);
+  --color-info: #60a5fa;
+  --color-info-bg: rgba(96, 165, 250, 0.15);
+
+  // 브랜드 컬러 팔레트 (다크모드)
+  --color-brand-primary: #10b981;
+  --color-brand-primary-light: rgba(16, 185, 129, 0.15);
+  --color-brand-primary-dark: #0c7c59;
 }
 
 :root[data-font-scale="small"] {

@@ -1,6 +1,69 @@
 import { useState, useRef, useEffect } from "react";
 import "./Header.scss";
 
+// GNB 메뉴 데이터 (3뎁스 구조) - 컴포넌트 외부로 이동하여 모든 함수에서 사용 가능하도록
+const gnbMenu = [
+  {
+    id: "menu1",
+    label: "메뉴 1",
+    children: [
+      {
+        id: "submenu1-1",
+        label: "서브메뉴 1-1",
+        children: [
+          { id: "depth3-1-1", label: "3뎁스 1-1-1", href: "#" },
+          { id: "depth3-1-2", label: "3뎁스 1-1-2", href: "#" }
+        ]
+      },
+      {
+        id: "submenu1-2",
+        label: "서브메뉴 1-2",
+        children: [
+          { id: "depth3-1-3", label: "3뎁스 1-2-1", href: "#" },
+          { id: "depth3-1-4", label: "3뎁스 1-2-2", href: "#" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "menu2",
+    label: "메뉴 2",
+    children: [
+      {
+        id: "submenu2-1",
+        label: "서브메뉴 2-1",
+        children: [
+          { id: "depth3-2-1", label: "3뎁스 2-1-1", href: "#" },
+          { id: "depth3-2-2", label: "3뎁스 2-1-2", href: "#" }
+        ]
+      },
+      {
+        id: "submenu2-2",
+        label: "서브메뉴 2-2",
+        children: [
+          { id: "depth3-2-3", label: "3뎁스 2-2-1", href: "#" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "menu3",
+    label: "메뉴 3",
+    children: [
+      {
+        id: "submenu3-1",
+        label: "서브메뉴 3-1",
+        href: "#"
+      },
+      {
+        id: "submenu3-2",
+        label: "서브메뉴 3-2",
+        href: "#"
+      }
+    ]
+  }
+];
+
 function Header({ currentPage, onPageChange }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedItems, setExpandedItems] = useState({});
@@ -21,13 +84,47 @@ function Header({ currentPage, onPageChange }) {
    * 2뎁스, 3뎁스 메뉴 토글 이벤트 핸들러
    * 서브메뉴 클릭 시 해당 메뉴 열기/닫기
    * @param {string} key - 메뉴 ID
+   * @param {boolean} isMenu1Depth - 1뎁스 메뉴인지 여부
    */
-  const toggleExpanded = (key) => {
+  const toggleExpanded = (key, isMenu1Depth = false) => {
     setExpandedItems(prev => {
-      const newState = {
-        ...prev,
-        [key]: !prev[key]
-      };
+      const newState = { ...prev };
+      
+      // 1뎁스 메뉴를 클릭한 경우, 다른 1뎁스 메뉴와 그 하위 메뉴들을 모두 닫기
+      if (isMenu1Depth) {
+        // 모든 1뎁스 메뉴 ID 찾기
+        const menu1DepthKeys = gnbMenu.map(menu => menu.id);
+        
+        // 현재 클릭한 메뉴를 제외한 다른 1뎁스 메뉴와 그 하위 메뉴들 닫기
+        menu1DepthKeys.forEach(menuId => {
+          if (menuId !== key) {
+            // 다른 1뎁스 메뉴 닫기
+            delete newState[menuId];
+            
+            // 해당 1뎁스 메뉴의 모든 2뎁스, 3뎁스 메뉴도 닫기
+            const menu = gnbMenu.find(m => m.id === menuId);
+            if (menu && menu.children) {
+              menu.children.forEach(submenu => {
+                delete newState[submenu.id];
+              });
+            }
+          }
+        });
+      }
+      
+      // 현재 클릭한 메뉴 토글
+      newState[key] = !prev[key];
+      
+      // 현재 클릭한 메뉴가 1뎁스이고 닫히는 경우, 하위 메뉴들도 모두 닫기
+      if (isMenu1Depth && !newState[key]) {
+        const menu = gnbMenu.find(m => m.id === key);
+        if (menu && menu.children) {
+          menu.children.forEach(submenu => {
+            delete newState[submenu.id];
+          });
+        }
+      }
+      
       // ref에도 최신 상태 저장
       expandedItemsRef.current = newState;
       return newState;
@@ -42,6 +139,9 @@ function Header({ currentPage, onPageChange }) {
     setIsMenuOpen(false);
     setExpandedItems({});
   };
+
+  // expandedItems의 이전 상태를 추적하기 위한 ref
+  const prevExpandedItemsRef = useRef({});
 
   // expandedItems가 변경될 때마다 ref 업데이트
   useEffect(() => {
@@ -84,13 +184,22 @@ function Header({ currentPage, onPageChange }) {
   /**
    * 모든 열려있는 메뉴의 높이를 재계산하는 함수
    * @param {Object} expandedItemsState - 현재 expandedItems 상태
+   * @param {Object} prevExpandedItemsState - 이전 expandedItems 상태 (변경 감지용)
    */
-  const recalculateAllHeights = (expandedItemsState) => {
+  const recalculateAllHeights = (expandedItemsState, prevExpandedItemsState = {}) => {
     // 먼저 닫혀있는 메뉴는 max-height를 0으로 설정
     Object.keys(submenuRefs.current).forEach((key) => {
       const ref = submenuRefs.current[key];
       if (ref && !expandedItemsState[key]) {
-        ref.style.maxHeight = "0";
+        // 이전에 열려있었던 경우에만 transition 활성화 (닫힐 때 애니메이션)
+        if (prevExpandedItemsState[key]) {
+          ref.style.removeProperty("transition");
+          ref.style.maxHeight = "0";
+        } else {
+          // 처음부터 닫혀있던 경우 transition 없이 0으로 설정
+          ref.style.setProperty("transition", "none", "important");
+          ref.style.maxHeight = "0";
+        }
       }
     });
 
@@ -112,32 +221,44 @@ function Header({ currentPage, onPageChange }) {
     });
 
     // 1단계: 3뎁스 메뉴의 높이를 먼저 계산 (자식부터)
-    // 각 메뉴를 개별적으로 처리하여 정확한 높이 측정
     depth3Keys.forEach((key) => {
       const ref = submenuRefs.current[key];
       if (ref) {
-        // 높이 측정 (transition 비활성화 상태에서 측정)
-        const height = measureHeight(ref);
+        const wasClosed = !prevExpandedItemsState[key];
         
-        // transition을 다시 활성화하고 높이 설정
-        // 이렇게 하면 0 또는 이전 높이에서 height로 부드럽게 transition
-        ref.style.transition = "";
-        ref.style.maxHeight = height + "px";
+        if (wasClosed) {
+          // 열릴 때: transition 비활성화하고 0으로 설정
+          // 실제 애니메이션은 useEffect에서 처리
+          // 명시적으로 "none" 문자열로 설정하여 나중에 체크 가능하도록
+          ref.style.setProperty("transition", "none", "important");
+          ref.style.maxHeight = "0";
+        } else {
+          // 이미 열려있었던 경우: 높이만 재계산
+          const height = measureHeight(ref);
+          ref.style.removeProperty("transition");
+          ref.style.maxHeight = height + "px";
+        }
       }
     });
 
     // 2단계: 2뎁스 메뉴의 높이를 계산 (3뎁스 높이가 포함된 상태)
-    // 3뎁스가 열려있으면 그 높이가 2뎁스의 scrollHeight에 포함됨
     depth2Keys.forEach((key) => {
       const ref = submenuRefs.current[key];
       if (ref) {
-        // 높이 측정 (transition 비활성화 상태에서 측정)
-        const height = measureHeight(ref);
+        const wasClosed = !prevExpandedItemsState[key];
         
-        // transition을 다시 활성화하고 높이 설정
-        // 이렇게 하면 0 또는 이전 높이에서 height로 부드럽게 transition
-        ref.style.transition = "";
-        ref.style.maxHeight = height + "px";
+        if (wasClosed) {
+          // 열릴 때: transition 비활성화하고 0으로 설정
+          // 실제 애니메이션은 useEffect에서 처리
+          // 명시적으로 "none" 문자열로 설정하여 나중에 체크 가능하도록
+          ref.style.setProperty("transition", "none", "important");
+          ref.style.maxHeight = "0";
+        } else {
+          // 이미 열려있었던 경우: 높이만 재계산
+          const height = measureHeight(ref);
+          ref.style.removeProperty("transition");
+          ref.style.maxHeight = height + "px";
+        }
       }
     });
   };
@@ -150,9 +271,12 @@ function Header({ currentPage, onPageChange }) {
   useEffect(() => {
     let rafId1 = null;
     let rafId2 = null;
-    let timeoutId = null;
+    let rafId3 = null;
     let isCancelled = false;
 
+    // 이전 상태 저장
+    const prevExpandedItems = prevExpandedItemsRef.current;
+    
     // requestAnimationFrame을 사용하여 DOM 업데이트 후 높이 재계산
     // 이중 requestAnimationFrame으로 브라우저 렌더링 완료 후 높이 계산
     const updateHeights = () => {
@@ -162,24 +286,91 @@ function Header({ currentPage, onPageChange }) {
       // ref에서 최신 expandedItems 상태를 가져와서 일관성 보장
       const currentExpandedItems = expandedItemsRef.current;
 
-      // 첫 번째 단계: DOM 업데이트 후 높이 재계산
-      recalculateAllHeights(currentExpandedItems);
+      // 첫 번째 단계: DOM 업데이트 후 높이 재계산 (이전 상태와 함께 전달)
+      recalculateAllHeights(currentExpandedItems, prevExpandedItems);
 
-      // 두 번째 단계: 한 프레임 후 다시 한 번 재계산 (3뎁스 높이가 2뎁스에 반영되도록)
+      // 두 번째 단계: 한 프레임 후 열릴 때 애니메이션 시작 (3뎁스 먼저)
       rafId2 = requestAnimationFrame(() => {
         if (isCancelled) return;
         
         const latestExpandedItems = expandedItemsRef.current;
-        recalculateAllHeights(latestExpandedItems);
         
-        // 세 번째 단계: CSS transition이 거의 완료된 후 최종 재계산
-        // transition이 0.3s이므로 350ms 후에 재계산
-        timeoutId = setTimeout(() => {
+        // 열릴 때 애니메이션 처리 (3뎁스 먼저)
+        Object.keys(latestExpandedItems).forEach((key) => {
+          if (latestExpandedItems[key] && !prevExpandedItems[key]) {
+            const parentId = findParentMenuId(key);
+            if (parentId) {
+              // 3뎁스 메뉴인 경우
+              const ref = submenuRefs.current[key];
+              if (ref) {
+                // transition이 "none"으로 설정되어 있는지 체크
+                // getComputedStyle로 확인하거나 style 속성 직접 확인
+                const styleTransition = ref.style.getPropertyValue("transition");
+                const computedTransition = window.getComputedStyle(ref).transition;
+                
+                // transition이 none이거나 important로 설정된 경우
+                if (styleTransition === "none" || computedTransition === "none" || computedTransition === "all 0s ease 0s") {
+                  // 높이 측정
+                  const height = measureHeight(ref);
+                  
+                  // transition을 활성화하고 높이 설정 (0에서 height로 애니메이션)
+                  ref.style.removeProperty("transition");
+                  ref.style.maxHeight = height + "px";
+                }
+              }
+            }
+          }
+        });
+        
+        // 세 번째 단계: 3뎁스 애니메이션 후 2뎁스 높이 재계산 및 애니메이션
+        rafId3 = requestAnimationFrame(() => {
           if (isCancelled) return;
           
           const finalExpandedItems = expandedItemsRef.current;
-          recalculateAllHeights(finalExpandedItems);
-        }, 350);
+          
+          // 열릴 때 애니메이션 처리 (2뎁스)
+          Object.keys(finalExpandedItems).forEach((key) => {
+            if (finalExpandedItems[key] && !prevExpandedItems[key]) {
+              const parentId = findParentMenuId(key);
+              if (!parentId) {
+                // 2뎁스 메뉴인 경우
+                const ref = submenuRefs.current[key];
+                if (ref) {
+                  // transition이 "none"으로 설정되어 있는지 체크
+                  // getComputedStyle로 확인하거나 style 속성 직접 확인
+                  const styleTransition = ref.style.getPropertyValue("transition");
+                  const computedTransition = window.getComputedStyle(ref).transition;
+                  
+                  // transition이 none이거나 important로 설정된 경우
+                  if (styleTransition === "none" || computedTransition === "none" || computedTransition === "all 0s ease 0s") {
+                    // 높이 측정 (3뎁스 높이 포함)
+                    const height = measureHeight(ref);
+                    
+                    // transition을 활성화하고 높이 설정 (0에서 height로 애니메이션)
+                    ref.style.removeProperty("transition");
+                    ref.style.maxHeight = height + "px";
+                  }
+                }
+              }
+            }
+          });
+          
+          // 이미 열려있었던 메뉴들의 높이도 재계산 (3뎁스가 열릴 때 2뎁스 높이 변경)
+          Object.keys(finalExpandedItems).forEach((key) => {
+            if (finalExpandedItems[key] && prevExpandedItems[key]) {
+              const parentId = findParentMenuId(key);
+              if (!parentId) {
+                // 2뎁스 메뉴이고 이미 열려있었던 경우
+                const ref = submenuRefs.current[key];
+                if (ref) {
+                  const height = measureHeight(ref);
+                  ref.style.removeProperty("transition");
+                  ref.style.maxHeight = height + "px";
+                }
+              }
+            }
+          });
+        });
       });
     };
 
@@ -187,6 +378,9 @@ function Header({ currentPage, onPageChange }) {
     rafId1 = requestAnimationFrame(() => {
       requestAnimationFrame(updateHeights);
     });
+
+    // 현재 상태를 이전 상태로 저장 (다음 변경 시 사용)
+    prevExpandedItemsRef.current = { ...expandedItems };
 
     // cleanup 함수: 컴포넌트 언마운트 또는 의존성 변경 시 실행 중인 애니메이션 취소
     return () => {
@@ -197,74 +391,11 @@ function Header({ currentPage, onPageChange }) {
       if (rafId2 !== null) {
         cancelAnimationFrame(rafId2);
       }
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId);
+      if (rafId3 !== null) {
+        cancelAnimationFrame(rafId3);
       }
     };
   }, [expandedItems]);
-
-  // GNB 메뉴 데이터 (3뎁스 구조)
-  const gnbMenu = [
-    {
-      id: "menu1",
-      label: "메뉴 1",
-      children: [
-        {
-          id: "submenu1-1",
-          label: "서브메뉴 1-1",
-          children: [
-            { id: "depth3-1-1", label: "3뎁스 1-1-1", href: "#" },
-            { id: "depth3-1-2", label: "3뎁스 1-1-2", href: "#" }
-          ]
-        },
-        {
-          id: "submenu1-2",
-          label: "서브메뉴 1-2",
-          children: [
-            { id: "depth3-1-3", label: "3뎁스 1-2-1", href: "#" },
-            { id: "depth3-1-4", label: "3뎁스 1-2-2", href: "#" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "menu2",
-      label: "메뉴 2",
-      children: [
-        {
-          id: "submenu2-1",
-          label: "서브메뉴 2-1",
-          children: [
-            { id: "depth3-2-1", label: "3뎁스 2-1-1", href: "#" },
-            { id: "depth3-2-2", label: "3뎁스 2-1-2", href: "#" }
-          ]
-        },
-        {
-          id: "submenu2-2",
-          label: "서브메뉴 2-2",
-          children: [
-            { id: "depth3-2-3", label: "3뎁스 2-2-1", href: "#" }
-          ]
-        }
-      ]
-    },
-    {
-      id: "menu3",
-      label: "메뉴 3",
-      children: [
-        {
-          id: "submenu3-1",
-          label: "서브메뉴 3-1",
-          href: "#"
-        },
-        {
-          id: "submenu3-2",
-          label: "서브메뉴 3-2",
-          href: "#"
-        }
-      ]
-    }
-  ];
 
   /**
    * 부모 메뉴 ID 찾기 (3뎁스의 경우 2뎁스 ID 반환)
@@ -276,7 +407,7 @@ function Header({ currentPage, onPageChange }) {
       if (menu.children) {
         for (const submenu of menu.children) {
           if (submenu.id === childId) {
-            // 3뎁스의 부모인 2뎁스 ID 반환
+            // 3뎁스의 부모인 2뎁스(1뎁스) ID 반환
             return menu.id;
           }
         }
@@ -328,7 +459,7 @@ function Header({ currentPage, onPageChange }) {
                 <li key={menu.id} className="header__nav-item header__nav-item--has-children">
                   <button
                     className="header__nav-link header__nav-link--expandable"
-                    onClick={() => toggleExpanded(menu.id)}
+                    onClick={() => toggleExpanded(menu.id, true)}
                     aria-expanded={expandedItems[menu.id]}
                   >
                     {menu.label}

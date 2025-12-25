@@ -319,19 +319,26 @@ function MyPage() {
 - **Loading** - 로딩 인디케이터
 - **Skeleton** - 스켈레톤 로딩
 - **SkeletonPlaceholder** - 스켈레톤 플레이스홀더
+- **LoadingGrid** - 그리드 로딩 인디케이터
 - **Badge** - 뱃지 (다양한 variant, size, outlined)
 - **EmptyState** - 빈 상태 UI
 - **ErrorState** - 에러 상태 UI (error, nodata, network, notfound)
 
 ### 기타 UI
-- **Button** - 버튼 (Primary, Secondary, Ghost)
+- **Button** - 버튼 (Primary, Secondary, Ghost, Small/Medium/Large, Disabled)
 - **Toggle** - 토글 스위치
 - **Dropdown** - 드롭다운
 - **DatePicker** - 날짜 선택
 - **TableDemo** - 테이블
-- **FormSample** - 폼 요소
+- **FormSample** - 폼 요소 (Input 컴포넌트 사용)
 - **DragDropList** - 드래그앤드랍 리스트
 - **ListSync** - 리스트 동기화
+- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, 크기/색상 옵션)
+- **Typography** - 타이포그래피 컴포넌트 (제목, 본문, 캡션, 오버라인)
+- **Color** - 컬러 시스템 컴포넌트 (브랜드 컬러, 상태 컬러, 테마 비교)
+- **Spacing** - 간격 시스템 컴포넌트 (간격 토큰, 사용 예시)
+- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템)
+- **LoadingGrid** - 그리드 로딩 인디케이터
 
 ---
 

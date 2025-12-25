@@ -1,4 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import hljs from "highlight.js";
+import "highlight.js/styles/vs2015.css"; // VS Code 다크 테마 스타일
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
 import Image from "../../components/Image/Image";
 import Header from "../../components/Header/Header";
@@ -10,6 +12,15 @@ import DatePicker from "../../components/DatePicker/DatePicker";
 import Tooltip from "../../components/Tooltip/Tooltip";
 import DragDropList from "../../components/DragDropList/DragDropList";
 import Carousel from "../../components/Carousel/Carousel";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, EffectFade, EffectCube, EffectCoverflow, EffectFlip, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/effect-fade";
+import "swiper/css/effect-cube";
+import "swiper/css/effect-coverflow";
+import "swiper/css/effect-flip";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import ImageZoomPopup from "../../components/Popup/ImageZoomPopup";
 import Toggle from "../../components/Toggle/Toggle";
@@ -45,6 +56,32 @@ import Card from "../../components/Card/Card";
 import List, { ListItem } from "../../components/List/List";
 import EmptyState from "../../components/EmptyState/EmptyState";
 import ErrorState from "../../components/ErrorState/ErrorState";
+import Typography from "../../components/Typography/Typography";
+import Color, { ColorPalette, ColorTheme } from "../../components/Color/Color";
+import Spacing, { SpacingScale, SpacingExample } from "../../components/Spacing/Spacing";
+import Container, { ContainerScale, GridSystem } from "../../components/Layout/Layout";
+import Icon from "../../components/Icon/Icon";
+import Button from "../../components/Button/Button";
+
+// 코드 블록 컴포넌트 (구문 강조 적용)
+const CodeBlock = ({ code }) => {
+  const codeRef = useRef(null);
+
+  useEffect(() => {
+    if (codeRef.current) {
+      // highlight.js로 구문 강조 적용
+      hljs.highlightElement(codeRef.current);
+    }
+  }, [code]);
+
+  return (
+    <pre className="guide-section__code-pre">
+      <code ref={codeRef} className="language-javascript">
+        {code}
+      </code>
+    </pre>
+  );
+};
 
 const PaginationPreview = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -136,7 +173,7 @@ const PaginationPreview = () => {
   );
 };
 
-const LayoutPreview = () => {
+const LoadMorePreview = () => {
   const [visibleItems, setVisibleItems] = useState(5);
   const totalItems = 20;
 
@@ -190,6 +227,9 @@ const IconPreview = () => {
     { label: "알림", symbol: "🔔", className: "icon-notification" },
     { label: "즐겨찾기", symbol: "⭐", className: "icon-star" },
     { label: "설정", symbol: "⚙️", className: "icon-settings" },
+    { label: "홈", symbol: "🏠", className: "icon-home" },
+    { label: "검색", symbol: "🔍", className: "icon-search" },
+    { label: "프로필", symbol: "👤", className: "icon-profile" },
   ];
 
   const copyToClipboard = async (className, iconLabel) => {
@@ -212,56 +252,172 @@ const IconPreview = () => {
 
   return (
     <div className="guide-preview guide-preview--icons">
-      {icons.map((icon) => (
-        <button
-          key={icon.className}
-          type="button"
-          className={`icon-chip ${copiedIcon === icon.className ? "is-copied" : ""}`}
-          aria-label={`${icon.label} 아이콘 복사`}
-          onClick={() => copyToClipboard(icon.className, icon.label)}
-        >
-          <span className="icon-chip__symbol">{icon.symbol}</span>
-          <span className="icon-chip__label">{icon.label}</span>
-          {copiedIcon === icon.className && (
-            <span className="icon-chip__copied" aria-live="polite">
-              복사됨
-            </span>
-          )}
-        </button>
-      ))}
+      {/* 아이콘 컴포넌트 예시 */}
+      <div className="icon-preview__section">
+        <h4 className="icon-preview__title">아이콘 컴포넌트</h4>
+        <div className="icon-preview__group">
+          <div className="icon-preview__row">
+            <div className="icon-preview__item">
+              <Icon name="알림" size="small">🔔</Icon>
+              <span className="icon-preview__label">Small (16px)</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="알림" size="medium">🔔</Icon>
+              <span className="icon-preview__label">Medium (20px)</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="알림" size="large">🔔</Icon>
+              <span className="icon-preview__label">Large (24px)</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="알림" size="xlarge">🔔</Icon>
+              <span className="icon-preview__label">XLarge (32px)</span>
+            </div>
+          </div>
+
+          <div className="icon-preview__row">
+            <div className="icon-preview__item">
+              <Icon name="알림" color="default">🔔</Icon>
+              <span className="icon-preview__label">Default</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="성공" color="success">✓</Icon>
+              <span className="icon-preview__label">Success</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="경고" color="warning">⚠</Icon>
+              <span className="icon-preview__label">Warning</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="에러" color="error">✕</Icon>
+              <span className="icon-preview__label">Error</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="정보" color="info">ℹ</Icon>
+              <span className="icon-preview__label">Info</span>
+            </div>
+          </div>
+
+          <div className="icon-preview__row">
+            <div className="icon-preview__item">
+              <Icon name="알림" clickable onClick={() => alert("클릭됨!")}>🔔</Icon>
+              <span className="icon-preview__label">Clickable</span>
+            </div>
+            <div className="icon-preview__item">
+              <Icon name="즐겨찾기" color="accent" clickable onClick={() => alert("클릭됨!")}>⭐</Icon>
+              <span className="icon-preview__label">Clickable Accent</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 아이콘 라이브러리 */}
+      <div className="icon-preview__section">
+        <h4 className="icon-preview__title">아이콘 라이브러리</h4>
+        <div className="guide-preview guide-preview--icons">
+          {icons.map((icon) => (
+            <button
+              key={icon.className}
+              type="button"
+              className={`icon-chip ${copiedIcon === icon.className ? "is-copied" : ""}`}
+              aria-label={`${icon.label} 아이콘 복사`}
+              onClick={() => copyToClipboard(icon.className, icon.label)}
+            >
+              <span className="icon-chip__symbol">{icon.symbol}</span>
+              <span className="icon-chip__label">{icon.label}</span>
+              {copiedIcon === icon.className && (
+                <span className="icon-chip__copied" aria-live="polite">
+                  복사됨
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
 
 const ButtonPreview = () => (
   <div className="guide-preview guide-preview--buttons">
-    <h4 className="button-list__title">버튼 사이즈 가이드</h4>
-    <ul className="button-list">
-      <li className="button-list__item">
-        <div className="button-list__label">Small</div>
-        <div className="button-list__actions">
-          <button type="button" className="btn btn--primary btn--sm">Primary</button>
-          <button type="button" className="btn btn--secondary btn--sm">Secondary</button>
-          <button type="button" className="btn btn--ghost btn--sm">Ghost</button>
+    <div className="button-preview__section">
+      <h4 className="button-preview__title">Variant (스타일)</h4>
+      <div className="button-preview__row">
+        <Button variant="primary" size="medium">Primary</Button>
+        <Button variant="secondary" size="medium">Secondary</Button>
+        <Button variant="ghost" size="medium">Ghost</Button>
+        <Button variant="primary" size="medium" disabled>Disabled</Button>
+      </div>
+    </div>
+
+    <div className="button-preview__section">
+      <h4 className="button-preview__title">Size (크기)</h4>
+      <div className="button-preview__row">
+        <div className="button-preview__item">
+          <span className="button-preview__label">Small (S)</span>
+          <Button variant="primary" size="small">Small</Button>
         </div>
-      </li>
-      <li className="button-list__item">
-        <div className="button-list__label">Medium</div>
-        <div className="button-list__actions">
-          <button type="button" className="btn btn--primary btn--md">Primary</button>
-          <button type="button" className="btn btn--secondary btn--md">Secondary</button>
-          <button type="button" className="btn btn--ghost btn--md">Ghost</button>
+        <div className="button-preview__item">
+          <span className="button-preview__label">Medium (M)</span>
+          <Button variant="primary" size="medium">Medium</Button>
         </div>
-      </li>
-      <li className="button-list__item">
-        <div className="button-list__label">Large</div>
-        <div className="button-list__actions">
-          <button type="button" className="btn btn--primary btn--lg">Primary</button>
-          <button type="button" className="btn btn--secondary btn--lg">Secondary</button>
-          <button type="button" className="btn btn--ghost btn--lg">Ghost</button>
+        <div className="button-preview__item">
+          <span className="button-preview__label">Large (L)</span>
+          <Button variant="primary" size="large">Large</Button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
+
+    <div className="button-preview__section">
+      <h4 className="button-preview__title">Size별 Variant 비교</h4>
+      <ul className="button-list">
+        <li className="button-list__item">
+          <div className="button-list__label">Small (S)</div>
+          <div className="button-list__actions">
+            <Button variant="primary" size="small">Primary</Button>
+            <Button variant="secondary" size="small">Secondary</Button>
+            <Button variant="ghost" size="small">Ghost</Button>
+            <Button variant="primary" size="small" disabled>Disabled</Button>
+          </div>
+        </li>
+        <li className="button-list__item">
+          <div className="button-list__label">Medium (M)</div>
+          <div className="button-list__actions">
+            <Button variant="primary" size="medium">Primary</Button>
+            <Button variant="secondary" size="medium">Secondary</Button>
+            <Button variant="ghost" size="medium">Ghost</Button>
+            <Button variant="primary" size="medium" disabled>Disabled</Button>
+          </div>
+        </li>
+        <li className="button-list__item">
+          <div className="button-list__label">Large (L)</div>
+          <div className="button-list__actions">
+            <Button variant="primary" size="large">Primary</Button>
+            <Button variant="secondary" size="large">Secondary</Button>
+            <Button variant="ghost" size="large">Ghost</Button>
+            <Button variant="primary" size="large" disabled>Disabled</Button>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div className="button-preview__section">
+      <h4 className="button-preview__title">아이콘 버튼</h4>
+      <div className="button-preview__row">
+        <Button variant="primary" size="medium" className="button-preview__btn">
+          <Icon name="알림" size="small">🔔</Icon>
+          알림
+        </Button>
+        <Button variant="secondary" size="medium" className="button-preview__btn">
+          <Icon name="즐겨찾기" size="small">⭐</Icon>
+          즐겨찾기
+        </Button>
+        <Button variant="ghost" size="medium" className="button-preview__btn">
+          <Icon name="설정" size="small">⚙️</Icon>
+          설정
+        </Button>
+      </div>
+    </div>
   </div>
 );
 
@@ -535,10 +691,18 @@ const TabsPreview = () => {
   );
 };
 
+const defaultCarouselSlides = [
+  { id: 1, title: "배너 1", desc: "이곳에 주요 메시지를 노출하세요.", color: "#0c7c59" },
+  { id: 2, title: "배너 2", desc: "슬라이드를 넘겨 다양한 정보를 전달합니다.", color: "#1a9d6f" },
+  { id: 3, title: "배너 3", desc: "모바일/데스크탑 반응형 지원.", color: "#28b87f" },
+  { id: 4, title: "배너 4", desc: "Swiper의 다양한 효과를 확인하세요.", color: "#36d38f" },
+];
+
 const CarouselPreview = () => {
   const [slides, setSlides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const effectSlides = defaultCarouselSlides;
 
   useEffect(() => {
     fetchMockCarouselSlides()
@@ -559,8 +723,212 @@ const CarouselPreview = () => {
   }
   if (error) return <div className="guide-preview guide-preview--carousel">{error}</div>;
 
-  return <Carousel slides={slides} showOptionsPanel />;
+  return (
+    <div className="guide-preview guide-preview--carousel-combined">
+      {/* 기본 캐러셀 */}
+      <div className="carousel-combined__section">
+        <h4 className="carousel-combined__title">기본 캐러셀</h4>
+        <Carousel slides={slides} showOptionsPanel />
+      </div>
+
+      {/* 효과 미리보기 */}
+      <div className="carousel-combined__effects">
+        <h4 className="carousel-combined__title">다양한 효과 옵션</h4>
+        <div className="guide-preview guide-preview--carousel-effects">
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">기본 슬라이드 (Slide)</h5>
+            <div className="carousel-effects__swiper-wrapper">
+              <Swiper
+                modules={[Navigation, Pagination]}
+                navigation
+                pagination={{ clickable: true }}
+                spaceBetween={0}
+                slidesPerView={1}
+                loop
+                allowTouchMove
+                className="carousel-effects__swiper"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> effect 없음 (기본), navigation, pagination, loop
+            </div>
+          </div>
+
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">페이드 효과 (Fade)</h5>
+            <div className="carousel-effects__swiper-wrapper">
+              <Swiper
+                modules={[Navigation, Pagination, EffectFade, Autoplay]}
+                effect="fade"
+                navigation
+                pagination={{ clickable: true }}
+                loop
+                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                className="carousel-effects__swiper"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> effect="fade", navigation, pagination, loop, autoplay
+            </div>
+          </div>
+
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">큐브 효과 (Cube)</h5>
+            <div className="carousel-effects__swiper-wrapper carousel-effects__swiper-wrapper--cube">
+              <Swiper
+                modules={[Navigation, Pagination, EffectCube]}
+                effect="cube"
+                navigation
+                pagination={{ clickable: true }}
+                loop
+                grabCursor
+                cubeEffect={{
+                  shadow: true,
+                  slideShadows: true,
+                  shadowOffset: 20,
+                  shadowScale: 0.94,
+                }}
+                className="carousel-effects__swiper"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> effect="cube", cubeEffect (shadow, slideShadows), navigation, pagination, loop
+            </div>
+          </div>
+
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">커버플로우 효과 (Coverflow)</h5>
+            <div className="carousel-effects__swiper-wrapper carousel-effects__swiper-wrapper--coverflow">
+              <Swiper
+                modules={[Navigation, Pagination, EffectCoverflow]}
+                effect="coverflow"
+                navigation
+                pagination={{ clickable: true }}
+                loop
+                grabCursor
+                slidesPerView={1.2}
+                centeredSlides
+                coverflowEffect={{
+                  rotate: 50,
+                  stretch: 0,
+                  depth: 100,
+                  modifier: 1,
+                  slideShadows: true,
+                }}
+                className="carousel-effects__swiper"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> effect="coverflow", slidesPerView=1.2, centeredSlides, coverflowEffect (rotate, depth, slideShadows), navigation, pagination, loop
+            </div>
+          </div>
+
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">플립 효과 (Flip)</h5>
+            <div className="carousel-effects__swiper-wrapper carousel-effects__swiper-wrapper--flip">
+              <Swiper
+                modules={[Navigation, Pagination, EffectFlip]}
+                effect="flip"
+                navigation
+                pagination={{ clickable: true }}
+                loop
+                flipEffect={{
+                  slideShadows: true,
+                  limitRotation: true,
+                }}
+                className="carousel-effects__swiper"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> effect="flip", flipEffect (slideShadows, limitRotation), navigation, pagination, loop
+            </div>
+          </div>
+
+          <div className="carousel-effects__section">
+            <h5 className="carousel-effects__title">다중 슬라이드 (Multiple Slides)</h5>
+            <div className="carousel-effects__swiper-wrapper">
+              <Swiper
+                modules={[Navigation, Pagination]}
+                navigation
+                pagination={{ clickable: true }}
+                spaceBetween={16}
+                slidesPerView={1.5}
+                centeredSlides
+                watchOverflow
+                loop={false}
+                grabCursor
+                breakpoints={{
+                  640: { slidesPerView: 2, spaceBetween: 16 },
+                  900: { slidesPerView: 2.5, spaceBetween: 20 },
+                  1200: { slidesPerView: 3, spaceBetween: 24 },
+                }}
+                className="carousel-effects__swiper carousel-effects__swiper--multiple"
+              >
+                {effectSlides.map((slide) => (
+                  <SwiperSlide key={slide.id}>
+                    <div className="carousel-effects__slide" style={{ backgroundColor: slide.color }}>
+                      <h5>{slide.title}</h5>
+                      <p>{slide.desc}</p>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </div>
+            <div className="carousel-effects__options">
+              <strong>옵션:</strong> slidesPerView=1.5, centeredSlides, watchOverflow, breakpoints (반응형), navigation, pagination, loop=false
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
+
 
 const TableDemoPreview = () => {
   const [wideHeaders, setWideHeaders] = useState([]);
@@ -1715,6 +2083,372 @@ const LottiePreview = () => {
   );
 };
 
+const TypographyPreview = () => {
+  return (
+    <div className="guide-preview guide-preview--typography">
+      <div className="typography-preview">
+        {/* 제목 스타일 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">제목 스타일</h4>
+          <div className="typography-preview__group">
+            <Typography variant="h1">Heading 1</Typography>
+            <Typography variant="h2">Heading 2</Typography>
+            <Typography variant="h3">Heading 3</Typography>
+            <Typography variant="h4">Heading 4</Typography>
+            <Typography variant="h5">Heading 5</Typography>
+            <Typography variant="h6">Heading 6</Typography>
+          </div>
+        </div>
+
+        {/* 본문 스타일 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">본문 스타일</h4>
+          <div className="typography-preview__group">
+            <Typography variant="body" size="small">
+              작은 본문 텍스트 (Small Body)
+            </Typography>
+            <Typography variant="body">
+              기본 본문 텍스트 (Body) - 일반적인 본문 내용에 사용됩니다. 여러 줄로 표시될 수 있으며 가독성을 고려하여 적절한 행간과 자간이 설정되어 있습니다.
+            </Typography>
+            <Typography variant="body" size="large">
+              큰 본문 텍스트 (Large Body) - 강조가 필요한 본문 내용에 사용됩니다.
+            </Typography>
+          </div>
+        </div>
+
+        {/* 캡션 & 오버라인 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">캡션 & 오버라인</h4>
+          <div className="typography-preview__group">
+            <Typography variant="caption">캡션 텍스트 (Caption)</Typography>
+            <Typography variant="caption" size="small">작은 캡션</Typography>
+            <Typography variant="caption" size="large">큰 캡션</Typography>
+            <Typography variant="overline">오버라인 텍스트</Typography>
+          </div>
+        </div>
+
+        {/* 색상 변형 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">색상 변형</h4>
+          <div className="typography-preview__group">
+            <Typography variant="body" color="default">기본 색상 (Default)</Typography>
+            <Typography variant="body" color="muted">약한 색상 (Muted)</Typography>
+            <Typography variant="body" color="accent">강조 색상 (Accent)</Typography>
+          </div>
+        </div>
+
+        {/* 폰트 굵기 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">폰트 굵기</h4>
+          <div className="typography-preview__group">
+            <Typography variant="body" weight="normal">Normal (400)</Typography>
+            <Typography variant="body" weight="medium">Medium (500)</Typography>
+            <Typography variant="body" weight="semibold">Semibold (600)</Typography>
+            <Typography variant="body" weight="bold">Bold (700)</Typography>
+          </div>
+        </div>
+
+        {/* 텍스트 정렬 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">텍스트 정렬</h4>
+          <div className="typography-preview__group">
+            <Typography variant="body" align="left">왼쪽 정렬 (Left)</Typography>
+            <Typography variant="body" align="center">가운데 정렬 (Center)</Typography>
+            <Typography variant="body" align="right">오른쪽 정렬 (Right)</Typography>
+          </div>
+        </div>
+
+        {/* 말줄임표 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">말줄임표</h4>
+          <div className="typography-preview__group">
+            <Typography variant="body" truncate style={{ maxWidth: "200px" }}>
+              한 줄 말줄임표 예시입니다. 텍스트가 길어지면 자동으로 말줄임표가 표시됩니다.
+            </Typography>
+            <Typography variant="body" lineClamp={2} style={{ maxWidth: "200px" }}>
+              두 줄 말줄임표 예시입니다. 여러 줄의 텍스트가 표시되다가 지정된 줄 수를 넘으면 자동으로 말줄임표가 표시됩니다.
+            </Typography>
+            <Typography variant="body" lineClamp={3} style={{ maxWidth: "200px" }}>
+              세 줄 말줄임표 예시입니다. 더 많은 텍스트를 표시할 수 있으며, 세 줄을 넘어가면 자동으로 말줄임표가 표시됩니다.
+            </Typography>
+          </div>
+        </div>
+
+        {/* 커스텀 태그 */}
+        <div className="typography-preview__section">
+          <h4 className="typography-preview__title">커스텀 태그</h4>
+          <div className="typography-preview__group">
+            <Typography variant="h3" as="div">h3 스타일을 div 태그로</Typography>
+            <Typography variant="body" as="span">body 스타일을 span 태그로</Typography>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ColorPreview = () => {
+  // 브랜드 컬러 팔레트
+  const brandColors = [
+    {
+      name: "Primary",
+      value: "#0c7c59",
+      description: "메인 브랜드 컬러",
+      showVariable: true,
+    },
+    {
+      name: "Primary Light",
+      value: "rgba(12, 124, 89, 0.12)",
+      description: "브랜드 컬러 배경",
+      showVariable: true,
+    },
+    {
+      name: "Primary Dark",
+      value: "#0a6347",
+      description: "브랜드 컬러 다크",
+      showVariable: true,
+    },
+  ];
+
+  // 상태 컬러 팔레트
+  const statusColors = [
+    {
+      name: "Success",
+      value: "#22c55e",
+      description: "성공 상태",
+      showVariable: true,
+    },
+    {
+      name: "Warning",
+      value: "#fbbf24",
+      description: "경고 상태",
+      showVariable: true,
+    },
+    {
+      name: "Error",
+      value: "#ef4444",
+      description: "에러 상태",
+      showVariable: true,
+    },
+    {
+      name: "Info",
+      value: "#3b82f6",
+      description: "정보 상태",
+      showVariable: true,
+    },
+  ];
+
+  // 기본 컬러 팔레트
+  const baseColors = [
+    {
+      name: "Background",
+      value: "#f5f6f7",
+      description: "배경색",
+      showVariable: true,
+    },
+    {
+      name: "Card",
+      value: "#ffffff",
+      description: "카드 배경색",
+      showVariable: true,
+    },
+    {
+      name: "Text",
+      value: "#1b1b1f",
+      description: "텍스트 색상",
+      showVariable: true,
+    },
+    {
+      name: "Muted",
+      value: "#5b5c60",
+      description: "보조 텍스트",
+      showVariable: true,
+    },
+    {
+      name: "Border",
+      value: "rgba(12, 124, 89, 0.16)",
+      description: "테두리 색상",
+      showVariable: true,
+    },
+  ];
+
+  // 테마 비교용 컬러
+  const themeColors = [
+    {
+      name: "Background",
+      light: "#f5f6f7",
+      dark: "#111315",
+      variable: "--color-bg",
+    },
+    {
+      name: "Card",
+      light: "#ffffff",
+      dark: "#1a1c1f",
+      variable: "--color-card",
+    },
+    {
+      name: "Text",
+      light: "#1b1b1f",
+      dark: "#f8f8fa",
+      variable: "--color-text",
+    },
+    {
+      name: "Muted",
+      light: "#5b5c60",
+      dark: "#a5a7ac",
+      variable: "--color-muted",
+    },
+    {
+      name: "Accent",
+      light: "#0c7c59",
+      dark: "#10b981",
+      variable: "--color-accent",
+    },
+    {
+      name: "Success",
+      light: "#22c55e",
+      dark: "#4ade80",
+      variable: "--color-success",
+    },
+    {
+      name: "Warning",
+      light: "#fbbf24",
+      dark: "#fcd34d",
+      variable: "--color-warning",
+    },
+    {
+      name: "Error",
+      light: "#ef4444",
+      dark: "#f87171",
+      variable: "--color-error",
+    },
+    {
+      name: "Info",
+      light: "#3b82f6",
+      dark: "#60a5fa",
+      variable: "--color-info",
+    },
+  ];
+
+  return (
+    <div className="guide-preview guide-preview--color">
+      <ColorPalette title="브랜드 컬러" colors={brandColors} />
+      <ColorPalette title="상태 컬러" colors={statusColors} />
+      <ColorPalette title="기본 컬러" colors={baseColors} />
+      <ColorTheme colors={themeColors} />
+    </div>
+  );
+};
+
+const SpacingPreview = () => {
+  // 간격 토큰 스케일
+  const spacingTokens = [
+    { value: 4, name: "XS" },
+    { value: 8, name: "SM" },
+    { value: 12, name: "MD" },
+    { value: 16, name: "LG" },
+    { value: 20, name: "XL" },
+    { value: 24, name: "2XL" },
+    { value: 32, name: "3XL" },
+    { value: 40, name: "4XL" },
+    { value: 48, name: "5XL" },
+    { value: 64, name: "6XL" },
+  ];
+
+  // 간격 사용 예시
+  const spacingExamples = [
+    {
+      label: "간격 8px (SM)",
+      value: 8,
+      code: "gap: px(8); // 또는 gap: 0.5rem;",
+    },
+    {
+      label: "간격 16px (LG)",
+      value: 16,
+      code: "gap: px(16); // 또는 gap: 1rem;",
+    },
+    {
+      label: "간격 24px (2XL)",
+      value: 24,
+      code: "gap: px(24); // 또는 gap: 1.5rem;",
+    },
+    {
+      label: "간격 32px (3XL)",
+      value: 32,
+      code: "gap: px(32); // 또는 gap: 2rem;",
+    },
+  ];
+
+  return (
+    <div className="guide-preview guide-preview--spacing">
+      <SpacingScale title="간격 토큰 스케일" values={spacingTokens} />
+      <SpacingExample title="간격 사용 예시" examples={spacingExamples} />
+    </div>
+  );
+};
+
+const LayoutSpacingPreview = () => {
+  // 컨테이너 폭 스케일
+  const containers = [
+    {
+      name: "Mobile",
+      width: 375,
+      description: "모바일 기본 폭",
+    },
+    {
+      name: "Tablet",
+      width: 768,
+      description: "태블릿 기본 폭",
+    },
+    {
+      name: "Desktop",
+      width: 1200,
+      description: "데스크톱 기본 폭",
+    },
+    {
+      name: "Wide",
+      width: 1440,
+      description: "와이드 데스크톱 폭",
+    },
+  ];
+
+  // 그리드 시스템
+  const grids = [
+    {
+      columns: 2,
+      gap: 16,
+      name: "2 Column Grid",
+    },
+    {
+      columns: 3,
+      gap: 16,
+      name: "3 Column Grid",
+    },
+    {
+      columns: 4,
+      gap: 16,
+      name: "4 Column Grid",
+    },
+    {
+      columns: 6,
+      gap: 12,
+      name: "6 Column Grid",
+    },
+    {
+      columns: 12,
+      gap: 16,
+      name: "12 Column Grid",
+    },
+  ];
+
+  return (
+    <div className="guide-preview guide-preview--layout-spacing">
+      <ContainerScale title="컨테이너 폭" containers={containers} />
+      <GridSystem title="그리드 시스템" grids={grids} />
+    </div>
+  );
+};
+
 // 가이드 섹션 정의
 const guideSections = [
   {
@@ -1865,19 +2599,93 @@ return (
     )}
   </div>
 );`,
-    PreviewComponent: LayoutPreview,
+    PreviewComponent: LoadMorePreview,
   },
   {
     id: "icon",
     label: "아이콘",
-    title: "아이콘 사용 가이드",
+    title: "Icon 컴포넌트",
     description:
-      "라인 아이콘과 솔리드 아이콘을 구분하고, 접근성 텍스트(`aria-label`)를 반드시 제공하세요.",
-    code: `<button class="icon-button" aria-label="알림">
-  <svg width="20" height="20" aria-hidden="true">
-    <!-- icon -->
+      "일관된 아이콘 시스템을 제공하는 컴포넌트입니다. 이모지, SVG, 텍스트 등 다양한 형태의 아이콘을 지원하며, 크기와 색상 옵션을 제공합니다. 클릭 가능한 아이콘 버튼으로도 사용할 수 있으며, 접근성을 고려한 aria-label을 자동으로 설정합니다.",
+    code: `import Icon from "./Icon";
+
+// ===== Props 설명 =====
+// children: 아이콘 내용 (이모지, SVG, 텍스트 등)
+// name: 아이콘 이름 (접근성용, aria-label에 사용)
+// size: 'small' | 'medium' | 'large' | 'xlarge' (기본값: 'medium')
+// color: 'default' | 'muted' | 'accent' | 'success' | 'warning' | 'error' | 'info' (기본값: 'default')
+// clickable: 클릭 가능 여부 (기본값: false)
+// onClick: 클릭 핸들러 (clickable이 true일 때)
+// className: 추가 클래스명
+// style: 인라인 스타일
+
+// ===== 기본 사용 =====
+<Icon name="알림">🔔</Icon>
+<Icon name="즐겨찾기">⭐</Icon>
+<Icon name="설정">⚙️</Icon>
+
+// ===== 크기 옵션 =====
+// small: 16px (1rem)
+<Icon name="알림" size="small">🔔</Icon>
+
+// medium: 20px (1.25rem) - 기본값
+<Icon name="알림" size="medium">🔔</Icon>
+
+// large: 24px (1.5rem)
+<Icon name="알림" size="large">🔔</Icon>
+
+// xlarge: 32px (2rem)
+<Icon name="알림" size="xlarge">🔔</Icon>
+
+// ===== 색상 옵션 =====
+<Icon name="알림" color="default">🔔</Icon>
+<Icon name="성공" color="success">✓</Icon>
+<Icon name="경고" color="warning">⚠</Icon>
+<Icon name="에러" color="error">✕</Icon>
+<Icon name="정보" color="info">ℹ</Icon>
+<Icon name="강조" color="accent">⭐</Icon>
+<Icon name="보조" color="muted">🔔</Icon>
+
+// ===== 클릭 가능한 아이콘 =====
+<Icon
+  name="알림"
+  clickable
+  onClick={() => console.log("알림 클릭")}
+>
+  🔔
+</Icon>
+
+<Icon
+  name="즐겨찾기"
+  color="accent"
+  clickable
+  onClick={() => handleFavorite()}
+>
+  ⭐
+</Icon>
+
+// ===== SVG 아이콘 =====
+<Icon name="검색">
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16z" stroke="currentColor"/>
+    <path d="m19 19-4.35-4.35" stroke="currentColor" strokeLinecap="round"/>
   </svg>
-</button>`,
+</Icon>
+
+// ===== 커스텀 스타일 =====
+<Icon
+  name="커스텀"
+  style={{ fontSize: "28px", color: "#ff6b6b" }}
+>
+  🎨
+</Icon>
+
+// ===== 주의사항 =====
+// 1. name prop은 접근성을 위해 필수입니다 (aria-label에 사용)
+// 2. clickable이 true일 때는 button 태그로 렌더링됩니다
+// 3. SVG 아이콘은 currentColor를 사용하여 색상이 자동으로 적용됩니다
+// 4. 이모지 아이콘은 크기에 따라 자동으로 조정됩니다
+// 5. hover 효과는 clickable이 true일 때만 적용됩니다`,
     PreviewComponent: IconPreview,
   },
   {
@@ -2453,20 +3261,72 @@ const clickableItems = [
   {
     id: "button",
     label: "버튼",
-    title: "버튼 타입",
+    title: "Button 컴포넌트",
     description:
-      "Primary/Secondary/Ghost 버튼을 rem 단위와 사이즈 토큰(S, M, L)으로 제공합니다.",
-    code: `<button class="btn btn--primary btn--sm">Primary Small</button>
-<button class="btn btn--secondary btn--sm">Secondary Small</button>
-<button class="btn btn--ghost btn--sm">Ghost Small</button>
+      "Primary/Secondary/Ghost 버튼을 제공하는 컴포넌트입니다. Small/Medium/Large 크기를 지원하며, disabled 상태와 아이콘을 포함한 버튼도 사용할 수 있습니다. 접근성을 고려하여 키보드 포커스와 ARIA 속성을 자동으로 처리합니다.",
+    code: `import Button from "./Button";
+import Icon from "./Icon";
 
-<button class="btn btn--primary btn--md">Primary Medium</button>
-<button class="btn btn--secondary btn--md">Secondary Medium</button>
-<button class="btn btn--ghost btn--md">Ghost Medium</button>
+// ===== Props 설명 =====
+// children: 버튼 내용
+// variant: 'primary' | 'secondary' | 'ghost' (기본값: 'primary')
+// size: 'small' | 'medium' | 'large' (기본값: 'medium')
+// disabled: 비활성화 여부 (기본값: false)
+// type: 'button' | 'submit' | 'reset' (기본값: 'button')
+// onClick: 클릭 핸들러
+// className: 추가 클래스명
+// style: 인라인 스타일
 
-<button class="btn btn--primary btn--lg">Primary Large</button>
-<button class="btn btn--secondary btn--lg">Secondary Large</button>
-<button class="btn btn--ghost btn--lg">Ghost Large</button>`,
+// ===== Variant =====
+<Button variant="primary">Primary</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="ghost">Ghost</Button>
+
+// ===== Size =====
+// Small: 13px, padding 6px 12px, min-height 32px
+<Button variant="primary" size="small">Small</Button>
+
+// Medium: 14px, padding 10px 18px, min-height 40px (기본값)
+<Button variant="primary" size="medium">Medium</Button>
+
+// Large: 16px, padding 14px 20px, min-height 48px
+<Button variant="primary" size="large">Large</Button>
+
+// ===== Disabled =====
+<Button variant="primary" disabled>Disabled</Button>
+<Button variant="secondary" disabled>Disabled</Button>
+<Button variant="ghost" disabled>Disabled</Button>
+
+// ===== 아이콘과 함께 사용 =====
+<Button variant="primary" size="medium">
+  <Icon name="알림" size="small">🔔</Icon>
+  알림
+</Button>
+
+<Button variant="secondary" size="medium">
+  <Icon name="즐겨찾기" size="small">⭐</Icon>
+  즐겨찾기
+</Button>
+
+// ===== Submit 버튼 =====
+<Button type="submit" variant="primary">
+  제출하기
+</Button>
+
+// ===== 이벤트 핸들러 =====
+<Button
+  variant="primary"
+  onClick={() => console.log("클릭됨")}
+>
+  클릭
+</Button>
+
+// ===== 주의사항 =====
+// 1. variant에 따라 배경색, 테두리, 텍스트 색상이 자동으로 설정됨
+// 2. disabled 상태에서는 모든 인터랙션이 비활성화됨
+// 3. hover/active 상태에서 자동으로 애니메이션 효과 적용
+// 4. focus-visible 상태에서 접근성을 위한 outline 표시
+// 5. 아이콘과 텍스트를 함께 사용할 때는 gap이 자동으로 적용됨`,
     PreviewComponent: ButtonPreview,
   },
   {
@@ -2660,7 +3520,7 @@ const handleStop = (startIndex, data) => {
     label: "캐러셀",
     title: "Swiper 캐러셀",
     description:
-      "react + swiper 캐러셀. 기본 네비게이션/페이지네이션 + loop/간격 옵션을 사용하며, breakpoints로 반응형 슬라이드 수를 조절합니다.",
+      "react + swiper 캐러셀. 기본 네비게이션/페이지네이션 + loop/간격 옵션을 사용하며, breakpoints로 반응형 슬라이드 수를 조절합니다. fade, cube, coverflow, flip 등 다양한 전환 효과도 제공합니다.",
     code: `import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
@@ -3061,6 +3921,346 @@ const items = [
     PreviewComponent: LottiePreview,
   },
   {
+    id: "typography",
+    label: "타이포그래피",
+    title: "Typography 컴포넌트",
+    description:
+      "일관된 타이포그래피 시스템을 제공하는 컴포넌트입니다. 제목(h1-h6), 본문(body), 캡션(caption), 오버라인(overline) 스타일을 지원하며, 폰트 크기, 행간, 자간이 최적화되어 있습니다. 색상, 굵기, 정렬, 말줄임표 등 다양한 옵션을 제공합니다.",
+    code: `import Typography from "./Typography";
+
+// ===== Props 설명 =====
+// variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body' | 'caption' | 'overline' (기본값: 'body')
+// size: 'small' | 'medium' | 'large' (variant에 따라 기본값 다름)
+// as: 실제 렌더링할 HTML 태그 (기본값: variant에 따라 자동 결정)
+// color: 'default' | 'muted' | 'accent' | 'inherit' (기본값: 'default')
+// weight: 'normal' | 'medium' | 'semibold' | 'bold'
+// align: 'left' | 'center' | 'right' | 'justify'
+// truncate: boolean - 텍스트 말줄임표 표시 (기본값: false)
+// lineClamp: number - 최대 줄 수 (1-4)
+
+// ===== 제목 스타일 =====
+<Typography variant="h1">Heading 1</Typography>
+<Typography variant="h2">Heading 2</Typography>
+<Typography variant="h3">Heading 3</Typography>
+<Typography variant="h4">Heading 4</Typography>
+<Typography variant="h5">Heading 5</Typography>
+<Typography variant="h6">Heading 6</Typography>
+
+// ===== 본문 스타일 =====
+<Typography variant="body">기본 본문 텍스트</Typography>
+<Typography variant="body" size="small">작은 본문</Typography>
+<Typography variant="body" size="large">큰 본문</Typography>
+
+// ===== 캡션 & 오버라인 =====
+<Typography variant="caption">캡션 텍스트</Typography>
+<Typography variant="overline">오버라인 텍스트</Typography>
+
+// ===== 색상 변형 =====
+<Typography variant="body" color="default">기본 색상</Typography>
+<Typography variant="body" color="muted">약한 색상</Typography>
+<Typography variant="body" color="accent">강조 색상</Typography>
+<Typography variant="body" color="inherit">상속 색상</Typography>
+
+// ===== 폰트 굵기 =====
+<Typography variant="body" weight="normal">Normal (400)</Typography>
+<Typography variant="body" weight="medium">Medium (500)</Typography>
+<Typography variant="body" weight="semibold">Semibold (600)</Typography>
+<Typography variant="body" weight="bold">Bold (700)</Typography>
+
+// ===== 텍스트 정렬 =====
+<Typography variant="body" align="left">왼쪽 정렬</Typography>
+<Typography variant="body" align="center">가운데 정렬</Typography>
+<Typography variant="body" align="right">오른쪽 정렬</Typography>
+<Typography variant="body" align="justify">양쪽 정렬</Typography>
+
+// ===== 말줄임표 =====
+// 한 줄 말줄임표
+<Typography variant="body" truncate style={{ maxWidth: "200px" }}>
+  긴 텍스트가 자동으로 말줄임표로 표시됩니다
+</Typography>
+
+// 다중 줄 말줄임표
+<Typography variant="body" lineClamp={2} style={{ maxWidth: "200px" }}>
+  여러 줄의 텍스트가 표시되다가 지정된 줄 수를 넘으면 자동으로 말줄임표가 표시됩니다
+</Typography>
+
+// ===== 커스텀 태그 =====
+<Typography variant="h3" as="div">h3 스타일을 div 태그로</Typography>
+<Typography variant="body" as="span">body 스타일을 span 태그로</Typography>
+
+// ===== 주의사항 =====
+// 1. variant에 따라 기본 태그가 자동 결정됨 (h1-h6는 해당 태그, body는 p, caption/overline은 span)
+// 2. as prop으로 태그를 커스터마이징할 수 있음
+// 3. 각 variant별로 최적화된 폰트 크기, 행간, 자간이 설정됨
+// 4. 제목은 음수 자간, 본문/캡션은 양수 자간 사용
+// 5. truncate와 lineClamp는 동시에 사용할 수 없음 (lineClamp 우선)
+// 6. 폰트 스케일은 CSS 변수 --font-scale을 통해 전체적으로 조정 가능`,
+    PreviewComponent: TypographyPreview,
+  },
+  {
+    id: "color",
+    label: "컬러",
+    title: "Color & Theme 컴포넌트",
+    description:
+      "브랜드 컬러와 상태 컬러(success/warn/error/info)를 시각적으로 표시하는 컴포넌트입니다. 라이트 모드와 다크 모드에서의 컬러 차이를 비교할 수 있으며, CSS 변수명도 함께 표시됩니다. 컬러 팔레트와 테마 비교 기능을 제공합니다.",
+    code: `import Color, { ColorPalette, ColorTheme } from "./Color";
+
+// ===== Props 설명 =====
+// Color 컴포넌트:
+//   variant: 'swatch' | 'palette' | 'theme' (기본값: 'swatch')
+//   name: 컬러 이름
+//   value: 컬러 값 (hex, rgb, CSS 변수 등)
+//   description: 컬러 설명
+//   showVariable: CSS 변수명 표시 여부 (기본값: true)
+
+// ColorPalette 컴포넌트:
+//   title: 팔레트 제목
+//   colors: 컬러 배열 [{ name, value, description, showVariable }]
+
+// ColorTheme 컴포넌트:
+//   colors: 테마 비교용 컬러 배열 [{ name, light, dark, variable }]
+
+// ===== 단일 컬러 스와치 =====
+<Color
+  name="Primary"
+  value="#0c7c59"
+  description="메인 브랜드 컬러"
+  showVariable={true}
+/>
+
+// ===== 컬러 팔레트 =====
+const brandColors = [
+  {
+    name: "Primary",
+    value: "#0c7c59",
+    description: "메인 브랜드 컬러",
+    showVariable: true,
+  },
+  {
+    name: "Primary Light",
+    value: "rgba(12, 124, 89, 0.12)",
+    description: "브랜드 컬러 배경",
+  },
+];
+
+<ColorPalette title="브랜드 컬러" colors={brandColors} />
+
+// ===== 상태 컬러 팔레트 =====
+const statusColors = [
+  { name: "Success", value: "#22c55e", description: "성공 상태" },
+  { name: "Warning", value: "#fbbf24", description: "경고 상태" },
+  { name: "Error", value: "#ef4444", description: "에러 상태" },
+  { name: "Info", value: "#3b82f6", description: "정보 상태" },
+];
+
+<ColorPalette title="상태 컬러" colors={statusColors} />
+
+// ===== 테마 비교 (라이트/다크) =====
+const themeColors = [
+  {
+    name: "Background",
+    light: "#f5f6f7",
+    dark: "#111315",
+    variable: "--color-bg",
+  },
+  {
+    name: "Text",
+    light: "#1b1b1f",
+    dark: "#f8f8fa",
+    variable: "--color-text",
+  },
+];
+
+<ColorTheme colors={themeColors} />
+
+// ===== CSS 변수 사용 =====
+// CSS 변수로 컬러를 정의하면 다크모드에서 자동으로 변경됩니다
+:root {
+  --color-success: #22c55e;
+  --color-warning: #fbbf24;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+}
+
+:root[data-theme="dark"] {
+  --color-success: #4ade80;
+  --color-warning: #fcd34d;
+  --color-error: #f87171;
+  --color-info: #60a5fa;
+}
+
+// ===== 주의사항 =====
+// 1. value는 hex, rgb, rgba, CSS 변수 등 모든 형식 지원
+// 2. CSS 변수를 사용하면 다크모드 자동 지원
+// 3. ColorTheme은 라이트/다크 모드 비교에 최적화됨
+// 4. hover 시 컬러 미리보기 확대 효과 제공
+// 5. 모든 컬러는 접근성을 고려한 대비율 준수`,
+    PreviewComponent: ColorPreview,
+  },
+  {
+    id: "spacing",
+    label: "간격",
+    title: "Spacing 컴포넌트",
+    description:
+      "일관된 간격 시스템을 제공하는 컴포넌트입니다. 4px부터 64px까지의 간격 토큰을 시각적으로 표시하며, 각 간격의 px와 rem 값을 함께 보여줍니다. 간격 사용 예시를 통해 실제 적용 방법을 확인할 수 있습니다.",
+    code: `import Spacing, { SpacingScale, SpacingExample } from "./Spacing";
+
+// ===== Props 설명 =====
+// Spacing 컴포넌트:
+//   value: 간격 값 (px)
+//   name: 간격 이름 (선택)
+
+// SpacingScale 컴포넌트:
+//   title: 스케일 제목
+//   values: 간격 배열 [{ value, name }]
+
+// SpacingExample 컴포넌트:
+//   title: 예시 제목
+//   examples: 예시 배열 [{ label, value, code }]
+
+// ===== 단일 간격 토큰 =====
+<Spacing value={16} name="LG" />
+
+// ===== 간격 스케일 =====
+const spacingTokens = [
+  { value: 4, name: "XS" },
+  { value: 8, name: "SM" },
+  { value: 16, name: "LG" },
+  { value: 24, name: "2XL" },
+  { value: 32, name: "3XL" },
+];
+
+<SpacingScale title="간격 토큰 스케일" values={spacingTokens} />
+
+// ===== 간격 사용 예시 =====
+const examples = [
+  {
+    label: "간격 16px",
+    value: 16,
+    code: "gap: px(16); // 또는 gap: 1rem;",
+  },
+];
+
+<SpacingExample title="간격 사용 예시" examples={examples} />
+
+// ===== SCSS에서 사용 =====
+// px() 함수 사용
+.my-element {
+  padding: px(16);        // 16px → 1rem
+  margin: px(24);         // 24px → 1.5rem
+  gap: px(12);            // 12px → 0.75rem
+}
+
+// @include px 믹스인 사용
+.my-element {
+  @include px(padding, 16);
+  @include px(margin, 24);
+  @include px(gap, 12);
+}
+
+// ===== 유틸리티 클래스 사용 =====
+<div className="p-16">패딩 16px</div>
+<div className="m-24">마진 24px</div>
+<div className="gap-12">간격 12px</div>
+
+// ===== 주의사항 =====
+// 1. 모든 간격은 4px 단위로 증가 (4, 8, 12, 16, 20, 24, 32, 40, 48, 64)
+// 2. px() 함수는 자동으로 rem으로 변환 (16px = 1rem 기준)
+// 3. 유틸리티 클래스는 10px 단위로 제공 (10~100px)
+// 4. 간격 토큰은 일관된 디자인 시스템을 위해 사용`,
+    PreviewComponent: SpacingPreview,
+  },
+  {
+    id: "layout",
+    label: "레이아웃",
+    title: "Layout 컴포넌트",
+    description:
+      "컨테이너 폭과 그리드 시스템을 시각적으로 표시하는 컴포넌트입니다. 모바일, 태블릿, 데스크톱 등 다양한 화면 크기에 맞는 컨테이너 폭을 확인할 수 있으며, 2열부터 12열까지의 그리드 시스템을 미리볼 수 있습니다.",
+    code: `import Container, { ContainerScale, GridSystem } from "./Layout";
+
+// ===== Props 설명 =====
+// Container 컴포넌트:
+//   name: 컨테이너 이름
+//   width: 컨테이너 폭 (px)
+//   description: 설명
+
+// ContainerScale 컴포넌트:
+//   title: 스케일 제목
+//   containers: 컨테이너 배열 [{ name, width, description }]
+
+// GridSystem 컴포넌트:
+//   title: 그리드 시스템 제목
+//   grids: 그리드 배열 [{ columns, gap, name }]
+
+// ===== 단일 컨테이너 =====
+<Container
+  name="Desktop"
+  width={1200}
+  description="데스크톱 기본 폭"
+/>
+
+// ===== 컨테이너 스케일 =====
+const containers = [
+  { name: "Mobile", width: 375, description: "모바일 기본 폭" },
+  { name: "Tablet", width: 768, description: "태블릿 기본 폭" },
+  { name: "Desktop", width: 1200, description: "데스크톱 기본 폭" },
+];
+
+<ContainerScale title="컨테이너 폭" containers={containers} />
+
+// ===== 그리드 시스템 =====
+const grids = [
+  { columns: 2, gap: 16, name: "2 Column Grid" },
+  { columns: 3, gap: 16, name: "3 Column Grid" },
+  { columns: 4, gap: 16, name: "4 Column Grid" },
+  { columns: 12, gap: 16, name: "12 Column Grid" },
+];
+
+<GridSystem title="그리드 시스템" grids={grids} />
+
+// ===== SCSS에서 사용 =====
+// 컨테이너 폭 설정
+.container {
+  width: 100%;
+  max-width: px(1200);
+  margin: 0 auto;
+  padding: 0 px(20);
+}
+
+// 그리드 레이아웃
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: px(16);
+}
+
+.grid-item {
+  grid-column: span 4; // 12열 중 4열 차지
+}
+
+// 반응형 그리드
+.responsive-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: px(16);
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// ===== 주의사항 =====
+// 1. 컨테이너 폭은 max-width로 설정하여 반응형 지원
+// 2. 그리드 gap은 간격 토큰을 사용 (8, 12, 16, 24px 등)
+// 3. 모바일 우선 접근 방식 권장
+// 4. 그리드 시스템은 flexbox와 함께 사용 가능`,
+    PreviewComponent: LayoutSpacingPreview,
+  },
+  {
     id: "script",
     label: "스크립트",
     title: "JavaScript 인터랙션",
@@ -3150,22 +4350,27 @@ const renderPagination = () => {
   },
 ];
 
-// 1뎁스 그룹 구성 (LNB용)
+// 1뎁스 그룹 구성 (LNB용) - ㄱ~ㅎ 순서로 정렬
 const guideGroups = [
+  {
+    id: "navigation-group",
+    label: "네비게이션",
+    items: ["accordion", "dock", "pagination", "tab"],
+  },
+  {
+    id: "data-display-group",
+    label: "데이터 표시",
+    items: ["table"],
+  },
+  {
+    id: "design-system-group",
+    label: "디자인 시스템",
+    items: ["color", "icon", "layout", "spacing", "typography"],
+  },
   {
     id: "layout-group",
     label: "레이아웃",
-    items: ["header", "footer"],
-  },
-  {
-    id: "input-group",
-    label: "입력 컴포넌트",
-    items: ["input", "select", "textarea", "file-upload", "search-field"],
-  },
-  {
-    id: "selection-group",
-    label: "선택 컴포넌트",
-    items: ["checkbox", "radio"],
+    items: ["footer", "header"],
   },
   {
     id: "list-card-group",
@@ -3173,39 +4378,44 @@ const guideGroups = [
     items: ["card", "list", "notice"],
   },
   {
-    id: "navigation-group",
-    label: "네비게이션",
-    items: ["tab", "pagination", "accordion", "dock"],
-  },
-  {
-    id: "feedback-group",
-    label: "피드백",
-    items: ["toast", "tooltip", "popup"],
-  },
-  {
     id: "media-group",
     label: "미디어",
-    items: ["image", "image-zoom", "carousel", "lottie"],
+    items: ["carousel", "image", "image-zoom", "lottie"],
+  },
+  {
+    id: "button-toggle-group",
+    label: "버튼 & 토글",
+    items: ["button", "toggle"],
+  },
+  {
+    id: "input-group",
+    label: "입력 컴포넌트",
+    items: ["file-upload", "input", "search-field", "select", "textarea"],
+  },
+  {
+    id: "selection-group",
+    label: "선택 컴포넌트",
+    items: ["checkbox", "radio"],
   },
   {
     id: "status-group",
     label: "상태 & 로딩",
-    items: ["loading", "skeleton-placeholder", "badge", "empty-state", "error-state"],
+    items: ["badge", "empty-state", "error-state", "loading", "skeleton-placeholder"],
   },
   {
-    id: "other-group",
-    label: "기타 UI",
-    items: [
-      "button",
-      "toggle",
-      "dropdown",
-      "datepicker",
-      "table",
-      "icon",
-      "more",
-      "listsync",
-      "dnd",
-    ],
+    id: "feedback-group",
+    label: "피드백",
+    items: ["popup", "toast", "tooltip"],
+  },
+  {
+    id: "dropdown-picker-group",
+    label: "드롭다운 & 피커",
+    items: ["datepicker", "dropdown"],
+  },
+  {
+    id: "functional-group",
+    label: "기능 컴포넌트",
+    items: ["dnd", "listsync", "more"],
   },
   {
     id: "form-group",
@@ -3382,10 +4592,7 @@ function PublishingGuidePage() {
 
                   <div className="guide-section__body">
                     <div className="guide-section__code">
-                      <p className="guide-section__code-label">예시 코드</p>
-                      <pre>
-                        <code>{currentSection.code}</code>
-                      </pre>
+                      <CodeBlock code={currentSection.code} />
                     </div>
 
                     <div className="guide-section__preview">
@@ -3404,5 +4611,6 @@ function PublishingGuidePage() {
 }
 
 export default PublishingGuidePage;
+
 
 

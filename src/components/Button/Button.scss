@@ -1,0 +1,145 @@
+@use "../../styles/index.scss" as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: px(8);
+  border: 1px solid transparent;
+  border-radius: px(10);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  font-family: inherit;
+  line-height: 1;
+
+  // ===== Variant 스타일 =====
+  &--primary {
+    background-color: var(--color-accent);
+    color: #fff;
+    border-color: var(--color-accent);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(12, 124, 89, 0.9);
+      border-color: rgba(12, 124, 89, 0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(12, 124, 89, 0.3);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(12, 124, 89, 0.2);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(12, 124, 89, 0.08);
+      border-color: var(--color-accent);
+    }
+
+    &:active:not(:disabled) {
+      background-color: rgba(12, 124, 89, 0.12);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  &--ghost {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border);
+
+    &:hover:not(:disabled) {
+      background-color: var(--color-bg);
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+
+    &:active:not(:disabled) {
+      background-color: rgba(12, 124, 89, 0.05);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  // ===== Size 스타일 =====
+  // Small: 13px, padding 6px 12px
+  &--small {
+    @include px(font-size, 13);
+    @include px(padding, 6, 12);
+    @include px(border-radius, 8);
+    @include px(min-height, 32);
+  }
+
+  // Medium: 14px, padding 10px 18px
+  &--medium {
+    @include px(font-size, 14);
+    @include px(padding, 10, 18);
+    @include px(border-radius, 10);
+    @include px(min-height, 40);
+  }
+
+  // Large: 16px, padding 14px 20px
+  &--large {
+    @include px(font-size, 16);
+    @include px(padding, 14, 20);
+    @include px(border-radius, 12);
+    @include px(min-height, 48);
+  }
+
+  // ===== Disabled 상태 =====
+  &--disabled,
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // ===== 아이콘과 함께 사용 =====
+  svg,
+  .icon {
+    flex-shrink: 0;
+  }
+
+  // 아이콘만 있는 버튼 (정사각형)
+  &:has(> svg:only-child),
+  &:has(> .icon:only-child) {
+    aspect-ratio: 1;
+    padding: 0;
+    @include px(width, 40);
+    @include px(height, 40);
+
+    &.button--small {
+      @include px(width, 32);
+      @include px(height, 32);
+    }
+
+    &.button--large {
+      @include px(width, 48);
+      @include px(height, 48);
+    }
+  }
+}
+

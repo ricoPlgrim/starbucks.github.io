@@ -1,0 +1,109 @@
+@use "../../styles/index.scss" as *;
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+  color: var(--color-text);
+  transition: all 0.2s ease;
+
+  // ===== 크기 변형 =====
+  // small: 16px (1rem)
+  &--small {
+    @include px(font-size, 16);
+    @include px(width, 16);
+    @include px(height, 16);
+  }
+
+  // medium: 20px (1.25rem) - 기본값
+  &--medium {
+    @include px(font-size, 20);
+    @include px(width, 20);
+    @include px(height, 20);
+  }
+
+  // large: 24px (1.5rem)
+  &--large {
+    @include px(font-size, 24);
+    @include px(width, 24);
+    @include px(height, 24);
+  }
+
+  // xlarge: 32px (2rem)
+  &--xlarge {
+    @include px(font-size, 32);
+    @include px(width, 32);
+    @include px(height, 32);
+  }
+
+  // ===== 색상 변형 =====
+  &--color-default {
+    color: var(--color-text);
+  }
+
+  &--color-muted {
+    color: var(--color-muted);
+  }
+
+  &--color-accent {
+    color: var(--color-accent);
+  }
+
+  &--color-success {
+    color: var(--color-success);
+  }
+
+  &--color-warning {
+    color: var(--color-warning);
+  }
+
+  &--color-error {
+    color: var(--color-error);
+  }
+
+  &--color-info {
+    color: var(--color-info);
+  }
+
+  // ===== 클릭 가능 =====
+  &--clickable {
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    padding: 0;
+    border-radius: px(8);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba(12, 124, 89, 0.08);
+      transform: scale(1.1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+  }
+
+  // SVG 아이콘 스타일
+  svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    stroke: currentColor;
+  }
+
+  // 이모지 아이콘 스타일
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+

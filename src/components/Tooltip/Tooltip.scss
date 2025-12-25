@@ -1,5 +1,7 @@
 @use "../../styles/index.scss" as *;
 
+$arrow-offset: px(7);
+
 .tooltip {
   position: relative;
   display: inline-flex;
@@ -40,6 +42,7 @@
   font-size: px(13);
   line-height: 1.4;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  overflow: visible;
 }
 
 .tooltip__text {
@@ -75,7 +78,7 @@
 }
 
 .tooltip__bubble--right .tooltip__arrow {
-  left: -px(5);
+  left: -$arrow-offset;
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
 }
@@ -99,7 +102,7 @@
 }
 
 .tooltip__bubble--left .tooltip__arrow {
-  right: -px(5);
+  right: -$arrow-offset;
   top: 50%;
   transform: translateY(-50%) rotate(45deg);
 }

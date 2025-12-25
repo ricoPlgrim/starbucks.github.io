@@ -1,0 +1,274 @@
+@use "../../styles/index.scss" as *;
+
+.typography {
+  margin: 0;
+  padding: 0;
+  color: var(--color-text);
+  font-family: inherit;
+  transition: color 0.2s ease;
+
+  // ===== 제목 스타일 (h1-h6) =====
+  &--h1 {
+    @include px(font-size, 32);
+    @include px(line-height, 40);
+    @include px(letter-spacing, -0.5);
+    font-weight: 700;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 28);
+      @include px(line-height, 36);
+    }
+
+    &.typography--large {
+      @include px(font-size, 36);
+      @include px(line-height, 44);
+    }
+  }
+
+  &--h2 {
+    @include px(font-size, 28);
+    @include px(line-height, 36);
+    @include px(letter-spacing, -0.3);
+    font-weight: 700;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 24);
+      @include px(line-height, 32);
+    }
+
+    &.typography--large {
+      @include px(font-size, 32);
+      @include px(line-height, 40);
+    }
+  }
+
+  &--h3 {
+    @include px(font-size, 24);
+    @include px(line-height, 32);
+    @include px(letter-spacing, -0.2);
+    font-weight: 700;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 20);
+      @include px(line-height, 28);
+    }
+
+    &.typography--large {
+      @include px(font-size, 28);
+      @include px(line-height, 36);
+    }
+  }
+
+  &--h4 {
+    @include px(font-size, 20);
+    @include px(line-height, 28);
+    @include px(letter-spacing, -0.1);
+    font-weight: 600;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 18);
+      @include px(line-height, 26);
+    }
+
+    &.typography--large {
+      @include px(font-size, 24);
+      @include px(line-height, 32);
+    }
+  }
+
+  &--h5 {
+    @include px(font-size, 18);
+    @include px(line-height, 26);
+    @include px(letter-spacing, 0);
+    font-weight: 600;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 16);
+      @include px(line-height, 24);
+    }
+
+    &.typography--large {
+      @include px(font-size, 20);
+      @include px(line-height, 28);
+    }
+  }
+
+  &--h6 {
+    @include px(font-size, 16);
+    @include px(line-height, 24);
+    @include px(letter-spacing, 0);
+    font-weight: 600;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 14);
+      @include px(line-height, 22);
+    }
+
+    &.typography--large {
+      @include px(font-size, 18);
+      @include px(line-height, 26);
+    }
+  }
+
+  // ===== 본문 스타일 =====
+  &--body {
+    @include px(font-size, 16);
+    @include px(line-height, 24);
+    @include px(letter-spacing, 0);
+    font-weight: 400;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 14);
+      @include px(line-height, 22);
+      @include px(letter-spacing, 0.1);
+    }
+
+    &.typography--large {
+      @include px(font-size, 18);
+      @include px(line-height, 28);
+      @include px(letter-spacing, -0.1);
+    }
+  }
+
+  // ===== 캡션 스타일 =====
+  &--caption {
+    @include px(font-size, 12);
+    @include px(line-height, 18);
+    @include px(letter-spacing, 0.2);
+    font-weight: 400;
+    color: var(--color-muted);
+
+    &.typography--small {
+      @include px(font-size, 11);
+      @include px(line-height, 16);
+      @include px(letter-spacing, 0.3);
+    }
+
+    &.typography--large {
+      @include px(font-size, 13);
+      @include px(line-height, 20);
+      @include px(letter-spacing, 0.1);
+    }
+  }
+
+  // ===== 오버라인 스타일 =====
+  &--overline {
+    @include px(font-size, 11);
+    @include px(line-height, 16);
+    @include px(letter-spacing, 0.5);
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-muted);
+
+    &.typography--small {
+      @include px(font-size, 10);
+      @include px(line-height, 14);
+      @include px(letter-spacing, 0.6);
+    }
+
+    &.typography--large {
+      @include px(font-size, 12);
+      @include px(line-height, 18);
+      @include px(letter-spacing, 0.4);
+    }
+  }
+
+  // ===== 색상 변형 =====
+  &--color-default {
+    color: var(--color-text);
+  }
+
+  &--color-muted {
+    color: var(--color-muted);
+  }
+
+  &--color-accent {
+    color: var(--color-accent);
+  }
+
+  &--color-inherit {
+    color: inherit;
+  }
+
+  // ===== 폰트 굵기 =====
+  &--weight-normal {
+    font-weight: 400;
+  }
+
+  &--weight-medium {
+    font-weight: 500;
+  }
+
+  &--weight-semibold {
+    font-weight: 600;
+  }
+
+  &--weight-bold {
+    font-weight: 700;
+  }
+
+  // ===== 텍스트 정렬 =====
+  &--align-left {
+    text-align: left;
+  }
+
+  &--align-center {
+    text-align: center;
+  }
+
+  &--align-right {
+    text-align: right;
+  }
+
+  &--align-justify {
+    text-align: justify;
+  }
+
+  // ===== 텍스트 말줄임표 =====
+  &--truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // ===== 다중 줄 말줄임표 =====
+  &--line-clamp-1 {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &--line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &--line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &--line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+

@@ -1,0 +1,178 @@
+@use "../../styles/index.scss" as *;
+
+// ===== Spacing Token =====
+.spacing-token {
+  display: flex;
+  flex-direction: column;
+  gap: px(8);
+  padding: px(12);
+  border: 1px solid var(--color-border);
+  border-radius: px(12);
+  background-color: var(--color-card);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-accent);
+    box-shadow: 0 2px 8px rgba(12, 124, 89, 0.1);
+  }
+
+  &__visual {
+    width: 100%;
+    min-height: px(60);
+    background: linear-gradient(135deg, rgba(12, 124, 89, 0.1), rgba(12, 124, 89, 0.05));
+    border: 2px dashed var(--color-accent);
+    border-radius: px(8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--color-accent);
+      transform: translateY(-50%);
+    }
+  }
+
+  &__label {
+    @include px(font-size, 12);
+    font-weight: 700;
+    color: var(--color-accent);
+    background-color: var(--color-card);
+    padding: px(4) px(8);
+    border-radius: px(4);
+    border: 1px solid var(--color-accent);
+    z-index: 1;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: px(4);
+  }
+
+  &__name {
+    @include px(font-size, 14);
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  &__value {
+    @include px(font-size, 12);
+    font-family: "Fira Code", "Courier New", monospace;
+    color: var(--color-muted);
+  }
+}
+
+// ===== Spacing Scale =====
+.spacing-scale {
+  display: flex;
+  flex-direction: column;
+  gap: px(16);
+  padding: px(20);
+  border: 1px solid var(--color-border);
+  border-radius: px(16);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-soft);
+
+  &__title {
+    margin: 0;
+    @include px(font-size, 18);
+    font-weight: 700;
+    color: var(--color-text);
+    padding-bottom: px(12);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: px(16);
+  }
+}
+
+// ===== Spacing Example =====
+.spacing-example {
+  display: flex;
+  flex-direction: column;
+  gap: px(16);
+  padding: px(20);
+  border: 1px solid var(--color-border);
+  border-radius: px(16);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-soft);
+
+  &__title {
+    margin: 0;
+    @include px(font-size, 18);
+    font-weight: 700;
+    color: var(--color-text);
+    padding-bottom: px(12);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: px(16);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: px(8);
+    padding: px(16);
+    border: 1px solid var(--color-border);
+    border-radius: px(12);
+    background-color: var(--color-bg);
+  }
+
+  &__label {
+    @include px(font-size, 14);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  &__preview {
+    display: flex;
+    align-items: center;
+    padding: px(16);
+    background-color: rgba(12, 124, 89, 0.05);
+    border-radius: px(8);
+    border: 1px dashed var(--color-border);
+    min-height: px(80);
+  }
+
+  &__box {
+    flex: 1;
+    height: px(60);
+    background: linear-gradient(135deg, var(--color-accent), rgba(12, 124, 89, 0.7));
+    border-radius: px(8);
+    border: 1px solid var(--color-accent);
+  }
+
+  &__code {
+    @include px(font-size, 12);
+    font-family: "Fira Code", "Courier New", monospace;
+    color: var(--color-muted);
+    padding: px(8) px(12);
+    background-color: var(--color-card);
+    border-radius: px(6);
+    border: 1px solid var(--color-border);
+  }
+}
+
+// 반응형
+@media (max-width: 768px) {
+  .spacing-scale__grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: px(12);
+  }
+}
+

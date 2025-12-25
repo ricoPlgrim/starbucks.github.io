@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./AccessibilityHelper.scss";
 
 const FONT_SCALE_OPTIONS = [
@@ -20,6 +20,8 @@ const FONT_SCALE_OPTIONS = [
 
 function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScale }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+  const timeoutRef = useRef(null);
   // TODO: 접근성 체크리스트 기능 구현 예정
   // const [checklist, setChecklist] = useState(ACCESSIBILITY_CHECKLIST);
   // const toggleChecklist = (id) => {
@@ -27,6 +29,34 @@ function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScal
   //     prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
   //   );
   // };
+
+  // isOpen 상태 변경 시 shouldRender 관리 (애니메이션 완료 후 DOM에서 제거)
+  useEffect(() => {
+    if (isOpen) {
+      // 열릴 때: 즉시 렌더링
+      setShouldRender(true);
+      // 기존 timeout 취소
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    } else if (shouldRender) {
+      // 닫힐 때: transition 시간(300ms) 후 DOM에서 제거
+      // shouldRender가 true일 때만 timeout 설정 (이미 false면 실행하지 않음)
+      timeoutRef.current = setTimeout(() => {
+        setShouldRender(false);
+        timeoutRef.current = null;
+      }, 300); // CSS transition 시간과 일치
+    }
+
+    // cleanup: 컴포넌트 언마운트 시 timeout 정리
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+    };
+  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const currentFontScaleLabel =
     FONT_SCALE_OPTIONS.find((option) => option.id === fontScale)?.label ?? "보통";
@@ -45,7 +75,7 @@ function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScal
         <span className="accessibility-helper__label">옵션</span>
       </button>
 
-      {isOpen && (
+      {shouldRender && (
         <div className="accessibility-helper__panel">
           <div className="accessibility-helper__section">
             <h3 className="accessibility-helper__title">접근성 설정</h3>

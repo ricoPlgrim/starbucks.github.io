@@ -2,22 +2,65 @@
 
 .guide-preview--carousel {
   width: 100%;
+  position: relative;
+
   .swiper {
     padding-bottom: px(28);
+    position: relative;
   }
 
   .swiper-button-prev,
   .swiper-button-next {
     color: var(--color-accent);
+    @include px(width, 28);
+    @include px(height, 28);
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    position: absolute;
+
+    &::after {
+      @include px(font-size, 12);
+      font-weight: 700;
+    }
+
+    &:hover {
+      background-color: var(--color-accent);
+      color: #fff;
+    }
+
+    &.swiper-button-disabled {
+      opacity: 0.35;
+    }
   }
 
-  .swiper-pagination-bullet {
-    background: var(--color-border);
-    opacity: 1;
+  .swiper-button-prev {
+    left: px(4);
   }
 
-  .swiper-pagination-bullet-active {
-    background: var(--color-accent);
+  .swiper-button-next {
+    right: px(4);
+  }
+
+  .swiper-pagination {
+    bottom: px(8);
+    z-index: 10;
+
+    .swiper-pagination-bullet {
+      background: var(--color-border);
+      opacity: 1;
+      @include px(width, 8);
+      @include px(height, 8);
+      margin: 0 px(4);
+    }
+
+    .swiper-pagination-bullet-active {
+      background: var(--color-accent);
+    }
   }
 }
 

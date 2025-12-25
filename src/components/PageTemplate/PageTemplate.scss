@@ -23,7 +23,7 @@
   }
 
   &__main {
-    @include px(padding, 20);
+    @include px(padding-top, 20);
     margin: 0 auto;
   }
 }

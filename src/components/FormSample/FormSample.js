@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "../Input/Input";
 import "./FormSample.scss";
 
 function FormSample() {
@@ -6,10 +7,13 @@ function FormSample() {
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (fieldName) => (e, value) => {
+    setForm((prev) => ({ ...prev, [fieldName]: value }));
     setMessage("");
+    // 에러가 있으면 입력 시 에러 메시지 제거
+    if (errors[fieldName]) {
+      setErrors((prev) => ({ ...prev, [fieldName]: "" }));
+    }
   };
 
   const validate = () => {
@@ -33,80 +37,59 @@ function FormSample() {
 
   return (
     <form className="form-sample" onSubmit={handleSubmit}>
-      <label className="field">
-        <span className="field__label">이름</span>
-        <input
-          type="text"
-          name="name"
-          placeholder="홍길동"
-          value={form.name}
-          onChange={handleChange}
-          aria-invalid={!!errors.name}
-        />
-        <small className={`field__help ${errors.name ? "is-error" : ""}`}>
-          {errors.name || "본인 확인이 가능한 이름을 입력하세요."}
-        </small>
-      </label>
+      <Input
+        label="이름"
+        type="text"
+        placeholder="홍길동"
+        value={form.name}
+        onChange={handleChange("name")}
+        error={errors.name}
+        help={!errors.name ? "본인 확인이 가능한 이름을 입력하세요." : undefined}
+        showClearButton
+      />
 
-      <label className="field">
-        <span className="field__label">휴대폰 번호</span>
-        <input
-          type="tel"
-          name="phone"
-          placeholder="010-1234-5678"
-          value={form.phone}
-          onChange={handleChange}
-          aria-invalid={!!errors.phone}
-        />
-        <small className={`field__help ${errors.phone ? "is-error" : ""}`}>
-          {errors.phone || "숫자만 입력해도 자동으로 처리됩니다."}
-        </small>
-      </label>
+      <Input
+        label="휴대폰 번호"
+        type="tel"
+        placeholder="010-1234-5678"
+        value={form.phone}
+        onChange={handleChange("phone")}
+        error={errors.phone}
+        help={!errors.phone ? "숫자만 입력해도 자동으로 처리됩니다." : undefined}
+        showClearButton
+      />
 
-      <label className="field">
-        <span className="field__label">주소</span>
-        <input
-          type="text"
-          name="address"
-          placeholder="도로명 주소를 입력하세요"
-          value={form.address}
-          onChange={handleChange}
-          aria-invalid={!!errors.address}
-        />
-        <small className={`field__help ${errors.address ? "is-error" : ""}`}>
-          {errors.address || "배송 또는 연락 가능한 주소를 입력하세요."}
-        </small>
-      </label>
+      <Input
+        label="주소"
+        type="text"
+        placeholder="도로명 주소를 입력하세요"
+        value={form.address}
+        onChange={handleChange("address")}
+        error={errors.address}
+        help={!errors.address ? "배송 또는 연락 가능한 주소를 입력하세요." : undefined}
+        showClearButton
+      />
 
-      <label className="field">
-        <span className="field__label">이메일</span>
-        <input
-          type="email"
-          name="email"
-          placeholder="name@example.com"
-          value={form.email}
-          onChange={handleChange}
-          aria-invalid={!!errors.email}
-        />
-        <small className={`field__help ${errors.email ? "is-error" : ""}`}>
-          {errors.email || "가입 시 사용한 이메일을 입력하세요."}
-        </small>
-      </label>
+      <Input
+        label="이메일"
+        type="email"
+        placeholder="name@example.com"
+        value={form.email}
+        onChange={handleChange("email")}
+        error={errors.email}
+        help={!errors.email ? "가입 시 사용한 이메일을 입력하세요." : undefined}
+        showClearButton
+      />
 
-      <label className="field">
-        <span className="field__label">비밀번호</span>
-        <input
-          type="password"
-          name="password"
-          placeholder="8자 이상 입력"
-          value={form.password}
-          onChange={handleChange}
-          aria-invalid={!!errors.password}
-        />
-        <small className={`field__help ${errors.password ? "is-error" : ""}`}>
-          {errors.password || "문자, 숫자 조합으로 8자 이상 입력하세요."}
-        </small>
-      </label>
+      <Input
+        label="비밀번호"
+        type="password"
+        placeholder="8자 이상 입력"
+        value={form.password}
+        onChange={handleChange("password")}
+        error={errors.password}
+        help={!errors.password ? "문자, 숫자 조합으로 8자 이상 입력하세요." : undefined}
+      />
 
       <button type="submit" className="btn btn--primary btn--md">
         유효성 검사
