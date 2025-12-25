@@ -1618,7 +1618,7 @@
 }
 
 .publishing-guide__mobile-lnb-modal {
-  background: #fff;
+  background: var(--color-bg);
   width: min(420px, 90vw);
   max-height: 80vh;
   border-radius: px(14);
@@ -1627,6 +1627,7 @@
   display: flex;
   flex-direction: column;
   gap: px(12);
+  color: var(--color-text);
 }
 
 .publishing-guide__mobile-lnb-header {
@@ -1638,6 +1639,7 @@
   h4 {
     margin: 0;
     font-weight: 800;
+    color: var(--color-text);
   }
 
   button {
@@ -1645,6 +1647,12 @@
     border: none;
     font-size: px(18);
     cursor: pointer;
+    color: var(--color-text);
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
   }
 }
 
@@ -1659,6 +1667,24 @@
   display: flex;
   flex-direction: column;
   gap: px(8);
+}
+
+// 다크모드 지원
+@media (prefers-color-scheme: dark) {
+  .publishing-guide__mobile-lnb-modal {
+    background-color: var(--color-card);
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  }
+
+  .publishing-guide__mobile-lnb-header {
+    h4 {
+      color: var(--color-text);
+    }
+
+    button {
+      color: var(--color-text);
+    }
+  }
 }
 
 @media (max-width: 960px) {

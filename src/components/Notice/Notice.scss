@@ -15,12 +15,15 @@
     align-items: center;
     justify-content: space-between;
     gap: px(8);
+    min-width: 0; // flexbox 오버플로우 방지
 
     h3 {
       margin: 0;
       @include px(font-size, 18);
       font-weight: 700;
       color: var(--color-text);
+      flex-shrink: 0;
+      white-space: nowrap;
     }
   }
 
@@ -32,6 +35,8 @@
     color: var(--color-text);
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0; // 버튼 크기 고정
+    white-space: nowrap; // 텍스트 줄바꿈 방지
 
     &:hover {
       border-color: var(--color-accent);
@@ -59,6 +64,7 @@
     justify-content: space-between;
     gap: px(12);
     align-items: center;
+    min-width: 0; // flexbox 오버플로우 방지
   }
 
   &__title {
@@ -68,6 +74,18 @@
     color: var(--color-text);
     font-weight: 600;
     line-height: 1.4;
+    min-width: 0; // flexbox 오버플로우 방지
+    flex: 1; // 남은 공간 차지
+    overflow: hidden; // 텍스트 오버플로우 처리
+    
+    // 제목 텍스트 부분 (span)
+    > span:not(.notice__badge) {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      min-width: 0;
+      flex: 1; // 남은 공간 차지
+    }
   }
 
   &__badge {

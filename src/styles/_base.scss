@@ -67,6 +67,8 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
+  min-width: 320px; // 최소 모바일 너비 (화면이 너무 작아지는 것 방지)
+  overflow-x: auto; // 가로 스크롤 허용 (필요시)
 }
 
 h1, h2, h3, h4, h5, h6,

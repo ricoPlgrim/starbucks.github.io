@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+    <script>
+      // 페이지 로드 전에 테마 설정 적용 (FOUC 방지)
+      (function() {
+        const STORAGE_KEYS = {
+          THEME: 'accessibility-theme',
+          FONT_SCALE: 'accessibility-font-scale'
+        };
+        
+        try {
+          // localStorage에서 저장된 테마 불러오기
+          const storedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
+          const storedFontScale = localStorage.getItem(STORAGE_KEYS.FONT_SCALE);
+          
+          // 시스템 다크모드 감지
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          
+          // 테마 설정
+          if (storedTheme === 'dark' || storedTheme === 'light') {
+            document.documentElement.setAttribute('data-theme', storedTheme);
+          } else {
+            document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+          }
+          
+          // 폰트 스케일 설정
+          if (storedFontScale && ['small', 'normal', 'large', 'xlarge'].includes(storedFontScale)) {
+            document.documentElement.setAttribute('data-font-scale', storedFontScale);
+          } else {
+            document.documentElement.setAttribute('data-font-scale', 'normal');
+          }
+        } catch (e) {
+          // localStorage 접근 실패 시 기본값 사용
+          document.documentElement.setAttribute('data-theme', 'light');
+          document.documentElement.setAttribute('data-font-scale', 'normal');
+        }
+      })();
+    </script>
+    <style>
+      /* 초기 배경색 설정 (FOUC 방지) */
+      html {
+        background-color: #f5f6f7;
+      }
+      html[data-theme="dark"] {
+        background-color: #111315;
+      }
+      body {
+        margin: 0;
+        background-color: #f5f6f7;
+        transition: none;
+      }
+      html[data-theme="dark"] body {
+        background-color: #111315;
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      GitHub Pages 404.html - SPA 라우팅 지원
+      index.html과 동일한 내용으로 React Router가 경로를 처리하도록 함
+      빌드 후 docs/index.html을 docs/404.html로 복사해야 함
+    -->
+  </body>
+</html>
+

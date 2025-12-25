@@ -22,8 +22,8 @@
   },
   "scripts": {
     "start": "cross-env SASS_SILENCE_DEPRECATIONS=all react-app-rewired start",
-    "build": "cross-env BUILD_PATH=docs SASS_SILENCE_DEPRECATIONS=all react-app-rewired build",
-    "build:analyze": "cross-env ANALYZE_BUILD=true BUILD_PATH=docs SASS_SILENCE_DEPRECATIONS=all react-app-rewired build",
+    "build": "cross-env BUILD_PATH=docs SASS_SILENCE_DEPRECATIONS=all react-app-rewired build && node scripts/copy-404.js",
+    "build:analyze": "cross-env ANALYZE_BUILD=true BUILD_PATH=docs SASS_SILENCE_DEPRECATIONS=all react-app-rewired build && node scripts/copy-404.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "storybook dev -p 6006",
