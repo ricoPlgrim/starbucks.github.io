@@ -9,9 +9,42 @@
 
   // ===== 제목 스타일 (h1-h6) =====
   &--h1 {
+    @include px(font-size, 56);
+    @include px(letter-spacing, -1.2);
+    font-weight: 800;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 48);
+      @include px(line-height, 56);
+    }
+
+    &.typography--large {
+      @include px(font-size, 64);
+      @include px(line-height, 72);
+    }
+  }
+
+  &--h2 {
+    @include px(font-size, 40);
+    @include px(letter-spacing, -0.8);
+    font-weight: 700;
+    color: var(--color-text);
+
+    &.typography--small {
+      @include px(font-size, 36);
+      @include px(line-height, 44);
+    }
+
+    &.typography--large {
+      @include px(font-size, 44);
+      @include px(line-height, 52);
+    }
+  }
+
+  &--h3 {
     @include px(font-size, 32);
-    @include px(line-height, 40);
-    @include px(letter-spacing, -0.5);
+    @include px(letter-spacing, -0.6);
     font-weight: 700;
     color: var(--color-text);
 
@@ -26,29 +59,10 @@
     }
   }
 
-  &--h2 {
-    @include px(font-size, 28);
-    @include px(line-height, 36);
-    @include px(letter-spacing, -0.3);
-    font-weight: 700;
-    color: var(--color-text);
-
-    &.typography--small {
-      @include px(font-size, 24);
-      @include px(line-height, 32);
-    }
-
-    &.typography--large {
-      @include px(font-size, 32);
-      @include px(line-height, 40);
-    }
-  }
-
-  &--h3 {
+  &--h4 {
     @include px(font-size, 24);
-    @include px(line-height, 32);
-    @include px(letter-spacing, -0.2);
-    font-weight: 700;
+    @include px(letter-spacing, -0.4);
+    font-weight: 600;
     color: var(--color-text);
 
     &.typography--small {
@@ -62,10 +76,9 @@
     }
   }
 
-  &--h4 {
+  &--h5 {
     @include px(font-size, 20);
-    @include px(line-height, 28);
-    @include px(letter-spacing, -0.1);
+    @include px(letter-spacing, -0.2);
     font-weight: 600;
     color: var(--color-text);
 
@@ -80,10 +93,10 @@
     }
   }
 
-  &--h5 {
+  &--h6 {
     @include px(font-size, 18);
-    @include px(line-height, 26);
-    @include px(letter-spacing, 0);
+    @include px(letter-spacing, -0.1);
+    @include px(margin-bottom, 8);
     font-weight: 600;
     color: var(--color-text);
 
@@ -95,24 +108,6 @@
     &.typography--large {
       @include px(font-size, 20);
       @include px(line-height, 28);
-    }
-  }
-
-  &--h6 {
-    @include px(font-size, 16);
-    @include px(line-height, 24);
-    @include px(letter-spacing, 0);
-    font-weight: 600;
-    color: var(--color-text);
-
-    &.typography--small {
-      @include px(font-size, 14);
-      @include px(line-height, 22);
-    }
-
-    &.typography--large {
-      @include px(font-size, 18);
-      @include px(line-height, 26);
     }
   }
 

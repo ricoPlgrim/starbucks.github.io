@@ -2,13 +2,19 @@ import { useEffect } from "react";
 import "./Toast.scss";
 
 function Toast({ message, type = "info", duration = 3000, onClose }) {
+  // useEffect는 항상 호출되어야 하므로 early return 전에 호출
   useEffect(() => {
-    if (!message) return;
-    const timer = setTimeout(onClose, duration);
+    if (!message || typeof message !== 'string' || !message.trim()) return;
+    const timer = setTimeout(() => {
+      onClose?.();
+    }, duration);
     return () => clearTimeout(timer);
   }, [message, duration, onClose]);
 
-  if (!message) return null;
+  // message가 없거나 빈 문자열이면 렌더링하지 않음
+  if (!message || typeof message !== 'string' || !message.trim()) {
+    return null;
+  }
 
   return (
     <div className={`toast toast--${type}`} role="status" aria-live="polite" onClick={onClose}>

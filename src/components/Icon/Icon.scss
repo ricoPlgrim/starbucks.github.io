@@ -8,6 +8,8 @@
   user-select: none;
   color: var(--color-text);
   transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 
   // ===== 크기 변형 =====
   // small: 16px (1rem)
@@ -104,6 +106,19 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+
+  // 테이블 및 모바일에서 한 줄 배치
+  @media (max-width: 768px) {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  // 테이블 셀 내부에서도 한 줄 배치
+  td &,
+  th & {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 }
 

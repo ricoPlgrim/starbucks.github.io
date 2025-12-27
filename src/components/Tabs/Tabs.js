@@ -18,6 +18,7 @@ const defaultTabItems = [
  * @param {string} scrollContainerId - 스크롤 컨테이너 ID (type이 'scroll'일 때 사용)
  * @param {function} onChange - 탭 변경 핸들러 (activeTabId) => void
  * @param {string} className - 추가 클래스명
+ * @param {boolean} showContent - 컨텐츠 영역 표시 여부 (기본값: true)
  */
 function Tabs({
   items = defaultTabItems,
@@ -25,6 +26,7 @@ function Tabs({
   scrollContainerId,
   onChange,
   className = "",
+  showContent = true,
 }) {
   // 현재 활성화된 탭 ID 상태
   const [activeTab, setActiveTab] = useState(items[0]?.id);
@@ -177,7 +179,7 @@ function Tabs({
             ))}
           </Swiper>
         </div>
-        {activeItem && (
+        {showContent && activeItem && (
           <div
             className="tabs__tabpanel"
             role="tabpanel"
@@ -212,7 +214,7 @@ function Tabs({
             ))}
           </div>
         </div>
-        {activeItem && (
+        {showContent && activeItem && (
           <div
             className="tabs__tabpanel"
             role="tabpanel"
@@ -243,7 +245,7 @@ function Tabs({
           </button>
         ))}
       </div>
-      {activeItem && (
+      {showContent && activeItem && (
         <div
           className="tabs__tabpanel"
           role="tabpanel"

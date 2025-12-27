@@ -63,6 +63,21 @@
   gap: px(10);
   z-index: 2100;
   transform: translateX(-50%);
+  
+  // 빈 토스트 스택은 숨김
+  &:empty {
+    display: none !important;
+  }
+}
+
+// 토스트 메시지가 비어있으면 숨김
+.toast .toast__message:empty {
+  display: none !important;
+}
+
+// 토스트가 숨겨진 메시지를 가진 경우 전체 토스트 숨김
+.toast:has(.toast__message:empty) {
+  display: none !important;
 }
 
 @keyframes toast-slide-in {

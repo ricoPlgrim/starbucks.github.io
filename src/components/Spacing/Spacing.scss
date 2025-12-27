@@ -124,6 +124,9 @@
   border-radius: px(20);
   background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  width: 100%;
+  min-height: 0;
+  height: auto;
 
   &__title {
     margin: 0;
@@ -136,8 +139,9 @@
 
   &__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: px(20);
+    width: 100%;
   }
 }
 
@@ -151,6 +155,9 @@
   border-radius: px(16);
   background-color: var(--color-card);
   box-shadow: var(--shadow-soft);
+  width: 100%;
+  min-height: 0;
+  height: auto;
 
   &__title {
     margin: 0;

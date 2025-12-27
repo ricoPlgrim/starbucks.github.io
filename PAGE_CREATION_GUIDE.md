@@ -261,17 +261,18 @@ const [currentPage, setCurrentPage] = useState(() => {
 - **List / ListItem** - 리스트 컴포넌트 (텍스트 리스트, 아이콘 리스트)
 - **ListContainer** - 리스트 컨테이너 (section/article 태그 기반)
 - **Notice** - 공지사항 리스트 (링크 지원)
+- **DataList** - API 데이터 리스트 컴포넌트 (목업 API를 통해 데이터를 가져와서 리스트 형태로 표시, 로딩/에러/빈 상태 자동 처리, 다양한 렌더링 유형 지원)
 
 ### 네비게이션
-- **Tabs** - 탭 인터페이스 (default, scroll, swiper 타입)
+- **Tabs** - 탭 인터페이스 (default, scroll, swiper 타입, showContent prop으로 탭 UI만 표시 가능)
 - **Pagination** - 페이지네이션
 - **Accordion** - 아코디언 (exclusive, independent 타입)
 - **BottomDock** - 하단 돗바
 
 ### 피드백
-- **Toast** - 토스트 알림
+- **Toast** - 토스트 알림 (빈 메시지일 때 자동으로 렌더링하지 않음, 조건부 렌더링 강화)
 - **Tooltip** - 툴팁
-- **Popup** - 팝업 (기본: Swiper 캐러셀 지원 / 시트: 드래그로 닫기 / 풀스크린)
+- **Popup** - 팝업 (기본: Swiper 캐러셀 지원 / 시트: 드래그로 닫기 / 풀스크린: showHeaderClose, showBottomClose props로 3가지 타입 지원)
 
 ### 미디어
 - **Image** - 이미지 컴포넌트 (에러 처리, 비율 자동 판단, fallback 이미지 지원)
@@ -292,16 +293,17 @@ const [currentPage, setCurrentPage] = useState(() => {
 - **Toggle** - 토글 스위치
 - **Dropdown** - 드롭다운
 - **DatePicker** - 날짜 선택 (닫기 버튼, 자동 닫기 제거)
-- **Table** - 테이블 (가로 스크롤·열 고정 / 세로 스크롤·헤더 고정 / 가로·세로 스크롤·헤더&열 고정)
+- **Table** - 테이블 (가로 스크롤·열 고정 / 세로 스크롤·헤더 고정 3개 컬럼 / 가로·세로 스크롤·헤더&열 고정)
 - **Form** - 폼 요소 (유효성 검사 포함, Button 컴포넌트 사용)
 - **DragDropList** - 드래그앤드랍 리스트
 - **ListSync** - 리스트 동기화
-- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, 크기/색상 옵션)
-- **Typography** - 타이포그래피 컴포넌트 (제목, 본문, 캡션, 오버라인)
+- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, 크기/색상 옵션, 모바일/태블릿에서 한 줄 표시)
+- **Typography** - 타이포그래피 컴포넌트 (제목, 본문, 캡션, 오버라인, H1-H6 명확한 크기/간격 차이)
 - **Color** - 컬러 시스템 컴포넌트 (브랜드 컬러, 상태 컬러, 테마 비교)
-- **Spacing** - 간격 시스템 컴포넌트 (간격 토큰, 사용 예시)
-- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템)
+- **Spacing** - 간격 시스템 컴포넌트 (간격 토큰, 사용 예시, 빈 공간 없이 채움)
+- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템, 12컬럼 동일 너비, 화면 넘침 방지)
 - **LoadingGrid** - 그리드 로딩 인디케이터
+- **DataList** - API 데이터 리스트 컴포넌트 (목업 API를 통해 데이터를 가져와서 리스트 형태로 표시, 로딩/에러/빈 상태 자동 처리, Card/List/ListItem/Badge/Button 등 다양한 렌더링 유형 지원, 그리드 레이아웃 지원)
 
 자세한 사용법은 `PublishingGuidePage`에서 확인할 수 있습니다.
 

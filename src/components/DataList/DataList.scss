@@ -1,0 +1,24 @@
+@use "../../styles/index.scss" as *;
+
+.data-list {
+  width: 100%;
+
+  &--loading,
+  &--error,
+  &--empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: px(200);
+    padding: px(40) px(20);
+  }
+
+  &__item {
+    width: 100%;
+    
+    &:not(:last-child) {
+      margin-bottom: px(16);
+    }
+  }
+}
+

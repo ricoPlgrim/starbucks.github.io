@@ -45,19 +45,19 @@ const defaultWideRows = [
   },
 ];
 
-const defaultVerticalHeaders = ["번호", "제목", "등록일", "조회수", "상태"];
+const defaultVerticalHeaders = ["번호", "제목", "등록일"];
 
 const defaultVerticalRows = [
-  { id: 1, title: "공지사항 제목 1", date: "2025-01-15", views: 1250, status: "공개" },
-  { id: 2, title: "공지사항 제목 2", date: "2025-01-14", views: 980, status: "공개" },
-  { id: 3, title: "공지사항 제목 3", date: "2025-01-13", views: 750, status: "공개" },
-  { id: 4, title: "공지사항 제목 4", date: "2025-01-12", views: 620, status: "공개" },
-  { id: 5, title: "공지사항 제목 5", date: "2025-01-11", views: 540, status: "공개" },
-  { id: 6, title: "공지사항 제목 6", date: "2025-01-10", views: 430, status: "공개" },
-  { id: 7, title: "공지사항 제목 7", date: "2025-01-09", views: 380, status: "공개" },
-  { id: 8, title: "공지사항 제목 8", date: "2025-01-08", views: 320, status: "공개" },
-  { id: 9, title: "공지사항 제목 9", date: "2025-01-07", views: 290, status: "공개" },
-  { id: 10, title: "공지사항 제목 10", date: "2025-01-06", views: 250, status: "공개" },
+  { id: 1, title: "공지사항 제목 1", date: "2025-01-15" },
+  { id: 2, title: "공지사항 제목 2", date: "2025-01-14" },
+  { id: 3, title: "공지사항 제목 3", date: "2025-01-13" },
+  { id: 4, title: "공지사항 제목 4", date: "2025-01-12" },
+  { id: 5, title: "공지사항 제목 5", date: "2025-01-11" },
+  { id: 6, title: "공지사항 제목 6", date: "2025-01-10" },
+  { id: 7, title: "공지사항 제목 7", date: "2025-01-09" },
+  { id: 8, title: "공지사항 제목 8", date: "2025-01-08" },
+  { id: 9, title: "공지사항 제목 9", date: "2025-01-07" },
+  { id: 10, title: "공지사항 제목 10", date: "2025-01-06" },
 ];
 
 const Table = ({ 
@@ -149,8 +149,6 @@ const Table = ({
                       <td>{row.id}</td>
                       <td className="table__title">{row.title}</td>
                       <td>{row.date}</td>
-                      <td>{row.views?.toLocaleString()}</td>
-                      <td>{row.status}</td>
                     </>
                   ) : (
                     <>

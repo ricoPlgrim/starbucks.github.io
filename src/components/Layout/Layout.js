@@ -18,7 +18,7 @@ const Container = ({ name, width, description, className = "" }) => {
         )}
       </div>
       <div className="layout-container__preview">
-        <div className="layout-container__visual" style={{ maxWidth: `${width}px` }}>
+        <div className="layout-container__visual" style={{ maxWidth: `${width}px`, width: '100%' }}>
           <div className="layout-container__content"></div>
         </div>
       </div>
@@ -63,7 +63,13 @@ const Grid = ({ columns, gap, name, className = "" }) => {
           {columns} columns · {gap}px gap
         </div>
       </div>
-      <div className="layout-grid__preview" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)`, gap: `${gap}px` }}>
+      <div 
+        className="layout-grid__preview" 
+        style={{ 
+          gridTemplateColumns: `repeat(${columns}, 1fr)`, 
+          gap: `${gap}px`
+        }}
+      >
         {Array.from({ length: columns }).map((_, index) => (
           <div key={index} className="layout-grid__item">
             <span className="layout-grid__label">{index + 1}</span>

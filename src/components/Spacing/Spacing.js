@@ -8,11 +8,12 @@ import "./Spacing.scss";
  */
 const Spacing = ({ value, name, className = "" }) => {
   const remValue = (value / 16).toFixed(2);
-  const displayWidth = Math.min(value, 120); // 최대 120px로 제한하여 카드 내에서 보기 좋게
+  // 시각적 표현을 실제 값에 비례하되, 카드 내에서 보기 좋게 조정
+  const displayWidth = Math.min(value, 100);
 
   return (
     <div className={`spacing-token ${className}`}>
-      <div className="spacing-token__visual" style={{ width: `${displayWidth}px`, height: `${displayWidth}px` }}>
+      <div className="spacing-token__visual" style={{ width: `${displayWidth}px`, height: `${displayWidth}px`, maxWidth: '100%' }}>
         <span className="spacing-token__label">{value}px</span>
       </div>
       <div className="spacing-token__info">

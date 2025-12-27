@@ -2,12 +2,13 @@
 
 .accessibility-helper {
   position: fixed;
-  top: 50%;
+  top: 50vh;
   right: 0;
   z-index: 1000;
   transform: translateY(-50%) translateX(calc(100% - 60px));
   transition: transform 0.3s ease;
   font-size: 1rem; /* 큰글씨 모드 제외 */
+  will-change: transform;
 
   &.is-open {
     transform: translateY(-50%) translateX(0);
@@ -80,13 +81,15 @@
     border-radius: px-to-rem(8) 0 0 px-to-rem(8);
     box-shadow: -4px 0 16px rgba(0, 0, 0, 0.1);
     opacity: 1;
-    transition: opacity 0.3s ease;
+    transform: translateX(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
   // 닫힐 때 애니메이션 (is-open이 없을 때)
   &:not(.is-open) {
     .accessibility-helper__panel {
       opacity: 0;
+      transform: translateX(100%);
     }
   }
 

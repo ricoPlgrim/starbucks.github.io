@@ -60,6 +60,8 @@
     display: flex;
     flex-direction: column;
     gap: px(12);
+    height: 100vh;
+    overflow: hidden;
   }
 
   h4 {
@@ -111,6 +113,13 @@
     &--center {
       text-align: center;
     }
+  }
+
+  &--full &__body {
+    flex: 1;
+    overflow-y: auto;
+    align-items: flex-start;
+    text-align: left;
   }
 
   &__image {
@@ -216,6 +225,16 @@
       gap: px(10);
       margin-top: px(4);
       width: 100%;
+    }
+  }
+
+  &--full &__actions {
+    margin-top: auto;
+    padding-top: px(16);
+    flex-shrink: 0;
+    
+    &--stack {
+      grid-template-columns: 1fr;
     }
   }
 

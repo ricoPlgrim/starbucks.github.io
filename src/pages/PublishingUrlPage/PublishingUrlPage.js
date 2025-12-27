@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PageTemplate from "../../components/PageTemplate/PageTemplate";
+import Loading from "../../components/Loading/Loading";
 import "./PublishingUrlPage.scss";
 import { fetchMockUrls } from "../../mocks/mockData";
 
@@ -43,7 +44,11 @@ const PublishingUrlPage = () => {
             <tbody>
               {isLoading && (
                 <tr>
-                  <td colSpan={6}>데이터를 불러오는 중...</td>
+                  <td colSpan={6} style={{ textAlign: 'center', padding: '60px 20px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+                      <Loading size={48} label="데이터를 불러오는 중..." />
+                    </div>
+                  </td>
                 </tr>
               )}
               {error && !isLoading && (

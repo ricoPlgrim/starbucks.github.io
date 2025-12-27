@@ -31,6 +31,7 @@
   width: 100%;
   min-width: 840px; // 가로 스크롤을 위한 최소 너비 확보
   border-collapse: collapse;
+  table-layout: fixed; // 테이블 레이아웃 고정으로 일관성 유지
 
   thead {
     background-color: var(--color-accent);

@@ -33,13 +33,19 @@ function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScal
   // isOpen 상태 변경 시 shouldRender 관리 (애니메이션 완료 후 DOM에서 제거)
   useEffect(() => {
     if (isOpen) {
-      // 열릴 때: 즉시 렌더링
+      // 열릴 때: 즉시 렌더링하고 약간의 지연 후 애니메이션 시작
       setShouldRender(true);
       // 기존 timeout 취소
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = null;
       }
+      // 다음 프레임에서 애니메이션이 시작되도록 약간의 지연
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // 애니메이션이 시작되도록 강제
+        });
+      });
     } else if (shouldRender) {
       // 닫힐 때: transition 시간(300ms) 후 DOM에서 제거
       // shouldRender가 true일 때만 timeout 설정 (이미 false면 실행하지 않음)
@@ -56,13 +62,15 @@ function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScal
         timeoutRef.current = null;
       }
     };
-  }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isOpen, shouldRender]);
 
   const currentFontScaleLabel =
     FONT_SCALE_OPTIONS.find((option) => option.id === fontScale)?.label ?? "보통";
 
   return (
-    <div className={`accessibility-helper ${isOpen ? "is-open" : ""}`}>
+    <div 
+      className={`accessibility-helper ${isOpen ? "is-open" : ""}`}
+    >
       <button
         className="accessibility-helper__toggle"
         onClick={() => setIsOpen(!isOpen)}
@@ -121,25 +129,6 @@ function AccessibilityHelper({ isDarkMode, setIsDarkMode, fontScale, setFontScal
 
             <div className="accessibility-helper__status">
               <span>현재: {isDarkMode ? "다크" : "라이트"} · {currentFontScaleLabel}</span>
-            </div>
-          </div>
-
-          <div className="accessibility-helper__section">
-            <h3 className="accessibility-helper__title">사용법 가이드</h3>
-            <div className="accessibility-helper__guide">
-              <p><strong>px 믹스인 사용법:</strong></p>
-              <pre className="accessibility-helper__code">
-                {`// px() 함수 사용
-                padding: px(20);
-                font-size: px(16);
-
-                // @include px 믹스인 사용
-                @include px(font-size, 16);
-                @include px(margin, 20);
-
-                // max-width 설정
-                @include px(max-width, 1200);`}
-              </pre>
             </div>
           </div>
         </div>

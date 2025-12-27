@@ -511,6 +511,13 @@
   border-radius: px(16);
   background-color: var(--color-card);
   box-shadow: var(--shadow-soft);
+  transition: none !important;
+  transform: none !important;
+
+  &:hover {
+    transform: none !important;
+    transition: none !important;
+  }
 
   &__header {
     display: flex;
@@ -725,6 +732,13 @@
     border-radius: px(12);
     padding: px(16);
     background-color: rgba(12, 124, 89, 0.05);
+    transition: none !important;
+    transform: none !important;
+
+    &:hover {
+      transform: none !important;
+      transition: none !important;
+    }
   }
 }
 
@@ -732,6 +746,11 @@
   display: flex;
   gap: px(12);
   flex-wrap: wrap;
+
+  &--icons {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
 
   &--tooltip {
     .tooltip-row {
@@ -880,7 +899,8 @@
     border-radius: px(16);
     background-color: var(--color-card);
     box-shadow: var(--shadow-soft);
-    flex: 1;
+    width: 100%;
+    flex: 1 1 100%;
     min-width: 0;
 
     // 아이콘 라이브러리 섹션 내부의 그리드
@@ -1629,7 +1649,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
+  flex:none;
   &:hover:not(:disabled) {
     background-color: var(--color-accent);
     border-color: var(--color-accent);
@@ -2152,6 +2172,8 @@
   flex-direction: column;
   width: 100%;
   gap: px(24);
+  min-height: 0;
+  height: auto;
 }
 
 // Layout 프리뷰
@@ -2159,7 +2181,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 100%;
   gap: px(24);
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 // Typography 프리뷰
@@ -2199,7 +2224,7 @@
 .typography-preview__group {
   display: flex;
   flex-direction: column;
-  gap: px(12);
+  gap: px(16);
   padding: px(12);
   background-color: rgba(12, 124, 89, 0.03);
   border-radius: px(8);

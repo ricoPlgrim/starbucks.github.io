@@ -10,6 +10,9 @@
   border-radius: px(12);
   background-color: var(--color-card);
   transition: all 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--color-accent);
@@ -43,21 +46,25 @@
 
   &__preview {
     width: 100%;
+    max-width: 100%;
     padding: px(12);
     background-color: var(--color-bg);
     border-radius: px(8);
     border: 1px dashed var(--color-border);
     overflow-x: auto;
+    box-sizing: border-box;
   }
 
   &__visual {
     width: 100%;
+    max-width: 100%;
     margin: 0 auto;
     background: linear-gradient(135deg, rgba(12, 124, 89, 0.1), rgba(12, 124, 89, 0.05));
     border: 2px solid var(--color-accent);
     border-radius: px(8);
     position: relative;
     transition: all 0.2s ease;
+    box-sizing: border-box;
 
     &:hover {
       box-shadow: 0 4px 12px rgba(12, 124, 89, 0.2);
@@ -88,6 +95,10 @@
   border-radius: px(16);
   background-color: var(--color-card);
   box-shadow: var(--shadow-soft);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 
   &__title {
     margin: 0;
@@ -102,6 +113,9 @@
     display: flex;
     flex-direction: column;
     gap: px(16);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
@@ -115,6 +129,9 @@
   border-radius: px(12);
   background-color: var(--color-card);
   transition: all 0.2s ease;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 
   &:hover {
     border-color: var(--color-accent);
@@ -146,6 +163,11 @@
     border-radius: px(8);
     border: 1px dashed var(--color-border);
     min-height: px(100);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+    min-width: 0;
   }
 
   &__item {
@@ -156,7 +178,9 @@
     align-items: center;
     justify-content: center;
     min-height: px(80);
+    min-width: 0;
     transition: transform 0.2s ease;
+    box-sizing: border-box;
 
     &:hover {
       transform: scale(1.02);
@@ -181,6 +205,10 @@
   border-radius: px(16);
   background-color: var(--color-card);
   box-shadow: var(--shadow-soft);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
 
   &__title {
     margin: 0;
@@ -195,6 +223,9 @@
     display: flex;
     flex-direction: column;
     gap: px(16);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 

@@ -39,6 +39,9 @@ import {
   fetchMockListSyncOptions,
   fetchMockCarouselSlides,
   fetchMockTableWide,
+  fetchMockSamplePage,
+  fetchMockUrls,
+  fetchMockTableBasic,
 } from "../../mocks/mockData";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import SkeletonPlaceholder from "../../components/Skeleton/SkeletonPlaceholder";
@@ -49,11 +52,12 @@ import Accordion from "../../components/Accordion/Accordion";
 import Badge from "../../components/Badge/Badge";
 import SearchField from "../../components/SearchField/SearchField";
 import Input from "../../components/Input/Input";
+import DataList from "../../components/DataList/DataList";
+import Card from "../../components/Card/Card";
 import Select from "../../components/Select/Select";
 import Checkbox, { CheckboxGroup } from "../../components/Checkbox/Checkbox";
 import Radio, { RadioGroup } from "../../components/Radio/Radio";
 import Textarea from "../../components/Textarea/Textarea";
-import Card from "../../components/Card/Card";
 import List, { ListItem } from "../../components/List/List";
 import EmptyState from "../../components/EmptyState/EmptyState";
 import ErrorState from "../../components/ErrorState/ErrorState";
@@ -431,7 +435,7 @@ const TogglePreview = () => {
     marketing: false,
   });
   // Toast 알림 상태 (중앙 관리)
-  const [toast, setToast] = useState({ message: "", type: "info", key: 0 });
+  const [toast, setToast] = useState(null);
 
   // 토글 변경 핸들러
   const handleChange = (key, next, label) => {
@@ -445,7 +449,7 @@ const TogglePreview = () => {
 
   // Toast 닫기 핸들러
   const handleToastClose = () => {
-    setToast((prev) => ({ message: "", type: "info", key: prev.key }));
+    setToast(null);
   };
 
   return (
@@ -473,20 +477,22 @@ const TogglePreview = () => {
         <code>Wi-Fi {states.wifi ? "ON" : "OFF"} · Push {states.push ? "ON" : "OFF"} · Marketing {states.marketing ? "ON" : "OFF"}</code>
       </div>
       {/* Toast 알림 (중앙 관리) */}
-      <div className="toast-stack">
-        <Toast 
-          key={toast.key} 
-          message={toast.message} 
-          type={toast.type} 
-          onClose={handleToastClose} 
-        />
-      </div>
+      {toast && toast.message && typeof toast.message === 'string' && toast.message.trim().length > 0 ? (
+        <div className="toast-stack">
+          <Toast 
+            key={toast.key} 
+            message={toast.message} 
+            type={toast.type} 
+            onClose={handleToastClose} 
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
 
 const ToastPreview = () => {
-  const [toast, setToast] = useState({ message: "", type: "info", key: 0 });
+  const [toast, setToast] = useState(null);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -501,13 +507,14 @@ const ToastPreview = () => {
       .finally(() => setIsLoading(false));
   }, []);
 
+
   const showToast = (type) => {
     const found = messages.find((m) => m.type === type);
     const message = found?.message ?? "데이터가 없습니다.";
     setToast({ message, type, key: Date.now() });
   };
 
-  const clearToast = () => setToast((prev) => ({ message: "", type: "info", key: prev.key }));
+  const clearToast = () => setToast(null);
 
   if (isLoading) {
     return (
@@ -516,9 +523,6 @@ const ToastPreview = () => {
           <Skeleton width="110px" height={32} />
           <Skeleton width="110px" height={32} />
           <Skeleton width="110px" height={32} />
-        </div>
-        <div className="toast-stack" style={{ marginTop: 12 }}>
-          <Skeleton width="260px" height={48} />
         </div>
       </div>
     );
@@ -540,9 +544,11 @@ const ToastPreview = () => {
 
       {error && <p className="toast-error">{error}</p>}
 
-      <div className="toast-stack">
-        <Toast key={toast.key} message={toast.message} type={toast.type} onClose={clearToast} />
-      </div>
+      {toast && toast.message && typeof toast.message === 'string' && toast.message.trim().length > 0 ? (
+        <div className="toast-stack">
+          <Toast key={toast.key} message={toast.message} type={toast.type} onClose={clearToast} />
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -563,6 +569,166 @@ const BottomDockPreview = () => {
       <BottomDock items={items} defaultActive={last} onChange={(key) => setLast(key)} />
       <div className="dock-status">
         마지막 클릭: <strong>{last}</strong>
+      </div>
+    </div>
+  );
+};
+
+const DataListPreview = () => {
+  return (
+    <div className="guide-preview guide-preview--datalist">
+      <div style={{ display: "flex", flexDirection: "column", gap: "32px", width: "100%" }}>
+        {/* 유형 1: Card 그리드 레이아웃 */}
+        <div>
+          <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 700 }}>유형 1: Card 그리드 레이아웃</h4>
+          <DataList
+            fetchData={async () => {
+              const result = await fetchMockSamplePage();
+              return result.cards || [];
+            }}
+            renderItem={(item) => (
+              <Card key={item.id} title={item.title} description={item.desc} />
+            )}
+            containerProps={{
+              style: {
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+                gap: "16px",
+              },
+            }}
+            emptyMessage="카드 데이터가 없습니다."
+            errorMessage="카드 데이터를 불러오지 못했습니다."
+            loadingLabel="카드 데이터를 불러오는 중..."
+          />
+        </div>
+
+        {/* 유형 2: List/ListItem 리스트 레이아웃 */}
+        <div>
+          <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 700 }}>유형 2: List/ListItem 리스트 레이아웃</h4>
+          <DataList
+            fetchData={fetchMockUrls}
+            renderItem={(item) => (
+              <ListItem
+                key={item.id}
+                icon="📄"
+                suffix={
+                  <Badge variant="default" size="small">
+                    {item.depth1}
+                  </Badge>
+                }
+                onClick={() => console.log("클릭:", item.url)}
+              >
+                {item.depth1} {item.depth2 && `> ${item.depth2}`} {item.depth3 && `> ${item.depth3}`}
+              </ListItem>
+            )}
+            containerProps={{
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              },
+            }}
+            emptyMessage="URL 데이터가 없습니다."
+            errorMessage="URL 데이터를 불러오지 못했습니다."
+            loadingLabel="URL 데이터를 불러오는 중..."
+          />
+        </div>
+
+        {/* 유형 3: Badge가 포함된 Card */}
+        <div>
+          <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 700 }}>유형 4: Badge가 포함된 Card</h4>
+          <DataList
+            fetchData={fetchMockCarouselSlides}
+            renderItem={(item) => (
+              <Card
+                key={item.id}
+                title={item.title}
+                description={item.description}
+                badge="NEW"
+                badgeVariant="success"
+              />
+            )}
+            containerProps={{
+              style: {
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                gap: "16px",
+              },
+            }}
+            emptyMessage="슬라이드 데이터가 없습니다."
+            errorMessage="슬라이드 데이터를 불러오지 못했습니다."
+            loadingLabel="슬라이드 데이터를 불러오는 중..."
+          />
+        </div>
+
+        {/* 유형 4: Button이 포함된 Card */}
+        <div>
+          <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 700 }}>유형 5: Button이 포함된 Card</h4>
+          <DataList
+            fetchData={async () => {
+              const result = await fetchMockSamplePage();
+              return result.cards || [];
+            }}
+            renderItem={(item) => (
+              <Card
+                key={item.id}
+                title={item.title}
+                description={item.desc}
+              >
+                <div style={{ marginTop: "12px", display: "flex", gap: "8px" }}>
+                  <Button variant="primary" size="small">
+                    자세히 보기
+                  </Button>
+                  <Button variant="ghost" size="small">
+                    공유하기
+                  </Button>
+                </div>
+              </Card>
+            )}
+            containerProps={{
+              style: {
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                gap: "16px",
+              },
+            }}
+            emptyMessage="카드 데이터가 없습니다."
+            errorMessage="카드 데이터를 불러오지 못했습니다."
+            loadingLabel="카드 데이터를 불러오는 중..."
+          />
+        </div>
+
+        {/* 유형 5: 아이콘이 포함된 리스트 */}
+        <div>
+          <h4 style={{ marginBottom: "12px", fontSize: "14px", fontWeight: 700 }}>유형 6: 아이콘이 포함된 리스트</h4>
+          <DataList
+            fetchData={fetchMockDropdownOptions}
+            renderItem={(item) => (
+              <ListItem
+                key={item.value}
+                icon="🍎"
+                suffix={
+                  <Icon name="chevron-right" size="small">
+                    →
+                  </Icon>
+                }
+                onClick={() => console.log("선택:", item.label)}
+              >
+                {item.label}
+              </ListItem>
+            )}
+            containerProps={{
+              style: {
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+              },
+            }}
+            emptyMessage="옵션 데이터가 없습니다."
+            errorMessage="옵션 데이터를 불러오지 못했습니다."
+            loadingLabel="옵션 데이터를 불러오는 중..."
+          />
+        </div>
       </div>
     </div>
   );
@@ -1045,30 +1211,8 @@ const PopupPreview = () => {
   const [isBasicOpen, setIsBasicOpen] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [isFullOpen, setIsFullOpen] = useState(false);
-  const [sheetOffset, setSheetOffset] = useState(0);
-  const [dragStartY, setDragStartY] = useState(null);
-
-  const SHEET_THRESHOLD = 120;
-
-  const handleSheetStart = (e) => {
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    setDragStartY(clientY);
-  };
-
-  const handleSheetMove = (e) => {
-    if (dragStartY === null) return;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    const delta = clientY - dragStartY;
-    setSheetOffset(Math.max(0, Math.min(delta, 240))); // drag down only
-  };
-
-  const handleSheetEnd = () => {
-    if (sheetOffset > SHEET_THRESHOLD) {
-      setIsSheetOpen(false);
-    }
-    setSheetOffset(0);
-    setDragStartY(null);
-  };
+  const [isFullNoHeaderOpen, setIsFullNoHeaderOpen] = useState(false);
+  const [isFullBothOpen, setIsFullBothOpen] = useState(false);
 
   return (
     <div className="guide-preview guide-preview--popup">
@@ -1080,7 +1224,13 @@ const PopupPreview = () => {
           바텀시트
         </button>
         <button className="btn btn--ghost btn--sm" onClick={() => setIsFullOpen(true)}>
-          풀스크린
+          풀스크린 (X버튼)
+        </button>
+        <button className="btn btn--ghost btn--sm" onClick={() => setIsFullNoHeaderOpen(true)}>
+          풀스크린 (닫기버튼만)
+        </button>
+        <button className="btn btn--ghost btn--sm" onClick={() => setIsFullBothOpen(true)}>
+          풀스크린 (둘다)
         </button>
       </div>
 
@@ -1109,45 +1259,61 @@ const PopupPreview = () => {
       />
 
       {/* Bottom Sheet */}
-      {isSheetOpen && (
-        <div className="popup-overlay popup-overlay--sheet" onClick={() => setIsSheetOpen(false)}>
-          <div
-            className="popup popup--sheet"
-            style={{ transform: `translateY(${sheetOffset}px)` }}
-            onClick={(e) => e.stopPropagation()}
-            onMouseDown={handleSheetStart}
-            onMouseMove={handleSheetMove}
-            onMouseUp={handleSheetEnd}
-            onMouseLeave={handleSheetEnd}
-            onTouchStart={handleSheetStart}
-            onTouchMove={handleSheetMove}
-            onTouchEnd={handleSheetEnd}
-          >
-            <div className="popup__handle" />
-            <h4>바텀시트 팝업</h4>
-            <p>상단 드래그로 절반 이상 내리면 자동으로 닫힙니다.</p>
-            <button className="btn btn--secondary btn--sm" onClick={() => setIsSheetOpen(false)}>
-              닫기
-            </button>
-          </div>
-        </div>
-      )}
+      <BottomSheetPopup
+        open={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        title="바텀시트 팝업"
+        description="상단 드래그로 절반 이상 내리면 자동으로 닫힙니다."
+      />
 
-      {/* Fullscreen Popup */}
-      {isFullOpen && (
-        <div className="popup-overlay popup-overlay--full">
-          <div className="popup popup--full">
-            <div className="popup__header">
-              <h4>풀스크린 팝업</h4>
-              <button className="popup__close" onClick={() => setIsFullOpen(false)}>✕</button>
-            </div>
-            <div className="popup__body">
-              <p>전체 화면을 덮는 풀스크린 팝업입니다.</p>
-              <p>배경 스크롤을 잠그고, 상단 닫기 버튼을 제공합니다.</p>
-            </div>
+      {/* Fullscreen Popup - X 버튼만 있는 타입 */}
+      <FullscreenPopup
+        open={isFullOpen}
+        onClose={() => setIsFullOpen(false)}
+        title="풀스크린 팝업"
+        body={
+          <div>
+            <p>전체 화면을 덮는 풀스크린 팝업입니다.</p>
+            <p>배경 스크롤을 잠그고, 상단 X 버튼만 제공합니다.</p>
+            <p>본문 영역은 스크롤 가능합니다.</p>
           </div>
-        </div>
-      )}
+        }
+        showHeaderClose={true}
+        showBottomClose={false}
+      />
+
+      {/* Fullscreen Popup - 하단 닫기 버튼만 있는 타입 */}
+      <FullscreenPopup
+        open={isFullNoHeaderOpen}
+        onClose={() => setIsFullNoHeaderOpen(false)}
+        title="풀스크린 팝업"
+        body={
+          <div>
+            <p>전체 화면을 덮는 풀스크린 팝업입니다.</p>
+            <p>배경 스크롤을 잠그고, 하단 닫기 버튼만 제공합니다.</p>
+            <p>상단 X 버튼이 없고 하단 닫기 버튼만 있는 타입입니다.</p>
+            <p>본문 영역은 스크롤 가능하며, 하단 닫기 버튼은 항상 화면 하단에 고정됩니다.</p>
+          </div>
+        }
+        showHeaderClose={false}
+        showBottomClose={true}
+      />
+
+      {/* Fullscreen Popup - X 버튼과 하단 닫기 버튼 둘 다 있는 타입 */}
+      <FullscreenPopup
+        open={isFullBothOpen}
+        onClose={() => setIsFullBothOpen(false)}
+        title="풀스크린 팝업"
+        body={
+          <div>
+            <p>전체 화면을 덮는 풀스크린 팝업입니다.</p>
+            <p>배경 스크롤을 잠그고, 상단 X 버튼과 하단 닫기 버튼을 모두 제공합니다.</p>
+            <p>본문 영역은 스크롤 가능하며, 하단 닫기 버튼은 항상 화면 하단에 고정됩니다.</p>
+          </div>
+        }
+        showHeaderClose={true}
+        showBottomClose={true}
+      />
     </div>
   );
 };
@@ -4741,6 +4907,235 @@ const customItems = [
     PreviewComponent: BottomDockPreview,
   },
   {
+    id: "datalist",
+    label: "데이터 리스트",
+    title: "API 데이터 리스트",
+    description:
+      "목업 API를 통해 데이터를 가져와서 리스트 형태로 표시하는 범용 컴포넌트입니다. 로딩, 에러, 빈 상태를 자동으로 처리합니다.",
+    code: `import DataList from "./DataList";
+import Card from "./Card";
+import { fetchMockSamplePage, fetchMockUrls, fetchMockCarouselSlides } from "../../mocks/mockData";
+
+// ===== Props 설명 =====
+// fetchData: 데이터를 가져오는 비동기 함수 (Promise 반환, 필수)
+// renderItem: 각 아이템을 렌더링하는 함수 (item, index) => ReactNode (필수)
+// renderEmpty: 데이터가 없을 때 렌더링하는 함수 (선택, 기본 EmptyState 사용)
+// renderError: 에러 발생 시 렌더링하는 함수 (선택, 기본 ErrorState 사용)
+// renderLoading: 로딩 중 렌더링하는 함수 (선택, 기본 Loading 사용)
+// emptyMessage: 데이터가 없을 때 표시할 메시지 (기본값: "데이터가 없습니다.")
+// errorMessage: 에러 발생 시 표시할 메시지 (기본값: "데이터를 불러오지 못했습니다.")
+// loadingLabel: 로딩 중 표시할 메시지 (기본값: "데이터를 불러오는 중...")
+// className: 추가 클래스명
+// containerProps: 컨테이너 div에 전달할 추가 props
+
+// ===== 1. 목업 API 함수 사용하기 =====
+// mockData.js에서 제공하는 fetch 함수들을 직접 사용할 수 있습니다.
+// 예: fetchMockUrls, fetchMockCarouselSlides, fetchMockSamplePage 등
+
+// 목업 API가 배열을 직접 반환하는 경우
+<DataList
+  fetchData={fetchMockUrls}  // 이미 배열을 반환하는 함수
+  renderItem={(item) => (
+    <div key={item.id}>
+      <h4>{item.depth1} > {item.depth2}</h4>
+      <p>{item.url}</p>
+    </div>
+  )}
+/>
+
+// 목업 API가 객체를 반환하는 경우 (배열 추출 필요)
+<DataList
+  fetchData={async () => {
+    const result = await fetchMockSamplePage();
+    // result = { hero: {...}, cards: [...] }
+    return result.cards || []; // cards 배열만 반환
+  }}
+  renderItem={(item) => (
+    <Card key={item.id} title={item.title} description={item.desc} />
+  )}
+/>
+
+// ===== 2. 실제 API 호출하기 =====
+// 실제 REST API를 호출하는 경우
+<DataList
+  fetchData={async () => {
+    const response = await fetch('/api/products');
+    if (!response.ok) {
+      throw new Error('데이터를 불러오는데 실패했습니다.');
+    }
+    const data = await response.json();
+    // API 응답이 { data: [...] } 형태인 경우
+    return data.data || [];
+    // 또는 API가 배열을 직접 반환하는 경우
+    // return data;
+  }}
+  renderItem={(item) => (
+    <Card key={item.id} title={item.name} description={item.description} />
+  )}
+/>
+
+// ===== 3. 쿼리 파라미터와 함께 API 호출 =====
+const [category, setCategory] = useState('all');
+
+<DataList
+  fetchData={async () => {
+    const url = category === 'all' 
+      ? '/api/products' 
+      : \`/api/products?category=\${category}\`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.products || [];
+  }}
+  renderItem={(item) => (
+    <Card key={item.id} title={item.name} />
+  )}
+/>
+// category가 변경되면 자동으로 데이터를 다시 가져옵니다.
+
+// ===== 4. POST 요청으로 데이터 가져오기 =====
+<DataList
+  fetchData={async () => {
+    const response = await fetch('/api/search', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ keyword: '검색어' }),
+    });
+    const data = await response.json();
+    return data.results || [];
+  }}
+  renderItem={(item) => (
+    <div key={item.id}>{item.title}</div>
+  )}
+/>
+
+// ===== 5. 에러 처리 포함한 fetchData 작성 =====
+<DataList
+  fetchData={async () => {
+    try {
+      const response = await fetch('/api/data');
+      if (!response.ok) {
+        throw new Error(\`HTTP error! status: \${response.status}\`);
+      }
+      const data = await response.json();
+      return Array.isArray(data) ? data : [];
+    } catch (error) {
+      console.error('데이터 로드 실패:', error);
+      throw error; // DataList가 에러 상태를 표시하도록 함
+    }
+  }}
+  renderItem={(item) => (
+    <Card key={item.id} title={item.title} />
+  )}
+  errorMessage="데이터를 불러오는데 실패했습니다. 다시 시도해주세요."
+/>
+
+// ===== 6. 데이터 변환 및 필터링 =====
+<DataList
+  fetchData={async () => {
+    const response = await fetch('/api/users');
+    const users = await response.json();
+    // 데이터 변환: 활성 사용자만 필터링
+    return users
+      .filter(user => user.isActive)
+      .map(user => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+      }));
+  }}
+  renderItem={(item) => (
+    <div key={item.id}>
+      <h4>{item.name}</h4>
+      <p>{item.email}</p>
+    </div>
+  )}
+/>
+
+// ===== 7. 기본 사용 (간단한 예시) =====
+// 목업 API를 직접 사용하는 가장 간단한 방법
+<DataList
+  fetchData={fetchMockCarouselSlides}  // 배열을 반환하는 함수
+  renderItem={(item) => (
+    <Card key={item.id} title={item.title} description={item.description} />
+  )}
+/>
+
+// ===== 커스텀 로딩 UI =====
+<DataList
+  fetchData={fetchMockSamplePage}
+  renderItem={(item) => <Card title={item.title} />}
+  renderLoading={() => (
+    <div style={{ padding: "40px", textAlign: "center" }}>
+      <Loading size={48} label="커스텀 로딩 메시지" />
+    </div>
+  )}
+/>
+
+// ===== 커스텀 에러 UI =====
+<DataList
+  fetchData={fetchMockSamplePage}
+  renderItem={(item) => <Card title={item.title} />}
+  renderError={(error) => (
+    <div style={{ padding: "40px", textAlign: "center" }}>
+      <ErrorState type="error" message={error} />
+    </div>
+  )}
+/>
+
+// ===== 커스텀 빈 상태 UI =====
+<DataList
+  fetchData={fetchMockSamplePage}
+  renderItem={(item) => <Card title={item.title} />}
+  renderEmpty={() => (
+    <div style={{ padding: "40px", textAlign: "center" }}>
+      <EmptyState message="커스텀 빈 상태 메시지" />
+    </div>
+  )}
+/>
+
+// ===== 리스트 아이템으로 렌더링 =====
+import List, { ListItem } from "./List";
+
+<DataList
+  fetchData={fetchMockDropdownOptions}
+  renderItem={(item) => (
+    <ListItem key={item.value} icon="📋">
+      {item.label}
+    </ListItem>
+  )}
+  className="custom-list"
+/>
+
+// ===== 그리드 레이아웃 =====
+<DataList
+  fetchData={async () => {
+    const result = await fetchMockSamplePage();
+    return result.cards || [];
+  }}
+  renderItem={(item) => (
+    <Card key={item.id} title={item.title} description={item.desc} />
+  )}
+  containerProps={{
+    style: {
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+      gap: "16px",
+    },
+  }}
+/>
+
+// ===== 주의사항 =====
+// 1. fetchData는 Promise를 반환하는 함수여야 합니다.
+// 2. renderItem 함수는 각 아이템에 대한 ReactNode를 반환해야 합니다.
+// 3. 데이터가 배열이 아닌 경우, fetchData 내부에서 배열로 변환해야 합니다.
+// 4. 각 아이템은 고유한 key를 가져야 합니다 (item.id, item.key, 또는 index 사용).
+// 5. 로딩, 에러, 빈 상태는 자동으로 처리되지만 커스텀 렌더링 함수로 오버라이드할 수 있습니다.
+// 6. fetchData가 변경되면 자동으로 데이터를 다시 가져옵니다.`,
+    PreviewComponent: DataListPreview,
+  },
+  {
     id: "listsync",
     label: "리스트 동기화",
     title: "선택 리스트 연동",
@@ -5063,8 +5458,14 @@ const [isSheetOpen, setIsSheetOpen] = useState(false);
 
 // ===== FullscreenPopup 사용 =====
 // 전체 화면을 덮는 풀스크린 팝업입니다.
+// 세 가지 타입을 제공합니다:
+// 1. 상단 X 버튼만 있는 타입 (기본)
+// 2. 하단 닫기 버튼만 있는 타입
+// 3. 상단 X 버튼과 하단 닫기 버튼 둘 다 있는 타입
+
 const [isFullOpen, setIsFullOpen] = useState(false);
 
+// 타입 1: 상단 X 버튼만 있는 타입 (기본)
 <FullscreenPopup
   open={isFullOpen}
   onClose={() => setIsFullOpen(false)}
@@ -5073,8 +5474,43 @@ const [isFullOpen, setIsFullOpen] = useState(false);
     <div>
       <p>풀스크린 팝업 내용입니다.</p>
       <p>자유롭게 콘텐츠를 구성할 수 있습니다.</p>
+      <p>상단 헤더에 X 버튼만 있습니다.</p>
     </div>
   }
+  showHeaderClose={true}   // 기본값이므로 생략 가능
+  showBottomClose={false}  // 기본값이므로 생략 가능
+/>
+
+// 타입 2: 하단 닫기 버튼만 있는 타입
+<FullscreenPopup
+  open={isFullOpen}
+  onClose={() => setIsFullOpen(false)}
+  title="상세 정보"
+  body={
+    <div>
+      <p>풀스크린 팝업 내용입니다.</p>
+      <p>자유롭게 콘텐츠를 구성할 수 있습니다.</p>
+      <p>상단 X 버튼이 없고 하단 닫기 버튼만 있습니다.</p>
+    </div>
+  }
+  showHeaderClose={false}  // X 버튼 숨김
+  showBottomClose={true}    // 하단 닫기 버튼 표시
+/>
+
+// 타입 3: 상단 X 버튼과 하단 닫기 버튼 둘 다 있는 타입
+<FullscreenPopup
+  open={isFullOpen}
+  onClose={() => setIsFullOpen(false)}
+  title="상세 정보"
+  body={
+    <div>
+      <p>풀스크린 팝업 내용입니다.</p>
+      <p>자유롭게 콘텐츠를 구성할 수 있습니다.</p>
+      <p>상단 X 버튼과 하단 닫기 버튼을 모두 제공합니다.</p>
+    </div>
+  }
+  showHeaderClose={true}   // X 버튼 표시
+  showBottomClose={true}   // 하단 닫기 버튼 표시
 />
 
 // ===== 오버레이 클릭으로 닫기 =====
@@ -5107,8 +5543,20 @@ const [isFullOpen, setIsFullOpen] = useState(false);
 // 시각적으로 드래그 가능함을 나타냅니다.
 
 // ===== FullscreenPopup 닫기 버튼 =====
-// 풀스크린 팝업 헤더에 닫기 버튼(✕)이 있습니다.
+// 풀스크린 팝업은 세 가지 닫기 버튼 타입을 제공합니다:
+// 1. 상단 X 버튼만 있는 타입 (showHeaderClose={true}, showBottomClose={false}, 기본값)
+// 2. 하단 닫기 버튼만 있는 타입 (showHeaderClose={false}, showBottomClose={true})
+// 3. 상단 X 버튼과 하단 닫기 버튼 둘 다 있는 타입 (showHeaderClose={true}, showBottomClose={true})
+// 
+// 상단 X 버튼:
 // <button className="popup__close" onClick={onClose} aria-label="닫기">✕</button>
+// 
+// 하단 닫기 버튼:
+// <div className="popup__actions popup__actions--stack">
+//   <Button variant="primary" onClick={onClose}>닫기</Button>
+// </div>
+// 
+// 하단 닫기 버튼은 항상 화면 하단에 고정되며, 본문 영역이 스크롤 가능합니다.
 
 // ===== UI 구조 =====
 // BasicPopup:
@@ -5129,8 +5577,9 @@ const [isFullOpen, setIsFullOpen] = useState(false);
 // FullscreenPopup:
 //   popup-overlay popup-overlay--full: 오버레이
 //     popup popup--full: 팝업 컨테이너
-//       popup__header: 헤더 (제목 + 닫기 버튼)
-//       popup__body: 본문 영역
+//       popup__header: 헤더 (제목 + X 버튼, showHeaderClose에 따라 표시/숨김)
+//       popup__body: 본문 영역 (스크롤 가능)
+//       popup__actions: 하단 닫기 버튼 영역 (항상 하단 고정)
 
 // ===== Typography 사용 =====
 // 모든 팝업은 내부적으로 Typography 컴포넌트를 사용합니다:
@@ -5180,12 +5629,34 @@ const handleDelete = () => {
   description="원하는 정렬 방식을 선택하세요."
 />
 
-// 3. 상세 정보 (풀스크린)
+// 3. 상세 정보 (풀스크린 - X 버튼만 있는 타입)
 <FullscreenPopup
   open={isFullOpen}
   onClose={() => setIsFullOpen(false)}
   title="상품 상세 정보"
   body={<ProductDetail product={product} />}
+  showHeaderClose={true}   // 기본값이므로 생략 가능
+  showBottomClose={false}  // 기본값이므로 생략 가능
+/>
+
+// 4. 상세 정보 (풀스크린 - 하단 닫기 버튼만 있는 타입)
+<FullscreenPopup
+  open={isFullOpen}
+  onClose={() => setIsFullOpen(false)}
+  title="상품 상세 정보"
+  body={<ProductDetail product={product} />}
+  showHeaderClose={false}  // X 버튼 숨김
+  showBottomClose={true}   // 하단 닫기 버튼 표시
+/>
+
+// 5. 상세 정보 (풀스크린 - X 버튼과 하단 닫기 버튼 둘 다 있는 타입)
+<FullscreenPopup
+  open={isFullOpen}
+  onClose={() => setIsFullOpen(false)}
+  title="상품 상세 정보"
+  body={<ProductDetail product={product} />}
+  showHeaderClose={true}   // X 버튼 표시
+  showBottomClose={true}   // 하단 닫기 버튼 표시
 />
 
 // ===== 주의사항 =====
@@ -5195,6 +5666,11 @@ const handleDelete = () => {
 // 4. BottomSheetPopup은 드래그로 닫을 수 있으며, 임계값은 120px입니다.
 // 5. BottomSheetPopup이 닫힐 때 offset과 startY 상태가 자동으로 초기화됩니다.
 // 6. FullscreenPopup의 body는 ReactNode이므로 자유롭게 콘텐츠를 구성할 수 있습니다.
+// 7. FullscreenPopup은 showHeaderClose와 showBottomClose prop으로 세 가지 타입을 제공합니다:
+//    - showHeaderClose={true}, showBottomClose={false} (기본): 상단 X 버튼만 표시
+//    - showHeaderClose={false}, showBottomClose={true}: 하단 닫기 버튼만 표시
+//    - showHeaderClose={true}, showBottomClose={true}: 상단 X 버튼과 하단 닫기 버튼 둘 다 표시
+// 8. FullscreenPopup의 하단 닫기 버튼은 항상 화면 하단에 고정되며, 본문 영역은 스크롤 가능합니다.
 // 7. 오버레이 클릭 시 팝업이 닫히므로, 팝업 내부 클릭 시 stopPropagation을 사용합니다.
 // 8. BasicPopup의 icon은 이모지, 텍스트, SVG 등 다양한 형태를 지원합니다.
 // 9. 모든 팝업은 Typography 컴포넌트를 사용하여 텍스트를 렌더링합니다.
@@ -8559,6 +9035,11 @@ const guideGroups = [
     id: "data-display-group",
     label: "데이터 표시",
     items: ["table"],
+  },
+  {
+    id: "api-data-group",
+    label: "API 데이터",
+    items: ["datalist"],
   },
   {
     id: "design-system-group",

@@ -94,6 +94,7 @@ Newstarbucks/
 │   │   ├── Checkbox/                 # 체크박스 컴포넌트
 │   │   ├── Color/                    # 컬러 컴포넌트 (디자인 시스템)
 │   │   ├── DatePicker/               # 날짜 선택 컴포넌트
+│   │   ├── DataList/                 # API 데이터 리스트 컴포넌트
 │   │   ├── DragDropList/             # 드래그앤드랍 리스트
 │   │   ├── Dropdown/                 # 드롭다운 컴포넌트
 │   │   ├── EmptyState/               # 빈 상태 UI
@@ -261,7 +262,6 @@ function MyPage() {
 - ✅ 다크모드 토글 (라이트/다크)
 - ✅ 큰글씨 모드 선택 (작게/보통/크게/아주 크게)
 - ✅ 접근성 체크리스트 (6개 항목)
-- ✅ 사용법 가이드 (px-to-rem 믹스인, 접근성 체크 포인트)
 
 #### 위치
 - 오른쪽 중앙에 고정
@@ -282,11 +282,11 @@ function MyPage() {
 프로젝트에 구현된 주요 컴포넌트들입니다. 자세한 사용법은 `PublishingGuidePage`에서 확인할 수 있습니다.
 
 #### 디자인 시스템
-- **Typography** - 타이포그래피 컴포넌트 (h1-h6, body, caption, overline, 다양한 size/weight/color 옵션)
+- **Typography** - 타이포그래피 컴포넌트 (h1-h6, body, caption, overline, 다양한 size/weight/color 옵션, H1-H6 명확한 크기/간격 차이)
 - **Color** - 컬러 컴포넌트 (브랜드 컬러, 상태 컬러, 다크모드 지원)
-- **Spacing** - 스페이싱 컴포넌트 (간격 토큰 시각화 및 예제)
-- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템)
-- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, size/color 옵션)
+- **Spacing** - 스페이싱 컴포넌트 (간격 토큰 시각화 및 예제, 빈 공간 없이 채움)
+- **Layout** - 레이아웃 컴포넌트 (컨테이너 폭, 그리드 시스템, 12컬럼 동일 너비, 화면 넘침 방지)
+- **Icon** - 아이콘 컴포넌트 (이모지, SVG, 텍스트 지원, size/color 옵션, 모바일/태블릿에서 한 줄 표시)
 
 #### 레이아웃
 - **Header** - 모바일 헤더 (메인 헤더: 햄버거 메뉴, 3뎁스 메뉴 구조 / 서브 헤더: 뒤로가기, 카테고리명, 유틸리티 버튼)
@@ -310,17 +310,18 @@ function MyPage() {
 - **List / ListItem** - 리스트 컴포넌트 (텍스트 리스트, 아이콘 리스트)
 - **ListContainer** - 리스트 컨테이너 (section/article 태그, 제목/설명, bordered/divided 옵션)
 - **Notice** - 공지사항 리스트 (스켈레톤 로딩 지원, 링크 지원)
+- **DataList** - API 데이터 리스트 컴포넌트 (목업 API를 통해 데이터를 가져와서 리스트 형태로 표시, 로딩/에러/빈 상태 자동 처리, Card/List/ListItem/Badge/Button 등 다양한 렌더링 유형 지원, 그리드 레이아웃 지원)
 
 #### 네비게이션
-- **Tabs** - 탭 인터페이스 (default, scroll, swiper 타입, 가운데 정렬)
+- **Tabs** - 탭 인터페이스 (default, scroll, swiper 타입, 가운데 정렬, showContent prop으로 탭 UI만 표시 가능)
 - **Pagination** - 페이지네이션
 - **Accordion** - 아코디언 (exclusive, independent 타입)
 - **BottomDock** - 하단 돗바
 
 #### 피드백
-- **Toast** - 토스트 알림
+- **Toast** - 토스트 알림 (빈 메시지일 때 자동으로 렌더링하지 않음, 조건부 렌더링 강화)
 - **Tooltip** - 툴팁 (top, bottom, left, right placement)
-- **Popup** - 팝업 (기본: Swiper 캐러셀 지원, lazy loading / 시트: 드래그로 닫기 / 풀스크린)
+- **Popup** - 팝업 (기본: Swiper 캐러셀 지원, lazy loading / 시트: 드래그로 닫기 / 풀스크린: showHeaderClose, showBottomClose props로 3가지 타입 지원)
 
 #### 미디어
 - **Image** - 이미지 컴포넌트 (에러 처리, 비율 자동 판단, landscape/portrait/square, fallback 이미지 지원)
@@ -345,7 +346,7 @@ function MyPage() {
 - **DatePicker** - 날짜 선택 (단일/범위/다중 선택, 닫기 버튼, 자동 닫기 제거)
 
 #### 기타 UI
-- **Table** - 테이블 (가로 스크롤·열 고정 / 세로 스크롤·헤더 고정 / 가로·세로 스크롤·헤더&열 고정)
+- **Table** - 테이블 (가로 스크롤·열 고정 / 세로 스크롤·헤더 고정 3개 컬럼 / 가로·세로 스크롤·헤더&열 고정)
 - **Form** - 폼 요소 (유효성 검사 포함, Button 컴포넌트 사용)
 - **DragDropList** - 드래그앤드랍 리스트
 - **ListSync** - 리스트 동기화
@@ -621,19 +622,21 @@ export default MyPage;
 ### PublishingGuidePage (퍼블리싱 가이드)
 퍼블리싱을 위한 UI 컴포넌트 가이드 페이지입니다.
 
-- 🎨 **레이아웃, 입력 컴포넌트, 선택 컴포넌트, 리스트 & 카드, 네비게이션, 피드백, 미디어, 상태 & 로딩, 기타 UI, 폼 예제** 카테고리별 컴포넌트 예시
+- 🎨 **레이아웃, 입력 컴포넌트, 선택 컴포넌트, 리스트 & 카드, 네비게이션, 피드백, 미디어, 상태 & 로딩, 기타 UI, API 데이터, 폼 예제** 카테고리별 컴포넌트 예시
 - 💻 코드 예시와 실제 UI 미리보기 동시 표시
 - 🎯 컴포넌트별 사용법 및 Props 설명
 - 📱 반응형 디자인 및 인터랙션 예시
 - ♿ 접근성 기능 포함 (다크모드, 큰글씨 모드)
+- 📊 DataList 컴포넌트 유형별 예시 (Card 그리드, List/ListItem, Badge 포함 Card, Button 포함 Card, 아이콘 리스트)
 
 ### PublishingUrlPage (퍼블리싱 URL 관리)
 퍼블리싱된 페이지들의 URL을 체계적으로 관리하는 페이지입니다.
 
 - 📋 **뎁스1 ~ 뎁스4** 계층 구조로 URL 분류
 - 🔗 URL 클릭 시 새 탭에서 열기
-- 📊 깔끔한 테이블 레이아웃
+- 📊 깔끔한 테이블 레이아웃 (table-layout: fixed로 로딩 중/후 일관된 레이아웃 유지)
 - 📱 모바일 반응형 디자인
+- ⏳ Loading 컴포넌트로 로딩 상태 표시 (가운데 정렬)
 
 ### ExamplePage (예시 페이지)
 기본적인 사용법을 보여주는 예시 페이지입니다.
